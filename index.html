@@ -16,14 +16,14 @@
 <style>
 :root{
   --telon:#8C2643;--telon2:#6F1B33;--oro:#D9A441;--oroc:#F6E6BD;--tinta:#241A1F;--mu:#6E6268;
-  --papel:#F7F3F5;--sf:#FFFFFF;--ln:#E4DADF;--mag:#E8006A;--ok:#1E7A4F;--wn:#9A6200;--er:#B42318;
+  --papel:#F1E8EC;--sf:#FFFFFF;--ln:#E4DADF;--mag:#E8006A;--ok:#1E7A4F;--wn:#9A6200;--er:#B42318;
   --acc:#8C2643;--azul:#3B6E99;
   --disp:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
   --txt:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif;
   color-scheme:light;
 }
-:root[data-theme="dark"]{--telon:#5E1529;--telon2:#430E1D;--tinta:#F1EAEE;--mu:#B9AAB2;--papel:#1A1417;--sf:#251C21;--ln:#3C2F36;--oroc:#4A3A1C;--ok:#5FCB96;--wn:#E3B04F;--er:#F08A80;--acc:#E7B85A;--azul:#8DB8DE;color-scheme:dark}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--telon:#5E1529;--telon2:#430E1D;--tinta:#F1EAEE;--mu:#B9AAB2;--papel:#1A1417;--sf:#251C21;--ln:#3C2F36;--oroc:#4A3A1C;--ok:#5FCB96;--wn:#E3B04F;--er:#F08A80;--acc:#E7B85A;--azul:#8DB8DE;color-scheme:dark}}
+:root[data-theme="dark"]{--telon:#5E1529;--telon2:#430E1D;--tinta:#F1EAEE;--mu:#B9AAB2;--papel:#150D11;--sf:#251C21;--ln:#3C2F36;--oroc:#4A3A1C;--ok:#5FCB96;--wn:#E3B04F;--er:#F08A80;--acc:#E7B85A;--azul:#8DB8DE;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--telon:#5E1529;--telon2:#430E1D;--tinta:#F1EAEE;--mu:#B9AAB2;--papel:#150D11;--sf:#251C21;--ln:#3C2F36;--oroc:#4A3A1C;--ok:#5FCB96;--wn:#E3B04F;--er:#F08A80;--acc:#E7B85A;--azul:#8DB8DE;color-scheme:dark}}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--papel);color:var(--tinta);font:16px/1.5 var(--txt);-webkit-font-smoothing:antialiased}
@@ -33,7 +33,7 @@ a{color:inherit}
 .it{font-style:italic}
 
 /* Cabecera: el telón del salón de actos */
-.top{background:var(--telon);color:#FFF6F0;padding:14px clamp(14px,4vw,32px) 0;position:relative}
+.top{background:var(--telon);color:#FFF6F0;padding:max(20px,env(safe-area-inset-top)) clamp(14px,4vw,32px) 0;position:relative}
 .top::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;
   background:repeating-linear-gradient(90deg,var(--telon2) 0 18px,var(--telon) 18px 36px);
   -webkit-mask:radial-gradient(18px 10px at 18px 0,#000 98%,transparent) 0 0/36px 10px repeat-x;
@@ -48,8 +48,9 @@ a{color:inherit}
 .ed{display:flex;align-items:center;gap:10px;font-size:14px}
 .ed select{background:var(--telon2);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:6px 8px}
 .est{font-size:13px;color:#F0D3DB;min-width:86px;text-align:right}
-.tema{background:var(--telon2);border:1px solid rgba(255,255,255,.25);color:#FFE9B8;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;cursor:pointer;padding:0}
-.tema svg{width:20px;height:20px}
+.tema{background:var(--telon2);border:1px solid rgba(255,255,255,.3);color:#FFE9B8;border-radius:24px;height:44px;padding:0 16px 0 12px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font:700 15px var(--disp)}
+.tema:hover{background:rgba(0,0,0,.25)}
+.tema svg{width:22px;height:22px}
 nav.tabs{display:flex;gap:2px;max-width:1180px;margin:12px auto 0;overflow-x:auto;scrollbar-width:none}
 nav.tabs button{background:none;border:0;color:#F6DCE3;padding:9px 14px 11px;cursor:pointer;font:700 15px var(--disp);border-radius:10px 10px 0 0;white-space:nowrap}
 nav.tabs button[aria-current="page"]{background:var(--papel);color:var(--acc)}
@@ -102,15 +103,53 @@ input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--mu) 70%,t
 .barra.wn i{background:var(--wn)}.barra.er i{background:var(--er)}
 .pres{display:grid;grid-template-columns:1fr 130px auto;gap:8px;align-items:center;margin-bottom:8px}
 
-.blq{background:var(--sf);border:1px solid var(--ln);border-left:6px solid var(--mag);border-radius:14px;padding:14px 16px;margin-top:14px}
-.blq.gr{border-left-color:var(--azul)}.blq.in{border-left-color:var(--oro)}
-.blqh{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.blqh b{font:800 20px var(--disp);color:var(--acc);min-width:24px}
-.blqh .sp{flex:1}
-.tipo{font:700 12px var(--disp);padding:3px 9px;border-radius:20px;background:color-mix(in srgb,var(--mag) 14%,transparent);color:var(--tinta)}
-.tipo.gr{background:color-mix(in srgb,var(--azul) 18%,transparent)}.tipo.in{background:color-mix(in srgb,var(--oro) 28%,transparent)}
+.blq{background:var(--sf);border:1px solid var(--ln);border-radius:16px;margin-top:16px;overflow:hidden}
+.blq.editando{outline:3px solid color-mix(in srgb,var(--oro) 70%,transparent);outline-offset:-1px}
+.bh{display:flex;align-items:center;gap:12px;padding:12px 14px 12px 16px;flex-wrap:wrap;--tc:var(--mag)}
+.bh.al{background:color-mix(in srgb,var(--mag) 13%,var(--sf))}
+.bh.gr{background:color-mix(in srgb,var(--azul) 17%,var(--sf));--tc:var(--azul)}
+.bh.in{background:color-mix(in srgb,var(--oro) 24%,var(--sf));--tc:#B07A10}
+.bh .num{width:34px;height:34px;border-radius:50%;background:var(--sf);display:grid;place-items:center;font:800 16px var(--disp);color:var(--tc);flex:0 0 auto;border:2px solid var(--tc)}
+.bh .bt{flex:1;min-width:180px;display:flex;flex-direction:column}
+.bh .bt b{font:800 19px/1.2 var(--disp)}
+.bh .bt span{font-size:13.5px;color:var(--mu)}
+.bacc{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.bacc select{width:auto}
+.bb{padding:4px 0 0}
+.sec{padding:12px 16px 14px}
+.sec+.sec{border-top:1px solid var(--ln)}
+.sl{display:flex;align-items:center;gap:7px;font:700 13.5px var(--disp);color:var(--mu);margin-bottom:9px;text-transform:none}
+.sl .ico{width:17px;height:17px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.mc{border:1px solid var(--ln);border-left:4px solid var(--mu);border-radius:10px;padding:8px 10px;background:var(--sf);display:flex;flex-direction:column;gap:3px}
+.mc b{font:700 15px/1.2 var(--disp)}
+.mc>span{font-size:13px;color:var(--mu);display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.mc.pr{border-left-color:var(--azul)}.mc.al{border-left-color:var(--mag)}.mc.in{border-left-color:var(--oro)}
+.rol{font-style:normal;font-weight:700}.rol.pr{color:var(--azul)}.rol.al{color:var(--mag)}.rol.in{color:#B07A10}
+:root[data-theme="dark"] .rol.al{color:#FF6FAE}
+.nv{font:700 12px var(--disp);padding:2px 8px;border-radius:20px;background:color-mix(in srgb,var(--mu) 18%,transparent);color:var(--tinta);white-space:nowrap}
+.nv-1ESO{background:#FDE4EF;color:#9C0050}.nv-2ESO{background:#F8C3DA;color:#880045}.nv-3ESO{background:#F09ABF;color:#5E0030}
+.nv-4ESO{background:#E5649E;color:#fff}.nv-1BACH{background:#C8307A;color:#fff}.nv-2BACH{background:#8E0F52;color:#fff}.nv-FP{background:#E3DAF5;color:#4A2C85}
+.setl{background:color-mix(in srgb,var(--oro) 14%,var(--sf))}
+.sli{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid color-mix(in srgb,var(--oro) 30%,transparent)}
+.sli:last-child{border-bottom:0}
+.sli .sn{width:26px;height:26px;border-radius:50%;background:var(--sf);border:1.5px solid var(--oro);display:grid;place-items:center;font:800 12px var(--disp);flex:0 0 auto}
+.sli .st{flex:1;min-width:0}.sli .st b{font-weight:700}.sli .st i{color:var(--mu);font-size:14px;margin-left:4px}
+.sli .sd{font:700 13px var(--disp);color:var(--mu);font-variant-numeric:tabular-nums}
+.obra .ob{font:800 21px/1.2 var(--disp)}
+.obra .oa{color:var(--mu);font-style:italic;margin-top:2px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:10px;font-size:14px;color:var(--mu)}
+.meta span{display:inline-flex;align-items:center;gap:5px}.meta .ico{width:16px;height:16px}
+.meta a{color:var(--acc);font-weight:700}
+.pill{background:color-mix(in srgb,var(--mag) 14%,transparent);color:var(--tinta)!important;font-weight:700;padding:3px 10px;border-radius:20px}
+.pill.ac{background:color-mix(in srgb,var(--telon) 22%,transparent)}
+.okk{color:var(--ok)!important;font-weight:700}.wnn{color:var(--wn)!important;font-weight:700}
+.nece{display:flex;gap:10px;align-items:center;color:var(--mu);font-size:14px;background:color-mix(in srgb,var(--mu) 7%,var(--sf))}
+.nece .ico{width:19px;height:19px;flex:0 0 auto}
+.rolsel.pr{border-color:var(--azul)}.rolsel.al{border-color:var(--mag)}.rolsel.in{border-color:var(--oro)}
+.leyenda .nv{font-size:11px}
 .alu{display:grid;grid-template-columns:1fr 120px 110px auto;gap:8px;margin-bottom:6px;align-items:center}
-.comp{display:grid;grid-template-columns:1.3fr 1fr 118px 110px auto;gap:8px;margin-bottom:6px;align-items:center}
+.comp{display:grid;grid-template-columns:1.3fr 1fr 138px 100px auto;gap:8px;margin-bottom:6px;align-items:center}
 .rep{display:grid;grid-template-columns:2fr 1.2fr 80px auto;gap:8px;margin-bottom:6px;align-items:center}
 .chip{font-size:12px;font-weight:700;padding:3px 8px;border-radius:20px;background:color-mix(in srgb,var(--oro) 26%,transparent);white-space:nowrap;justify-self:start}
 .chip.vet{background:color-mix(in srgb,var(--mag) 16%,transparent)}
@@ -301,10 +340,18 @@ const ICO={
   plus:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',
   print:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 9V3h10v6M7 18H4v-7h16v7h-3M7 14h10v7H7z"/></svg>',
   drive:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3h8l6 10-4 7H6l-4-7z"/><path d="M8 3l6 10h8M2 13h12l-4 7"/></svg>',
+  edit:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>',
+  check:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg>',
+  up2:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg>',
+  users:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a5.5 5.5 0 0 1 3.5 6"/></svg>',
+  list:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h11M4 12h11M4 18h7"/><circle cx="18" cy="17" r="2.5"/><path d="M20.5 17V6l-3 1"/></svg>',
+  plug:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0zM12 17v5"/></svg>',
+  music:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M10 18V5l11-2v13"/></svg>',
+  clock:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   copy:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>'
 };
 
-const S={tab:'programa',dia:0,eds:[],E:null,user:null,timer:null,estado:'',vImg:null,dImg:null,iaDia:0,iaTipo:'guion',cartTipo:'general'};
+const S={edit:new Set(),fold:new Set(),tab:'programa',dia:0,eds:[],E:null,user:null,timer:null,estado:'',vImg:null,dImg:null,iaDia:0,iaTipo:'guion',cartTipo:'general'};
 
 /* ---------- Tema claro / oscuro ---------- */
 function temaActual(){const t=document.documentElement.dataset.theme;if(t)return t;return matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}
@@ -476,7 +523,7 @@ function render(){
     <div class="ed"><select onchange="cambiaEd(this.value)" aria-label="Edición">
       ${S.eds.map(e=>`<option value="${e.anio}" ${e===S.E?'selected':''}>${e.anio}${e.datos.musical?' · '+esc(e.datos.musical):''}</option>`).join('')}</select>
      <span class="est" id="est">${esc(S.estado)}</span>
-     <button class="tema" onclick="cambiaTema()" aria-label="${dark?'Cambiar a modo claro':'Cambiar a modo oscuro'}" title="${dark?'Modo claro':'Modo oscuro'}">${dark?SOL:LUNA}</button></div>
+     <button class="tema" onclick="cambiaTema()" aria-label="${dark?'Cambiar a modo claro':'Cambiar a modo oscuro'}">${dark?SOL+'<span>Claro</span>':LUNA+'<span>Oscuro</span>'}</button></div>
    </div>
    <nav class="tabs">${TABS.map(([k,t])=>`<button ${S.tab==k?'aria-current="page"':''} onclick="S.tab='${k}';render();scrollTo(0,0)">${t}</button>`).join('')}</nav>
   </header><main>${({programa:vPrograma,semana:vSemana,imprimir:vImprimir,ia:vIA,stats:vStats,historial:vHistorial,ajustes:vAjustes})[S.tab]()}</main>`;
@@ -507,11 +554,11 @@ function vPrograma(){
     return`<button class="key" aria-pressed="${k==i}" onclick="S.dia=${k};render()" aria-label="${DIAS[k]} ${f.getDate()}">
       <span class="dots">${x.no?'':tipos.map(t=>`<i class="dot ${t}"></i>`).join('')}</span>
       <span class="dn">${DIAS[k]}</span><span class="dd">${f.getDate()}</span>
-      <span class="dm">${x.no?'Sin concierto':`${x.bloques.length} ${x.bloques.length==1?'bloque':'bloques'} · ${minutos(x)} min`}</span></button>`}).join('');
+      <span class="dm">${x.no?'Sin concierto':`${x.bloques.length} ${x.bloques.length==1?'bloque':'bloques'} · ${dur(minutos(x))}`}</span></button>`}).join('');
   const blacks=[1,2,3,4].map(k=>`<span class="blk" style="left:calc(10px + (100% - 20px) * ${k}/5)"></span>`).join('');
   const pct=Math.min(100,m/util*100),cls=m>util?'er':m>util-3?'wn':'';
   return `<div class="piano" role="group" aria-label="Días de la semana">${keys}${blacks}</div>
-  <div class="leyenda"><span><i class="dot al"></i>Alumnos</span><span><i class="dot gr"></i>Grupo o coro</span><span><i class="dot in"></i>Artista invitado</span></div>
+  <div class="leyenda"><span><i class="dot al"></i>Alumnos</span><span><i class="dot gr"></i>Grupo o coro</span><span><i class="dot in"></i>Artista invitado</span><span style="margin-left:auto;gap:4px">${NIVORD.map(k=>`<span class="nv nv-${k}">${NIV[k]}</span>`).join('')}</span></div>
   <section class="panel">
    <div class="dayhead">
     <label class="f">Título del concierto<input type="text" value="${esc(d.titulo)}" oninput="setP('dias.${i}.titulo',this.value)"></label>
@@ -519,7 +566,7 @@ function vPrograma(){
    </div>
    <div class="row" style="justify-content:space-between;margin-top:10px"><span class="mu sm">${esc(may(fLarga(fechaDia(E,i))))} · ${esc(D().hora)} · ${esc(D().lugar)}</span>
     <label class="chk"><input type="checkbox" ${d.no?'checked':''} onchange="setP('dias.${i}.no',this.checked,1)">Este día no hay concierto</label></div>
-   ${d.no?'':`<div style="margin-top:14px"><div class="row sm" style="justify-content:space-between"><span>Tiempo previsto: <b>${m} de ${util} min</b></span><span class="mu">${m>util?'Te pasas del recreo: quita o acorta algo.':util-m>0?`Quedan ${util-m} min`:'Justo'}</span></div>
+   ${d.no?'':`<div style="margin-top:14px"><div class="row sm" style="justify-content:space-between"><span>Tiempo previsto: <b>${dur(m)} de ${util} min</b></span><span class="mu">${m>util?'Te pasas del recreo: quita o acorta algo.':util-m>0?`Quedan ${dur(Math.round((util-m)*60)/60)}`:'Justo'}</span></div>
    <div class="barra ${cls}"><i style="width:${pct}%"></i></div></div>`}
   </section>
   ${d.no?'':`
@@ -530,70 +577,97 @@ function vPrograma(){
    <button class="btn" onclick="pushP('dias.${i}.pres',{n:'',g:''})">${ICO.plus}Añadir presentador</button></section>
   ${d.bloques.length?d.bloques.map((b,k)=>vBloque(b,i,k,d.bloques.length)).join(''):`<div class="vacio">Todavía no hay nada programado este día. Añade un bloque.</div>`}
   <div class="addbar">
-   <button class="btn p" onclick="pushP('dias.${i}.bloques',nuevoAl())">${ICO.plus}Alumnos</button>
-   <button class="btn" onclick="pushP('dias.${i}.bloques',nuevoGr())">${ICO.plus}Grupo</button>
-   <button class="btn" onclick="pushP('dias.${i}.bloques',nuevoGr(1))">${ICO.plus}Coro</button>
-   <button class="btn" onclick="pushP('dias.${i}.bloques',nuevoIn())">${ICO.plus}Artista invitado</button></div>`}
+   <button class="btn p" onclick="addB(${i},nuevoAl())">${ICO.plus}Alumnos</button>
+   <button class="btn" onclick="addB(${i},nuevoGr())">${ICO.plus}Grupo</button>
+   <button class="btn" onclick="addB(${i},nuevoGr(1))">${ICO.plus}Coro</button>
+   <button class="btn" onclick="addB(${i},nuevoIn())">${ICO.plus}Artista invitado</button></div>`}
   <datalist id="cursos">${Object.values(NIV).map(v=>`<option value="${v}">`).join('')}</datalist>`;
 }
-function cabBloque(b,i,k,n){
-  const otros=D().dias.map((x,j)=>j!=i?`<option value="${j}">${DIAS[j]}</option>`:'').join('');
+/* ---------- Duraciones ("3:30", "3,5" o "3") ---------- */
+function parseMin(v){const s=String(v||'').trim();const m=s.match(/^(\d+)\s*[:']\s*(\d{1,2})$/);if(m)return +m[1]+Math.min(59,+m[2])/60;const n=parseFloat(s.replace(',','.'));return isFinite(n)?n:0}
+function fmtMin(m){m=Number(m)||0;let mm=Math.floor(m),ss=Math.round((m-mm)*60);if(ss==60){mm++;ss=0}return `${mm}:${String(ss).padStart(2,'0')}`}
+const dur=m=>{m=Number(m)||0;return Number.isInteger(m)?`${m} min`:`${fmtMin(m)} min`};
+const limpiaTit=t=>String(t||'').replace(/^\s*\d+\s*[.)\-–]\s*/,'');
+/* ---------- Bloques: modo ver / editar ---------- */
+const nvChip=g=>{const p=curso(g);if(p)return `<span class="nv nv-${p.niv}">${esc(fmtCurso(g))}</span>`;return g&&String(g).trim()?`<span class="nv">${esc(g)}</span>`:''};
+const rolTxt=c=>({al:'Alumno/a',pr:'Profesor/a',in:'Invitado/a'})[c.rol]||'';
+function resumenB(b){
+  if(b.t=='al'){const n=b.alumnos.filter(u=>u.n).length;return `Alumnos · ${n} ${n==1?'intérprete':'intérpretes'} · ${b.formato=='acappella'?ACAP:'Con playback'} · ${dur(minB(b))}`}
+  const no=b.rep.filter(r=>r.obra).length,obr=`${no} ${no==1?'obra':'obras'}`;
+  if(b.t=='gr'&&b.coro)return `Coro · ${b.cantantes?esc(b.cantantes)+' voces':'voces sin indicar'} · ${obr} · ${dur(minB(b))}`;
+  if(b.t=='gr'){const n=b.comp.filter(c=>c.n).length;return `Grupo · ${n} ${n==1?'músico':'músicos'} · ${obr} · ${dur(minB(b))}`}
+  return `Artista invitado · ${obr} · ${dur(minB(b))}`;
+}
+function cabBloque(b,i,k,n,edit,plegado){
   const tt=b.t=='gr'&&b.coro?'co':b.t;
-  return `<div class="blqh"><b>${k+1}</b><span class="tipo ${b.t}">${TB[tt]}</span>
-   ${b.t=='al'?`<span class="mu sm">${b.formato=='acappella'?ACAP:'Con playback'}</span>`:''}
-   <span class="mu sm">${minB(b)} min</span><span class="sp"></span>
-   <button class="btn g" title="Subir" ${k==0?'disabled':''} onclick="mover(${i},${k},-1)">${ICO.up}</button>
-   <button class="btn g" title="Bajar" ${k==n-1?'disabled':''} onclick="mover(${i},${k},1)">${ICO.down}</button>
-   <select aria-label="Pasar a otro día" style="width:auto" onchange="if(this.value!=='')pasarDia(${i},${k},+this.value)"><option value="">Pasar a…</option>${otros}</select>
-   <button class="btn g" title="Borrar" onclick="borrarB(${i},${k})">${ICO.del}</button></div>`;
+  const tit=b.t=='al'?(esc(nombres(b))||'Alumnos sin nombre'):esc(b.nombre||TB[tt]);
+  const otros=D().dias.map((x,j)=>j!=i?`<option value="${j}">${DIAS[j]}</option>`:'').join('');
+  return `<div class="bh ${b.t}"><span class="num">${k+1}</span><div class="bt"><b>${tit}</b><span>${resumenB(b)}</span></div><div class="bacc">
+   ${edit?`<select aria-label="Pasar a otro día" onchange="if(this.value!=='')pasarDia(${i},${k},+this.value)"><option value="">Pasar a…</option>${otros}</select>
+     <button class="btn g" title="Borrar bloque" onclick="borrarB(${i},${k})">${ICO.del}</button>
+     <button class="btn p" onclick="toggleEdit('${b.id}')">${ICO.check}Listo</button>`
+   :`<button class="btn g" title="Subir" ${k==0?'disabled':''} onclick="mover(${i},${k},-1)">${ICO.up}</button>
+     <button class="btn g" title="Bajar" ${k==n-1?'disabled':''} onclick="mover(${i},${k},1)">${ICO.down}</button>
+     <button class="btn" onclick="toggleEdit('${b.id}')">${ICO.edit}Editar</button>
+     <button class="btn g" title="${plegado?'Desplegar':'Plegar'}" aria-expanded="${!plegado}" onclick="toggleFold('${b.id}')">${plegado?ICO.down:ICO.up2}</button>`}</div></div>`;
+}
+function setlist(rep){const r=rep.filter(x=>x.obra||x.autor);
+  return r.length?`<div class="sec setl"><div class="sl">${ICO.list}Repertorio</div>${r.map((x,j)=>`<div class="sli"><span class="sn">${j+1}</span><div class="st"><b>${esc(limpiaTit(x.obra))||'—'}</b> ${x.autor?`<i>${esc(x.autor)}</i>`:''}</div><span class="sd">${fmtMin(x.min)}</span></div>`).join('')}</div>`:''}
+const necesidades=b=>b.obs?`<div class="sec nece">${ICO.plug}<span>${esc(b.obs)}</span></div>`:'';
+function verBloque(b){
+  if(b.t=='al')return `<div class="sec"><div class="sl">${ICO.users}Intérpretes</div><div class="cards">${b.alumnos.map(u=>`<div class="mc al"><b>${esc(u.n)||'Sin nombre'}</b><span>${nvChip(u.g)}${chipVez(u.n)}</span></div>`).join('')}</div></div>
+   <div class="sec obra"><div class="ob">${b.obra?`«${esc(b.obra)}»`:'<span class="mu">Obra sin indicar</span>'}</div>${b.autor?`<div class="oa">${esc(b.autor)}</div>`:''}
+    <div class="meta"><span class="pill ${b.formato=='acappella'?'ac':''}">${b.formato=='acappella'?ACAP:'Con playback'}</span>${b.instr?`<span>${ICO.music}${esc(b.instr)}</span>`:''}<span>${ICO.clock}${fmtMin(b.min)}</span>
+    ${b.formato=='playback'?(b.yt&&/^https?:/.test(b.yt)?`<a href="${esc(b.yt)}" target="_blank" rel="noopener">Abrir playback</a>`:'')+`<span class="${b.ok?'okk':'wnn'}">${b.ok?'Playback probado':'Playback sin probar'}</span>`:''}</div></div>${necesidades(b)}`;
+  if(b.t=='gr'&&b.coro)return `<div class="sec"><div class="sl">${ICO.users}Coro</div><div class="cards"><div class="mc pr"><b>${esc(b.director)||'Sin indicar'}</b><span>Dirección</span></div><div class="mc"><b>${esc(b.cantantes)||'?'}</b><span>cantantes</span></div></div></div>${setlist(b.rep)}${necesidades(b)}`;
+  if(b.t=='gr')return `<div class="sec"><div class="sl">${ICO.users}Músicos</div><div class="cards">${b.comp.filter(c=>c.n||c.instr).map(c=>`<div class="mc ${c.rol}"><b>${esc(c.n)||'Sin nombre'}</b><span>${esc(c.instr)}${c.instr?' · ':''}<em class="rol ${c.rol}">${rolTxt(c)}</em>${c.rol=='al'?nvChip(c.g):''}</span></div>`).join('')||'<span class="mu sm">Sin músicos todavía.</span>'}</div></div>${setlist(b.rep)}${necesidades(b)}`;
+  return `${b.presenta?`<div class="sec"><div class="sl">${ICO.users}Presentación</div><p style="margin:0">${esc(b.presenta)}</p></div>`:''}${setlist(b.rep)}${necesidades(b)}`;
 }
 function vRep(P,rep){
-  return `<div class="sub3">Repertorio</div>${rep.map((r,j)=>`<div class="rep">
+  return `<div class="sec setl"><div class="sl">${ICO.list}Repertorio <span class="mu" style="font-weight:400">· la duración como 3:30</span></div>${rep.map((r,j)=>`<div class="rep">
     <input type="text" placeholder="Obra" value="${esc(r.obra)}" oninput="setP('${P}.rep.${j}.obra',this.value)" aria-label="Obra ${j+1}">
     <input class="au" type="text" placeholder="Autor" value="${esc(r.autor)}" oninput="setP('${P}.rep.${j}.autor',this.value)" aria-label="Autor ${j+1}">
-    <input type="number" min="1" max="20" step="0.5" value="${esc(r.min)}" title="Minutos" aria-label="Minutos" onchange="setP('${P}.rep.${j}.min',Number(this.value)||0,1)">
+    <input type="text" inputmode="decimal" placeholder="3:30" value="${fmtMin(r.min)}" title="Duración (minutos:segundos)" aria-label="Duración" onchange="setP('${P}.rep.${j}.min',parseMin(this.value),1)">
     <button class="btn g" title="Quitar" ${rep.length<2?'disabled':''} onclick="delP('${P}.rep',${j})">${ICO.del}</button></div>`).join('')}
-   <button class="btn sm" onclick="pushP('${P}.rep',{obra:'',autor:'',min:4})">${ICO.plus}Añadir obra</button>`;
+   <button class="btn sm" onclick="pushP('${P}.rep',{obra:'',autor:'',min:4})">${ICO.plus}Añadir obra</button></div>`;
 }
-function vBloque(b,i,k,n){
-  const P=`dias.${i}.bloques.${k}`;
-  let h='';
-  if(b.t=='al'){
-    h=`${b.alumnos.map((u,j)=>`<div class="alu"><input type="text" placeholder="Nombre y apellidos" value="${esc(u.n)}" oninput="setP('${P}.alumnos.${j}.n',this.value)" onchange="render()" aria-label="Intérprete ${j+1}">
+function editarBloque(b,P){
+  if(b.t=='al')return `<div class="sec"><div class="sl">${ICO.users}Intérpretes</div>${b.alumnos.map((u,j)=>`<div class="alu"><input type="text" placeholder="Nombre y apellidos" value="${esc(u.n)}" oninput="setP('${P}.alumnos.${j}.n',this.value)" onchange="render()" aria-label="Intérprete ${j+1}">
        <input type="text" placeholder="Curso" list="cursos" value="${esc(u.g)}" oninput="setP('${P}.alumnos.${j}.g',this.value)" onchange="render()" aria-label="Curso">
-       <span class="chip" title="Así lo entiende la app">${esc(fmtCurso(u.g))||'—'}</span>
-       <span class="row" style="gap:4px;flex-wrap:nowrap">${chipVez(u.n)}<button class="btn g" title="Quitar" ${b.alumnos.length<2?'disabled':''} onclick="delP('${P}.alumnos',${j})">${ICO.del}</button></span></div>`).join('')}
-     <button class="btn sm" onclick="pushP('${P}.alumnos',{n:'',g:''})">${ICO.plus}Añadir intérprete</button>
-     <div class="actg"><label class="f">Obra<input type="text" value="${esc(b.obra)}" placeholder="Título completo" oninput="setP('${P}.obra',this.value)"></label>
+       <span title="Así lo entiende la app">${nvChip(u.g)||'<span class="mu sm">—</span>'}</span>
+       <button class="btn g" title="Quitar" ${b.alumnos.length<2?'disabled':''} onclick="delP('${P}.alumnos',${j})">${ICO.del}</button></div>`).join('')}
+     <button class="btn sm" onclick="pushP('${P}.alumnos',{n:'',g:''})">${ICO.plus}Añadir intérprete</button></div>
+    <div class="sec obra"><div class="actg" style="margin-top:0"><label class="f">Obra<input type="text" value="${esc(b.obra)}" placeholder="Título completo" oninput="setP('${P}.obra',this.value)"></label>
       <label class="f">Autor o intérprete original<input type="text" value="${esc(b.autor)}" oninput="setP('${P}.autor',this.value)"></label></div>
      <div class="actg3"><div class="f"><span>Formato</span><div class="seg" role="group">
        <button aria-pressed="${b.formato=='playback'}" onclick="setP('${P}.formato','playback',1)">Con playback</button>
        <button aria-pressed="${b.formato=='acappella'}" onclick="setP('${P}.formato','acappella',1)">${ACAP}</button></div></div>
       <label class="f">Instrumento(s)<input type="text" value="${esc(b.instr)}" placeholder="Voz, piano, guitarra…" oninput="setP('${P}.instr',this.value)"></label>
-      <label class="f">Minutos<input type="number" min="1" max="15" step="0.5" value="${esc(b.min)}" onchange="setP('${P}.min',Number(this.value)||0,1)"></label></div>
+      <label class="f">Duración<input type="text" inputmode="decimal" placeholder="3:30" value="${fmtMin(b.min)}" onchange="setP('${P}.min',parseMin(this.value),1)"></label></div>
      ${b.formato=='playback'?`<div class="actg" style="align-items:end"><label class="f">Enlace del playback (YouTube)<input type="url" value="${esc(b.yt)}" placeholder="https://…" oninput="setP('${P}.yt',this.value)"></label>
       <div class="row">${b.yt&&/^https?:/.test(b.yt)?`<a class="btn" href="${esc(b.yt)}" target="_blank" rel="noopener">Abrir</a>`:''}
-       <label class="chk"><input type="checkbox" ${b.ok?'checked':''} onchange="setP('${P}.ok',this.checked)">Playback probado</label></div></div>`:''}`;
-  }else if(b.t=='gr'){
-    h=`<div class="actg" style="margin-top:0"><label class="f">${b.coro?'Nombre del coro':'Nombre del grupo'}<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)"></label>
+       <label class="chk"><input type="checkbox" ${b.ok?'checked':''} onchange="setP('${P}.ok',this.checked,1)">Playback probado</label></div></div>`:''}</div>`;
+  if(b.t=='gr')return `<div class="sec"><div class="actg" style="margin-top:0"><label class="f">${b.coro?'Nombre del coro':'Nombre del grupo'}<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)" onchange="render()"></label>
       ${b.coro?`<div class="row" style="flex-wrap:nowrap"><label class="f" style="flex:2">Director/a<input type="text" value="${esc(b.director)}" oninput="setP('${P}.director',this.value)"></label>
        <label class="f" style="flex:1">Cantantes<input type="number" min="1" value="${esc(b.cantantes)}" oninput="setP('${P}.cantantes',this.value)"></label></div>`:'<span></span>'}</div>
-     ${b.coro?'':`<div class="sub3">Componentes</div>${b.comp.map((c,j)=>`<div class="comp">
-       <input type="text" placeholder="Nombre" value="${esc(c.n)}" oninput="setP('${P}.comp.${j}.n',this.value)" aria-label="Componente ${j+1}">
+     ${b.coro?'':`<div class="sl" style="margin-top:14px">${ICO.users}Músicos</div>${b.comp.map((c,j)=>`<div class="comp">
+       <input type="text" placeholder="Nombre" value="${esc(c.n)}" oninput="setP('${P}.comp.${j}.n',this.value)" aria-label="Músico ${j+1}">
        <input type="text" placeholder="Instrumento" value="${esc(c.instr)}" oninput="setP('${P}.comp.${j}.instr',this.value)" aria-label="Instrumento">
-       <select aria-label="Papel" onchange="setP('${P}.comp.${j}.rol',this.value,1)">${Object.entries(ROL).map(([v,t])=>`<option value="${v}" ${c.rol==v?'selected':''}>${t}</option>`).join('')}</select>
-       ${c.rol=='al'?`<input type="text" placeholder="Curso" list="cursos" value="${esc(c.g)}" oninput="setP('${P}.comp.${j}.g',this.value)" aria-label="Curso">`:'<span></span>'}
+       <select aria-label="Papel" class="rolsel ${c.rol}" onchange="setP('${P}.comp.${j}.rol',this.value,1)">${Object.entries(ROL).map(([v,t])=>`<option value="${v}" ${c.rol==v?'selected':''}>${t}</option>`).join('')}</select>
+       ${c.rol=='al'?`<input type="text" placeholder="Curso" list="cursos" value="${esc(c.g)}" oninput="setP('${P}.comp.${j}.g',this.value)" onchange="render()" aria-label="Curso">`:'<span></span>'}
        <button class="btn g del" title="Quitar" onclick="delP('${P}.comp',${j})">${ICO.del}</button></div>`).join('')}
-      <button class="btn sm" onclick="pushP('${P}.comp',{n:'',instr:'',rol:'pr',g:''})">${ICO.plus}Añadir componente</button>`}
-     ${vRep(P,b.rep)}`;
-  }else{
-    h=`<label class="f">Artista o grupo invitado<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)"></label>
-     <label class="f" style="margin-top:10px">Presentación breve para los presentadores<textarea style="min-height:70px" oninput="setP('${P}.presenta',this.value)" placeholder="Quién es, de dónde viene, qué estilo toca…">${esc(b.presenta)}</textarea></label>
-     ${vRep(P,b.rep)}`;
-  }
-  return `<article class="blq ${b.t}">${cabBloque(b,i,k,n)}${h}
-   <label class="f" style="margin-top:10px">Necesidades y observaciones<input type="text" value="${esc(b.obs)}" placeholder="Micros, atriles, piano, amplis, enchufes…" oninput="setP('${P}.obs',this.value)"></label></article>`;
+      <button class="btn sm" onclick="pushP('${P}.comp',{n:'',instr:'',rol:'pr',g:''})">${ICO.plus}Añadir músico</button>`}</div>${vRep(P,b.rep)}`;
+  return `<div class="sec"><label class="f">Artista o grupo invitado<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)" onchange="render()"></label>
+     <label class="f" style="margin-top:10px">Presentación breve para los presentadores<textarea style="min-height:70px" oninput="setP('${P}.presenta',this.value)" placeholder="Quién es, de dónde viene, qué estilo toca…">${esc(b.presenta)}</textarea></label></div>${vRep(P,b.rep)}`;
 }
+function vBloque(b,i,k,n){
+  const P=`dias.${i}.bloques.${k}`,edit=S.edit.has(b.id),pleg=!edit&&S.fold.has(b.id);
+  return `<article class="blq ${b.t} ${edit?'editando':''}">${cabBloque(b,i,k,n,edit,pleg)}
+   ${pleg?'':`<div class="bb">${edit?editarBloque(b,P)+`<div class="sec nece"><label class="f" style="flex:1">${b.t=='al'?'Necesidades y observaciones':'Necesidades técnicas'}<input type="text" value="${esc(b.obs)}" placeholder="Micros, atriles, piano, amplis, enchufes…" oninput="setP('${P}.obs',this.value)"></label></div>`:verBloque(b)}</div>`}</article>`;
+}
+function toggleEdit(id){S.edit.has(id)?S.edit.delete(id):S.edit.add(id);render()}
+function toggleFold(id){S.fold.has(id)?S.fold.delete(id):S.fold.add(id);render()}
+function addB(i,b){D().dias[i].bloques.push(b);D().dias[i].no=false;S.edit.add(b.id);marcar();render()}
 function mover(i,k,dir){const a=D().dias[i].bloques;[a[k],a[k+dir]]=[a[k+dir],a[k]];marcar();render()}
 function borrarB(i,k){const b=D().dias[i].bloques[k];
   modal(`<h3>¿Borrar este bloque?</h3><p>${esc(tituloB(b))}</p>
@@ -622,7 +696,7 @@ function vSemana(){
   return `<div class="row" style="justify-content:space-between;margin-bottom:14px"><div><h2>La semana completa</h2><p class="mu" style="margin:0">${esc(rango(E))} · ${esc(D().hora)} · ${esc(D().lugar)}</p></div>
    <button class="btn p" onclick="imprimirSemana()">${ICO.print}Imprimir programa de la semana</button></div>
   ${D().dias.map((d,i)=>`<section class="panel"><div class="row" style="justify-content:space-between"><h3 style="margin:0">${esc(may(fLarga(fechaDia(E,i))))}</h3>
-     <span class="tag">${d.no?'Sin concierto':minutos(d)+' min'}</span></div>
+     <span class="tag">${d.no?'Sin concierto':dur(minutos(d))}</span></div>
    ${d.no?'':`<p style="margin:4px 0 8px"><b>${esc(d.titulo)}</b>${d.sub?' · '+esc(d.sub):''}</p>
     ${d.bloques.length?`<div class="wrap"><table class="sem"><thead><tr><th>Tipo</th><th>Intérpretes</th><th>Curso</th><th>Obra</th><th>Formato</th><th>Instrumento</th><th>Observaciones</th></tr></thead><tbody>${d.bloques.map(filaSemana).join('')}</tbody></table></div>`:'<p class="mu">Sin nada programado todavía.</p>'}
     <p class="sm mu" style="margin:8px 0 0">Presentan: ${esc(d.pres.map(p=>p.n+(p.g?` (${fmtCurso(p.g)})`:'')).filter(x=>x.trim()).join(' y ')||'sin asignar')}</p>`}
@@ -652,18 +726,18 @@ function hojaApuntes(){
   return `<div class="pg">${cabeceraPr(null,'<b>Hoja de apuntes</b><br>Presentadores: ______________________')}<div class="ap">${Array.from({length:8},caja).join('')}</div></div>`;
 }
 function fichaBloque(b,k){
-  if(b.t=='al')return `<div class="ficha"><h4><span>${k}. Alumnos</span><small>${b.formato=='acappella'?'<i>a cappella</i>':'Con playback'}${b.formato=='playback'?(b.ok?' · probado ✓':' · sin probar'):''} · ${minB(b)} min</small></h4>
+  if(b.t=='al')return `<div class="ficha"><h4><span>${k}. Alumnos</span><small>${b.formato=='acappella'?'<i>a cappella</i>':'Con playback'}${b.formato=='playback'?(b.ok?' · probado ✓':' · sin probar'):''} · ${dur(minB(b))}</small></h4>
    <table><tr><th>Intérprete</th><th>Curso</th><th>Obra</th><th>Instrumento</th></tr>${b.alumnos.map((u,j)=>`<tr><td>${esc(u.n)}${vez(u.n)>1?` <small>(${vez(u.n)}.ª vez)</small>`:''}</td><td>${esc(fmtCurso(u.g))}</td>${j==0?`<td rowspan="${b.alumnos.length}"><b>${esc(b.obra)}</b>${b.autor?`<br>${esc(b.autor)}`:''}</td><td rowspan="${b.alumnos.length}">${esc(b.instr)}</td>`:''}</tr>`).join('')}</table>
    ${b.obs?`<p><b>Necesidades:</b> ${esc(b.obs)}</p>`:''}${b.yt&&b.formato=='playback'?`<p style="font-size:8.5pt;color:#555;word-break:break-all">${esc(b.yt)}</p>`:''}</div>`;
-  const rep=`<table><tr><th>#</th><th>Obra</th><th>Autor</th><th>Min.</th></tr>${b.rep.map((r,j)=>`<tr><td>${j+1}</td><td>${esc(r.obra)}</td><td>${esc(r.autor)}</td><td>${esc(r.min)}</td></tr>`).join('')}</table>`;
-  if(b.t=='gr')return `<div class="ficha"><h4><span>${k}. ${b.coro?'Coro':'Grupo'}: ${esc(b.nombre)}</span><small>${minB(b)} min</small></h4>
+  const rep=`<table><tr><th>#</th><th>Obra</th><th>Autor</th><th>Min.</th></tr>${b.rep.map((r,j)=>`<tr><td>${j+1}</td><td>${esc(r.obra)}</td><td>${esc(r.autor)}</td><td>${fmtMin(r.min)}</td></tr>`).join('')}</table>`;
+  if(b.t=='gr')return `<div class="ficha"><h4><span>${k}. ${b.coro?'Coro':'Grupo'}: ${esc(b.nombre)}</span><small>${dur(minB(b))}</small></h4>
    ${b.coro?`<p><b>Director/a:</b> ${esc(b.director||'—')} · <b>Cantantes:</b> ${esc(b.cantantes||'—')}</p>`:
    `<table><tr><th>Componente</th><th>Instrumento</th><th>Papel</th></tr>${b.comp.map(c=>`<tr><td>${esc(c.n)}</td><td>${esc(c.instr)}</td><td>${ROL[c.rol]}${c.rol=='al'&&c.g?' · '+esc(fmtCurso(c.g)):''}</td></tr>`).join('')}</table>`}
    ${rep}${b.obs?`<p><b>Necesidades técnicas:</b> ${esc(b.obs)}</p>`:''}</div>`;
-  return `<div class="ficha"><h4><span>${k}. Artista invitado: ${esc(b.nombre)}</span><small>${minB(b)} min</small></h4>${b.presenta?`<p>${esc(b.presenta)}</p>`:''}${rep}${b.obs?`<p><b>Necesidades técnicas:</b> ${esc(b.obs)}</p>`:''}</div>`;
+  return `<div class="ficha"><h4><span>${k}. Artista invitado: ${esc(b.nombre)}</span><small>${dur(minB(b))}</small></h4>${b.presenta?`<p>${esc(b.presenta)}</p>`:''}${rep}${b.obs?`<p><b>Necesidades técnicas:</b> ${esc(b.obs)}</p>`:''}</div>`;
 }
 function fichaDia(i){const d=D().dias[i];
-  return `<div class="pg">${cabeceraPr(i)}<div style="font:800 14pt var(--disp);margin:2mm 0 3mm">${esc(d.titulo)}${d.sub?' · '+esc(d.sub):''} <span style="font:400 10pt var(--txt);color:#555">· ${minutos(d)} min previstos</span></div>
+  return `<div class="pg">${cabeceraPr(i)}<div style="font:800 14pt var(--disp);margin:2mm 0 3mm">${esc(d.titulo)}${d.sub?' · '+esc(d.sub):''} <span style="font:400 10pt var(--txt);color:#555">· ${dur(minutos(d))} previstos</span></div>
    <p style="font-size:10.5pt;margin:0 0 3mm"><b>Presentan:</b> ${esc(d.pres.map(p=>p.n+(p.g?` (${fmtCurso(p.g)})`:'')).filter(x=>x.trim()).join(' y ')||'sin asignar')}</p>
    ${d.bloques.map((b,k)=>fichaBloque(b,k+1)).join('')||'<p>Sin nada programado.</p>'}</div>`}
 function itemPrograma(b){
