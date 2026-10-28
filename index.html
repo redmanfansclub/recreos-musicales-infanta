@@ -38,7 +38,7 @@ a{color:inherit}
   background:repeating-linear-gradient(90deg,var(--telon2) 0 18px,var(--telon) 18px 36px);
   -webkit-mask:radial-gradient(18px 10px at 18px 0,#000 98%,transparent) 0 0/36px 10px repeat-x;
           mask:radial-gradient(18px 10px at 18px 0,#000 98%,transparent) 0 0/36px 10px repeat-x}
-.brand{display:flex;align-items:center;gap:14px;max-width:1180px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:14px;max-width:1480px;margin:0 auto}
 .brand svg{flex:0 0 auto;width:78px;height:78px}
 .brand h1{font:800 clamp(21px,3.2vw,30px)/1.05 var(--disp);margin:0;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .brand h1 .rmi{font:800 13px/1 var(--disp);letter-spacing:.06em;background:var(--oro);color:#3A1F06;padding:5px 8px;border-radius:7px}
@@ -51,11 +51,11 @@ a{color:inherit}
 .tema{background:var(--telon2);border:1px solid rgba(255,255,255,.3);color:#FFE9B8;border-radius:24px;height:44px;padding:0 16px 0 12px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font:700 15px var(--disp)}
 .tema:hover{background:rgba(0,0,0,.25)}
 .tema svg{width:22px;height:22px}
-nav.tabs{display:flex;gap:2px;max-width:1180px;margin:12px auto 0;overflow-x:auto;scrollbar-width:none}
+nav.tabs{display:flex;gap:2px;max-width:1480px;margin:12px auto 0;overflow-x:auto;scrollbar-width:none}
 nav.tabs button{background:none;border:0;color:#F6DCE3;padding:9px 14px 11px;cursor:pointer;font:700 15px var(--disp);border-radius:10px 10px 0 0;white-space:nowrap}
 nav.tabs button[aria-current="page"]{background:var(--papel);color:var(--acc)}
 
-main{max-width:1180px;margin:0 auto;padding:30px clamp(14px,4vw,32px) 60px}
+main{max-width:1544px;margin:0 auto;padding:30px clamp(14px,4vw,32px) 60px}
 h2{font:800 24px/1.15 var(--disp);margin:0 0 4px}
 h3{font:700 18px/1.2 var(--disp);margin:0 0 8px}
 .mu{color:var(--mu)}
@@ -102,14 +102,24 @@ input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--mu) 70%,t
 .dia .dt{font-size:14px;white-space:nowrap}.dia .dt.er{color:var(--er)}.dia .dt.wn{color:var(--wn)}
 .dia .dno{flex:1;color:var(--mu);font-style:italic}
 .dia .ded{flex-basis:100%;border-top:1px solid var(--ln);padding-top:12px}
-.perg{background:#E4EEE6;border:1px solid #B8CFBE;border-radius:14px;padding:14px 16px;color:#22412C}
-.perg h3{font-size:16px;color:#22412C}.perg input{background:#F6FAF7;border-color:#B8CFBE;color:#22412C}
-.perg .btn{background:#F6FAF7;border-color:#B8CFBE;color:#22412C}.perg .btn.g{background:none;border-color:transparent;color:#4C7058}
-.perg.off{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:14px;color:#4C7058}.perg.off span{flex:1}
-:root[data-theme="dark"] .perg{background:#1E2D23;border-color:#35503D;color:#D5E8DA}
-:root[data-theme="dark"] .perg h3{color:#D5E8DA}
-:root[data-theme="dark"] .perg input,:root[data-theme="dark"] .perg .btn{background:#17231B;border-color:#35503D;color:#D5E8DA}
-:root[data-theme="dark"] .perg .btn.g,:root[data-theme="dark"] .perg.off{color:#9CC2A6}
+.perg{background:#EFE6F1;border:1px solid #D7C5DD;border-radius:14px;padding:14px 16px;color:#4A2B55}
+.perg h3{font-size:16px;color:#4A2B55}.perg input{background:#FBF7FC;border-color:#D7C5DD;color:#3A2142}
+.perg .btn{background:#FBF7FC;border-color:#D7C5DD;color:#4A2B55}.perg .btn.g{background:none;border-color:transparent;color:#7A5A86}
+.perg.off{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:14px;color:#7A5A86}.perg.off span{flex:1}
+:root[data-theme="dark"] .perg{background:#2B1F31;border-color:#4A3754;color:#E9DCEF}
+:root[data-theme="dark"] .perg h3{color:#E9DCEF}
+:root[data-theme="dark"] .perg input,:root[data-theme="dark"] .perg .btn{background:#21172A;border-color:#4A3754;color:#E9DCEF}
+:root[data-theme="dark"] .perg .btn.g,:root[data-theme="dark"] .perg.off{color:#C6A9D2}
+.dgrid{display:flex;flex-direction:column;gap:0}
+.dside .perg{margin-bottom:2px}
+@media (min-width:1240px){
+  .dgrid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:22px;align-items:start}
+  .dside{grid-column:2;grid-row:1;position:sticky;top:16px}
+  .dmain{grid-column:1;grid-row:1}
+  .dmain>.blq:first-child,.dmain>.vacio:first-child{margin-top:0}
+  .dside .pres{grid-template-columns:1fr 96px auto}
+  .dside .perg .btn.g{font-size:13px;padding:4px 6px}
+}
 .dayhead{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:end}
 @media (max-width:760px){.dayhead{grid-template-columns:1fr}}
 .barra{height:10px;border-radius:10px;background:color-mix(in srgb,var(--mu) 18%,transparent);overflow:hidden}
@@ -134,13 +144,14 @@ input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--mu) 70%,t
 .sec+.sec{border-top:1px solid var(--ln)}
 .sl{display:flex;align-items:center;gap:7px;font:700 13.5px var(--disp);color:var(--mu);margin-bottom:9px;text-transform:none}
 .sl .ico{width:17px;height:17px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
 .mc{border:1px solid var(--ln);border-left:4px solid var(--mu);border-radius:10px;padding:8px 10px;background:var(--sf);display:flex;flex-direction:column;gap:3px}
 .mc{position:relative;padding:10px 12px;gap:4px}
-.mc b{font:700 15.5px/1.2 var(--disp);color:var(--tinta)}
-.mc>span.ins{font:600 15px/1.2 var(--disp);color:var(--tinta);gap:6px;flex-wrap:nowrap}
+.mc b{font:700 15.5px/1.2 var(--disp);color:color-mix(in srgb,var(--tinta) 58%,var(--sf))}
+.mc>span.ins{font:700 15.5px/1.2 var(--disp);color:var(--tinta);gap:6px;flex-wrap:nowrap}
 .mc>span.ins .ico{width:16px;height:16px;flex:0 0 auto;color:var(--oro)}
 .mc>span.rl{font-size:11.5px;color:var(--mu);gap:6px;margin-top:2px}
+.mc.nm b{font-size:16px;color:var(--tinta)}
 .rdot{width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--azul)}.rdot.al{background:var(--mag)}.rdot.in{background:var(--oro)}
 .mc>span{font-size:13px;color:var(--mu);display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .mc.pr{border-left-color:var(--azul)}.mc.al{border-left-color:var(--mag)}.mc.in{border-left-color:var(--oro)}
@@ -596,7 +607,7 @@ function vPrograma(){
     <div class="row" style="justify-content:space-between;margin-top:10px"><label class="chk"><input type="checkbox" ${d.no?'checked':''} onchange="setP('dias.${i}.no',this.checked,1)">Este día no hay concierto</label>
      <button class="btn p" onclick="S.diaEd=false;render()">${ICO.check}Listo</button></div></div>`:''}
   </section>
-  ${d.no?'':`
+  ${d.no?'':`<div class="dgrid"><aside class="dside">
   ${d.sinPres?`<div class="perg off">${ICO.mic}<span>Sin presentadores este día</span><button class="btn g" style="color:var(--acc)" onclick="setP('dias.${i}.sinPres',false,1)">Añadir presentadores</button></div>`:
   `<section class="perg"><div class="row" style="justify-content:space-between;margin-bottom:8px"><h3 style="margin:0;display:flex;align-items:center;gap:8px">${ICO.mic}Presentadores</h3>
     <button class="btn g" onclick="setP('dias.${i}.sinPres',true,1)">Sin presentadores</button></div>
@@ -604,12 +615,13 @@ function vPrograma(){
      <input type="text" placeholder="Curso" list="cursos" value="${esc(p.g)}" oninput="setP('dias.${i}.pres.${k}.g',this.value)" aria-label="Curso del presentador ${k+1}">
      <button class="btn g" title="Quitar" onclick="delP('dias.${i}.pres',${k})">${ICO.del}</button></div>`).join('')}
    <button class="btn" onclick="pushP('dias.${i}.pres',{n:'',g:''})">${ICO.plus}Añadir presentador</button></section>`}
+  </aside><div class="dmain">
   ${d.bloques.length?d.bloques.map((b,k)=>vBloque(b,i,k,d.bloques.length)).join(''):`<div class="vacio">Todavía no hay nada programado este día. Añade un bloque.</div>`}
   <div class="addbar">
    <button class="btn p" onclick="addB(${i},nuevoAl())">${ICO.plus}Alumnos</button>
    <button class="btn" onclick="addB(${i},nuevoGr())">${ICO.plus}Grupo</button>
    <button class="btn" onclick="addB(${i},nuevoGr(1))">${ICO.plus}Coro</button>
-   <button class="btn" onclick="addB(${i},nuevoIn())">${ICO.plus}Artista invitado</button></div>`}
+   <button class="btn" onclick="addB(${i},nuevoIn())">${ICO.plus}Artista invitado</button></div></div></div>`}
   <datalist id="cursos">${Object.values(NIV).map(v=>`<option value="${v}">`).join('')}</datalist>`;
 }
 /* ---------- Duraciones ("3:30", "3,5" o "3") ---------- */
