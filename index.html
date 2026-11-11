@@ -92,6 +92,9 @@ input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--mu) 70%,t
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:#B9A9B0}
 .dot.al{background:#E8006A}.dot.gr{background:#3B6E99}.dot.in{background:#C98A12}
 .blk{position:absolute;top:10px;width:22px;height:36px;background:#1C1216;border-radius:0 0 5px 5px;transform:translateX(-50%);pointer-events:none}
+.key[draggable="true"]{cursor:grab}
+.key.arr{opacity:.45}
+.key.drop{outline:3px dashed #E8006A;outline-offset:-5px;background:#FFF0F6}
 .leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin:-16px 0 18px}
 .leyenda span{display:inline-flex;align-items:center;gap:6px}
 @media (prefers-reduced-motion:reduce){.key{transition:none}}
@@ -589,14 +592,14 @@ const chipVez=n=>{const v=vez(n);return v>1?`<span class="chip vet" title="Ha to
 function vPrograma(){
   const E=S.E,d=D().dias[S.dia],i=S.dia,util=Number(D().util)||25,m=minutos(d);
   const keys=D().dias.map((x,k)=>{const f=fechaDia(E,k),tipos=[...new Set(x.bloques.map(b=>b.t))];
-    return`<button class="key" aria-pressed="${k==i}" onclick="S.dia=${k};S.diaEd=false;render()" aria-label="${DIAS[k]} ${f.getDate()}">
+    return`<button class="key" aria-pressed="${k==i}" draggable="true" ondragstart="dragDia(event,${k})" ondragover="overDia(event,${k})" ondragleave="this.classList.remove('drop')" ondrop="soltarDia(event,${k})" ondragend="finDrag()" onclick="S.dia=${k};S.diaEd=false;render()" aria-label="${DIAS[k]} ${f.getDate()}. Arrastra sobre otro día para cambiarlos de sitio">
       <span class="dots">${x.no?'':tipos.map(t=>`<i class="dot ${t}"></i>`).join('')}</span>
       <span class="dn">${DIAS[k]}</span><span class="dd">${f.getDate()}</span>
       <span class="dm">${x.no?'Sin concierto':`${x.bloques.length} ${x.bloques.length==1?'bloque':'bloques'} · ${dur(minutos(x))}`}</span></button>`}).join('');
   const blacks=[1,2,3,4].map(k=>`<span class="blk" style="left:calc(10px + (100% - 20px) * ${k}/5)"></span>`).join('');
   const pct=Math.min(100,m/util*100),cls=m>util?'er':m>util-3?'wn':'';
   return `<div class="piano" role="group" aria-label="Días de la semana">${keys}${blacks}</div>
-  <div class="leyenda"><span><i class="dot al"></i>Alumnos</span><span><i class="dot gr"></i>Grupo o coro</span><span><i class="dot in"></i>Artista invitado</span><span style="margin-left:auto;gap:4px">${NIVORD.map(k=>`<span class="nv nv-${k}">${NIV[k]}</span>`).join('')}</span></div>
+  <div class="leyenda"><span><i class="dot al"></i>Alumnos</span><span><i class="dot gr"></i>Grupo o coro</span><span><i class="dot in"></i>Artista invitado</span><span class="mu">· Arrastra un día sobre otro para cambiarlos de sitio</span><span style="margin-left:auto;gap:4px">${NIVORD.map(k=>`<span class="nv nv-${k}">${NIV[k]}</span>`).join('')}</span></div>
   <section class="dia">
    <span class="df"><b>${esc(may(fLarga(fechaDia(E,i))))}</b> · ${esc(D().hora)} · ${esc(D().lugar)}${d.sub?` · <i>${esc(d.sub)}</i>`:''}</span>
    ${d.no?'<span class="dno">Sin concierto</span>':`<span class="dbar barra ${cls}" title="Tiempo previsto"><i style="width:${pct}%"></i></span><span class="dt ${cls}"><b>${dur(m)}</b> de ${util} min${m>util?' · ¡te pasas!':''}</span>`}
@@ -604,7 +607,8 @@ function vPrograma(){
    ${S.diaEd?`<div class="ded"><div class="dayhead">
     <label class="f">Título del concierto<input type="text" value="${esc(d.titulo)}" oninput="setP('dias.${i}.titulo',this.value)"></label>
     <label class="f">Nombre del espectáculo <span class="sm">(opcional)</span><input type="text" value="${esc(d.sub)}" placeholder="Ej.: Infanta Rockets" oninput="setP('dias.${i}.sub',this.value)"></label></div>
-    <div class="row" style="justify-content:space-between;margin-top:10px"><label class="chk"><input type="checkbox" ${d.no?'checked':''} onchange="setP('dias.${i}.no',this.checked,1)">Este día no hay concierto</label>
+    <div class="row" style="justify-content:space-between;margin-top:10px"><div class="row"><label class="chk"><input type="checkbox" ${d.no?'checked':''} onchange="setP('dias.${i}.no',this.checked,1)">Este día no hay concierto</label>
+     <select style="width:auto" aria-label="Mover este día a otro" onchange="if(this.value!=='')confirmaInter(${i},+this.value)"><option value="">Mover este día a…</option>${DIAS.map((n,j)=>j!=i?`<option value="${j}">${n} ${fechaDia(E,j).getDate()}</option>`:'').join('')}</select></div>
      <button class="btn p" onclick="S.diaEd=false;render()">${ICO.check}Listo</button></div></div>`:''}
   </section>
   ${d.no?'':`<div class="dgrid"><aside class="dside">
@@ -705,6 +709,25 @@ function vBloque(b,i,k,n){
   const P=`dias.${i}.bloques.${k}`,edit=S.edit.has(b.id),pleg=!edit&&S.fold.has(b.id);
   return `<article class="blq ${b.t} ${edit?'editando':''}">${cabBloque(b,i,k,n,edit,pleg)}
    ${pleg?'':`<div class="bb">${edit?editarBloque(b,P)+`<div class="sec nece"><label class="f" style="flex:1">${b.t=='al'?'Necesidades y observaciones':'Necesidades técnicas'}<input type="text" value="${esc(b.obs)}" placeholder="Micros, atriles, piano, amplis, enchufes…" oninput="setP('${P}.obs',this.value)"></label></div>`:verBloque(b)}</div>`}</article>`;
+}
+/* ---------- Cambiar días de sitio (arrastrando una tecla sobre otra) ---------- */
+function dragDia(e,k){S.drag=k;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',String(k))}catch(_){}e.currentTarget.classList.add('arr')}
+function overDia(e,k){if(S.drag==null||S.drag==k)return;e.preventDefault();e.dataTransfer.dropEffect='move';e.currentTarget.classList.add('drop')}
+function soltarDia(e,k){e.preventDefault();e.currentTarget.classList.remove('drop');const a=S.drag;finDrag();if(a==null||a==k)return;confirmaInter(a,k)}
+function finDrag(){S.drag=null;document.querySelectorAll('.key.drop,.key.arr').forEach(x=>x.classList.remove('drop','arr'))}
+const vacioDia=d=>!d.no&&!d.bloques.length;
+const resumenDia=d=>d.no?'sin concierto':d.bloques.length?d.bloques.map(tituloB).join(', '):'vacío';
+function confirmaInter(a,b){
+  const ds=D().dias,A=ds[a],B=ds[b],fa=`${DIAS[a]} ${fechaDia(S.E,a).getDate()}`,fb=`${DIAS[b]} ${fechaDia(S.E,b).getDate()}`;
+  modal(`<h3>¿Cambiar de día?</h3><p>Lo del <b>${fa}</b> (${esc(resumenDia(A))}) pasa al <b>${fb}</b>${vacioDia(B)?`, y el ${esc(DIAS[a])} queda en blanco.`:`, y lo del ${esc(fb)} (${esc(resumenDia(B))}) pasa al ${esc(fa)}.`}</p>
+   <p class="sm mu">No se borra nada: se intercambian los bloques, los presentadores y el nombre del espectáculo. Si el título es el automático («Concierto del…»), se cambia solo al día nuevo.</p>
+   <div class="row"><button class="btn p" onclick="intercambiar(${a},${b})">Cambiar</button><button class="btn" onclick="cerrar();render()">Cancelar</button></div>`);
+}
+function intercambiar(a,b){
+  const ds=D().dias,re=/^\s*concierto del (lunes|martes|miércoles|miercoles|jueves|viernes)\s*$/i;
+  const fix=(d,to)=>{if(re.test(d.titulo||''))d.titulo=`Concierto del ${DIAS[to]}`};
+  const A=ds[a],B=ds[b];fix(A,b);fix(B,a);ds[a]=B;ds[b]=A;
+  S.dia=b;S.diaEd=false;cerrar();marcar();toast(`Cambiado: ${DIAS[a]} ⇄ ${DIAS[b]}`);render();
 }
 function toggleEdit(id){S.edit.has(id)?S.edit.delete(id):S.edit.add(id);render()}
 function toggleFold(id){S.fold.has(id)?S.fold.delete(id):S.fold.add(id);render()}
