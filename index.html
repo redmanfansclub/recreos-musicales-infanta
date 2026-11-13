@@ -95,6 +95,37 @@ input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--mu) 70%,t
 .key[draggable="true"]{cursor:grab}
 .key.arr{opacity:.45}
 .key.drop{outline:3px dashed #E8006A;outline-offset:-5px;background:#FFF0F6}
+.key .dc{display:block;font:700 12.5px/1.2 var(--disp);color:#8C2643;margin:-1px 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drow{flex-basis:100%;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mini{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;padding:4px 10px;border-radius:20px;border:1px solid #D7C5DD;background:#EFE6F1;color:#4A2B55;cursor:pointer;line-height:1.4}
+.mini .ico{width:15px;height:15px}.mini .btn.g{padding:0 2px;color:#7A5A86}
+button.mini+button.mini,.drow>button.mini:not(:first-child){background:color-mix(in srgb,var(--mu) 10%,var(--sf));border-color:var(--ln);color:var(--mu)}
+.pchip{background:#FBF7FC;border:1px solid #D7C5DD;border-radius:14px;padding:0 9px;font-weight:700;cursor:grab}
+.pered{background:#EFE6F1;border:1px solid #D7C5DD;border-radius:12px;padding:12px;color:#4A2B55;margin-top:6px}
+.pered .ico{width:16px;height:16px;vertical-align:-3px}
+.mont{flex-basis:100%;margin:2px 0 0;padding:8px 12px 8px 28px;font-size:13.5px;color:var(--mu);background:color-mix(in srgb,var(--mu) 7%,var(--sf));border-radius:10px}
+:root[data-theme="dark"] .mini,:root[data-theme="dark"] .pered{background:#2B1F31;border-color:#4A3754;color:#E9DCEF}
+:root[data-theme="dark"] .pchip{background:#21172A;border-color:#4A3754}
+.blq.c{display:flex;align-items:flex-start;gap:12px;padding:12px 14px 12px 16px;border-left:5px solid var(--mag);cursor:pointer;margin-top:10px;--tc:var(--mag);transition:box-shadow .15s}
+.blq.c.gr{border-left-color:var(--azul);--tc:var(--azul)}.blq.c.in{border-left-color:var(--oro);--tc:#B07A10}
+.blq.c:hover{box-shadow:0 3px 14px rgba(60,10,30,.10)}
+.blq.c .num{width:30px;height:30px;border-radius:50%;background:var(--sf);display:grid;place-items:center;font:800 14px var(--disp);color:var(--tc);flex:0 0 auto;border:2px solid var(--tc)}
+.pc{flex:1;min-width:0}
+.pn{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.pn b{font:800 17px/1.25 var(--disp)}
+.pi{color:var(--mu);font-size:14.5px}
+.po{font:700 16px/1.3 var(--disp);margin-top:3px}.pa{font:italic 400 14px var(--txt);color:var(--mu)}
+.pm{display:flex;gap:10px;align-items:center;margin-top:6px;font-size:13px;color:var(--mu)}.pm .pill{font-size:12px;padding:2px 9px}
+.pw{color:var(--wn);font-weight:700}
+.pk{display:flex;flex-wrap:wrap;gap:3px 14px;font-size:14px;margin-top:5px}.pk span{display:inline-flex;align-items:center;gap:5px}.pk em{font-style:normal;color:var(--mu)}
+.pl{display:flex;flex-wrap:wrap;gap:2px 16px;font-size:14.5px;margin-top:5px;font-weight:600}
+.grip{color:var(--mu);opacity:.45;cursor:grab;font-size:18px;letter-spacing:-3px;align-self:center;user-select:none}
+.blq.arr,.key.arr,.pchip.arr{opacity:.4}
+.blq.dropb{box-shadow:inset 0 4px 0 var(--mag)}
+body.arrastrando .key{outline:2px dashed color-mix(in srgb,var(--mag) 40%,transparent);outline-offset:-5px}
+.cgrid{display:grid;grid-template-columns:minmax(280px,1fr) minmax(260px,420px);gap:20px;align-items:start}
+@media (max-width:820px){.cgrid{grid-template-columns:1fr}}
+.cprev canvas{width:100%;height:auto;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.15);display:block}
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px 14px}
 .leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin:-16px 0 18px}
 .leyenda span{display:inline-flex;align-items:center;gap:6px}
 @media (prefers-reduced-motion:reduce){.key{transition:none}}
@@ -392,7 +423,7 @@ const ICO={
   copy:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>'
 };
 
-const S={edit:new Set(),fold:new Set(),tab:'programa',dia:0,eds:[],E:null,user:null,timer:null,estado:'',vImg:null,dImg:null,iaDia:0,iaTipo:'guion',cartTipo:'general'};
+const S={edit:new Set(),fold:new Set(),cImg:null,cDia:0,cTxt:{},cGuia:true,presEd:false,montaje:false,dragT:null,tab:'programa',dia:0,eds:[],E:null,user:null,timer:null,estado:'',vImg:null,dImg:null,iaDia:0,iaTipo:'guion',cartTipo:'general'};
 
 /* ---------- Tema claro / oscuro ---------- */
 function temaActual(){const t=document.documentElement.dataset.theme;if(t)return t;return matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}
@@ -545,7 +576,7 @@ async function arrancar(){
   const hoy=new Date(),cur=hoy.getMonth()>=7?hoy.getFullYear():hoy.getFullYear()-1;
   S.E=S.eds.find(e=>e.anio==cur)||S.eds[0];
   if(!S.E){S.E=nuevaEdicion(cur);S.eds.unshift(S.E);await guardar()}
-  S.estado=DEMO?'Prueba: no se guarda':'Guardado';render();
+  S.estado=DEMO?'Prueba: no se guarda':'Guardado';limpiaVacios();render();
 }
 async function init(){
   if(DEMO)return arrancar();
@@ -555,7 +586,7 @@ async function init(){
 }
 
 /* ---------- Pintado general ---------- */
-const TABS=[['programa','Programa'],['semana','Semana'],['imprimir','Imprimir'],['ia','IA y cartel'],['stats','Estadísticas'],['historial','Historial'],['ajustes','Ajustes']];
+const TABS=[['programa','Programa'],['semana','Semana'],['imprimir','Imprimir'],['stats','Estadísticas'],['historial','Historial'],['ajustes','Ajustes']];
 function render(){
   const y=window.scrollY,dark=temaActual()=='dark';
   $('#app').innerHTML=`<header class="top">
@@ -566,12 +597,12 @@ function render(){
      <span class="est" id="est">${esc(S.estado)}</span>
      <button class="tema" onclick="cambiaTema()" aria-label="${dark?'Cambiar a modo claro':'Cambiar a modo oscuro'}">${dark?SOL+'<span>Claro</span>':LUNA+'<span>Oscuro</span>'}</button></div>
    </div>
-   <nav class="tabs">${TABS.map(([k,t])=>`<button ${S.tab==k?'aria-current="page"':''} onclick="S.tab='${k}';render();scrollTo(0,0)">${t}</button>`).join('')}</nav>
+   <nav class="tabs">${TABS.map(([k,t])=>`<button ${S.tab==k?'aria-current="page"':''} onclick="limpiaVacios();S.edit.clear();S.tab='${k}';render();scrollTo(0,0)">${t}</button>`).join('')}</nav>
   </header><main>${({programa:vPrograma,semana:vSemana,imprimir:vImprimir,ia:vIA,stats:vStats,historial:vHistorial,ajustes:vAjustes})[S.tab]()}</main>`;
   if(S.tab=='programa')scrollTo(0,y);
-  if(S.tab=='ia')actualizaPrompt();
+  if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir')pintaCartel();
 }
-function cambiaEd(a){S.E=S.eds.find(e=>e.anio==a);S.dia=0;render()}
+function cambiaEd(a){limpiaVacios();S.edit.clear();S.E=S.eds.find(e=>e.anio==a);S.dia=0;S.cTxt={};render()}
 
 /* ---------- Veteranos ---------- */
 const clave=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
@@ -591,43 +622,56 @@ const chipVez=n=>{const v=vez(n);return v>1?`<span class="chip vet" title="Ha to
 /* ---------- Programa ---------- */
 function vPrograma(){
   const E=S.E,d=D().dias[S.dia],i=S.dia,util=Number(D().util)||25,m=minutos(d);
-  const keys=D().dias.map((x,k)=>{const f=fechaDia(E,k),tipos=[...new Set(x.bloques.map(b=>b.t))];
-    return`<button class="key" aria-pressed="${k==i}" draggable="true" ondragstart="dragDia(event,${k})" ondragover="overDia(event,${k})" ondragleave="this.classList.remove('drop')" ondrop="soltarDia(event,${k})" ondragend="finDrag()" onclick="S.dia=${k};S.diaEd=false;render()" aria-label="${DIAS[k]} ${f.getDate()}. Arrastra sobre otro día para cambiarlos de sitio">
+  const keys=D().dias.map((x,k)=>{const f=fechaDia(E,k),tipos=[...new Set(x.bloques.map(b=>b.t))],nom=nombreDia(x);
+    return`<button class="key" aria-pressed="${k==i}" draggable="true" ondragstart="dragDia(event,${k})" ondragover="overDia(event,${k})" ondragleave="this.classList.remove('drop')" ondrop="soltarDia(event,${k})" ondragend="finDrag()" onclick="cambiaDia(${k})" aria-label="${DIAS[k]} ${f.getDate()}">
       <span class="dots">${x.no?'':tipos.map(t=>`<i class="dot ${t}"></i>`).join('')}</span>
       <span class="dn">${DIAS[k]}</span><span class="dd">${f.getDate()}</span>
+      ${nom?`<span class="dc">${esc(nom)}</span>`:''}
       <span class="dm">${x.no?'Sin concierto':`${x.bloques.length} ${x.bloques.length==1?'bloque':'bloques'} · ${dur(minutos(x))}`}</span></button>`}).join('');
   const blacks=[1,2,3,4].map(k=>`<span class="blk" style="left:calc(10px + (100% - 20px) * ${k}/5)"></span>`).join('');
   const pct=Math.min(100,m/util*100),cls=m>util?'er':m>util-3?'wn':'';
+  const presOk=d.pres.filter(p=>p.n.trim());
+  const mont=d.bloques.filter(b=>b.obs&&b.obs.trim());
+  const presChip=d.sinPres?`<button class="mini" onclick="S.presEd=!S.presEd;render()">${ICO.mic}Sin presentadores</button>`
+    :presOk.length?`<span class="mini pchips">${ICO.mic}<span class="mu">Presentan:</span>${d.pres.map((p,k)=>p.n.trim()?`<span class="pchip" draggable="true" ondragstart="dragP(event,${i},${k})" ondragend="finDrag()" title="Arrastra sobre otro día para pasar a ${esc(p.n)} a ese día">${esc(p.n)}</span>`:'').join('')}<button class="btn g" title="Editar presentadores" onclick="S.presEd=!S.presEd;render()">${ICO.edit}</button></span>`
+    :`<button class="mini" onclick="S.presEd=!S.presEd;render()">${ICO.mic}Añadir presentadores</button>`;
   return `<div class="piano" role="group" aria-label="Días de la semana">${keys}${blacks}</div>
-  <div class="leyenda"><span><i class="dot al"></i>Alumnos</span><span><i class="dot gr"></i>Grupo o coro</span><span><i class="dot in"></i>Artista invitado</span><span class="mu">· Arrastra un día sobre otro para cambiarlos de sitio</span><span style="margin-left:auto;gap:4px">${NIVORD.map(k=>`<span class="nv nv-${k}">${NIV[k]}</span>`).join('')}</span></div>
+  <div class="leyenda"><span><i class="dot al"></i>Alumnos</span><span><i class="dot gr"></i>Grupo o coro</span><span><i class="dot in"></i>Artista invitado</span><span class="mu">· Arrastra un día, una tarjeta o un presentador sobre otro día para moverlo</span><span style="margin-left:auto;gap:4px">${NIVORD.map(k=>`<span class="nv nv-${k}">${NIV[k]}</span>`).join('')}</span></div>
   <section class="dia">
-   <span class="df"><b>${esc(may(fLarga(fechaDia(E,i))))}</b> · ${esc(D().hora)} · ${esc(D().lugar)}${d.sub?` · <i>${esc(d.sub)}</i>`:''}</span>
+   <span class="df"><b>${esc(may(fLarga(fechaDia(E,i))))}</b> · ${esc(D().hora)} · ${esc(D().lugar)}</span>
    ${d.no?'<span class="dno">Sin concierto</span>':`<span class="dbar barra ${cls}" title="Tiempo previsto"><i style="width:${pct}%"></i></span><span class="dt ${cls}"><b>${dur(m)}</b> de ${util} min${m>util?' · ¡te pasas!':''}</span>`}
    <button class="btn g" title="Editar el día" aria-expanded="${!!S.diaEd}" onclick="S.diaEd=!S.diaEd;render()">${ICO.edit}</button>
+   ${d.no?'':`<div class="drow">${presChip}${mont.length?`<button class="mini" aria-expanded="${!!S.montaje}" onclick="S.montaje=!S.montaje;render()">${ICO.plug}Montaje (${mont.length})</button>`:''}</div>`}
+   ${S.montaje&&mont.length&&!d.no?`<ul class="mont">${mont.map(b=>`<li><b>${esc(tituloB(b))}:</b> ${esc(b.obs)}</li>`).join('')}</ul>`:''}
+   ${S.presEd&&!d.no?`<div class="ded pered"><div class="row" style="justify-content:space-between;margin-bottom:8px"><b>${ICO.mic} Presentadores del ${esc(DIAS[i])}</b>
+     <label class="chk"><input type="checkbox" ${d.sinPres?'checked':''} onchange="setP('dias.${i}.sinPres',this.checked,1)">Este día no hay presentadores</label></div>
+    ${d.sinPres?'':`${d.pres.map((p,k)=>`<div class="pres"><input type="text" placeholder="Nombre" value="${esc(p.n)}" oninput="setP('dias.${i}.pres.${k}.n',this.value)" aria-label="Presentador ${k+1}">
+      <input type="text" placeholder="Curso" list="cursos" value="${esc(p.g)}" oninput="setP('dias.${i}.pres.${k}.g',this.value)" aria-label="Curso del presentador ${k+1}">
+      <button class="btn g" title="Quitar" onclick="delP('dias.${i}.pres',${k})">${ICO.del}</button></div>`).join('')}
+     <div class="row"><button class="btn" onclick="pushP('dias.${i}.pres',{n:'',g:''})">${ICO.plus}Añadir presentador</button>
+      <button class="btn" onclick="presSemana(${i})">Poner los mismos toda la semana</button></div>`}
+    <div class="row" style="justify-content:flex-end;margin-top:8px"><button class="btn p" onclick="S.presEd=false;render()">${ICO.check}Listo</button></div></div>`:''}
    ${S.diaEd?`<div class="ded"><div class="dayhead">
     <label class="f">Título del concierto<input type="text" value="${esc(d.titulo)}" oninput="setP('dias.${i}.titulo',this.value)"></label>
-    <label class="f">Nombre del espectáculo <span class="sm">(opcional)</span><input type="text" value="${esc(d.sub)}" placeholder="Ej.: Infanta Rockets" oninput="setP('dias.${i}.sub',this.value)"></label></div>
+    <label class="f">Nombre que sale en la tecla <span class="sm">(opcional)</span><input type="text" value="${esc(d.sub)}" placeholder="Ej.: Concierto de alumnos, Infanta Rockets" oninput="setP('dias.${i}.sub',this.value)" onchange="render()"></label></div>
     <div class="row" style="justify-content:space-between;margin-top:10px"><div class="row"><label class="chk"><input type="checkbox" ${d.no?'checked':''} onchange="setP('dias.${i}.no',this.checked,1)">Este día no hay concierto</label>
      <select style="width:auto" aria-label="Mover este día a otro" onchange="if(this.value!=='')confirmaInter(${i},+this.value)"><option value="">Mover este día a…</option>${DIAS.map((n,j)=>j!=i?`<option value="${j}">${n} ${fechaDia(E,j).getDate()}</option>`:'').join('')}</select></div>
      <button class="btn p" onclick="S.diaEd=false;render()">${ICO.check}Listo</button></div></div>`:''}
   </section>
-  ${d.no?'':`<div class="dgrid"><aside class="dside">
-  ${d.sinPres?`<div class="perg off">${ICO.mic}<span>Sin presentadores este día</span><button class="btn g" style="color:var(--acc)" onclick="setP('dias.${i}.sinPres',false,1)">Añadir presentadores</button></div>`:
-  `<section class="perg"><div class="row" style="justify-content:space-between;margin-bottom:8px"><h3 style="margin:0;display:flex;align-items:center;gap:8px">${ICO.mic}Presentadores</h3>
-    <button class="btn g" onclick="setP('dias.${i}.sinPres',true,1)">Sin presentadores</button></div>
-   ${d.pres.map((p,k)=>`<div class="pres"><input type="text" placeholder="Nombre" value="${esc(p.n)}" oninput="setP('dias.${i}.pres.${k}.n',this.value)" aria-label="Presentador ${k+1}">
-     <input type="text" placeholder="Curso" list="cursos" value="${esc(p.g)}" oninput="setP('dias.${i}.pres.${k}.g',this.value)" aria-label="Curso del presentador ${k+1}">
-     <button class="btn g" title="Quitar" onclick="delP('dias.${i}.pres',${k})">${ICO.del}</button></div>`).join('')}
-   <button class="btn" onclick="pushP('dias.${i}.pres',{n:'',g:''})">${ICO.plus}Añadir presentador</button></section>`}
-  </aside><div class="dmain">
-  ${d.bloques.length?d.bloques.map((b,k)=>vBloque(b,i,k,d.bloques.length)).join(''):`<div class="vacio">Todavía no hay nada programado este día. Añade un bloque.</div>`}
+  ${d.no?'':`<div class="lista" ondragover="overFin(event)" ondrop="soltarFin(event,${i})">
+  ${d.bloques.length?d.bloques.map((b,k)=>vBloque(b,i,k,d.bloques.length)).join(''):`<div class="vacio">Todavía no hay nada programado este día. Añade un bloque.</div>`}</div>
   <div class="addbar">
    <button class="btn p" onclick="addB(${i},nuevoAl())">${ICO.plus}Alumnos</button>
    <button class="btn" onclick="addB(${i},nuevoGr())">${ICO.plus}Grupo</button>
    <button class="btn" onclick="addB(${i},nuevoGr(1))">${ICO.plus}Coro</button>
-   <button class="btn" onclick="addB(${i},nuevoIn())">${ICO.plus}Artista invitado</button></div></div></div>`}
+   <button class="btn" onclick="addB(${i},nuevoIn())">${ICO.plus}Artista invitado</button></div>`}
   <datalist id="cursos">${Object.values(NIV).map(v=>`<option value="${v}">`).join('')}</datalist>`;
 }
+const RE_TIT=/^\s*concierto del (lunes|martes|miércoles|miercoles|jueves|viernes)\s*$/i;
+function nombreDia(d){if(d.no)return '';if(d.sub&&d.sub.trim())return d.sub.trim();return d.titulo&&!RE_TIT.test(d.titulo)?d.titulo:''}
+function cambiaDia(k){limpiaVacios();S.edit.clear();S.dia=k;S.diaEd=false;S.presEd=false;S.montaje=false;render()}
+function presSemana(i){const src=D().dias[i].pres.filter(p=>p.n.trim()).map(p=>({...p}));
+  D().dias.forEach((d,j)=>{if(j!=i&&!d.no&&!d.sinPres)d.pres=src.map(p=>({...p}))});marcar();toast('Presentadores copiados a toda la semana');render()}
 /* ---------- Duraciones ("3:30", "3,5" o "3") ---------- */
 function parseMin(v){const s=String(v||'').trim();const m=s.match(/^(\d+)\s*[:']\s*(\d{1,2})$/);if(m)return +m[1]+Math.min(59,+m[2])/60;const n=parseFloat(s.replace(',','.'));return isFinite(n)?n:0}
 function fmtMin(m){m=Number(m)||0;let mm=Math.floor(m),ss=Math.round((m-mm)*60);if(ss==60){mm++;ss=0}return `${mm}:${String(ss).padStart(2,'0')}`}
@@ -705,16 +749,62 @@ function editarBloque(b,P){
   return `<div class="sec"><label class="f">Artista o grupo invitado<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)" onchange="render()"></label>
      <label class="f" style="margin-top:10px">Presentación breve para los presentadores<textarea style="min-height:70px" oninput="setP('${P}.presenta',this.value)" placeholder="Quién es, de dónde viene, qué estilo toca…">${esc(b.presenta)}</textarea></label></div>${vRep(P,b.rep)}`;
 }
-function vBloque(b,i,k,n){
-  const P=`dias.${i}.bloques.${k}`,edit=S.edit.has(b.id),pleg=!edit&&S.fold.has(b.id);
-  return `<article class="blq ${b.t} ${edit?'editando':''}">${cabBloque(b,i,k,n,edit,pleg)}
-   ${pleg?'':`<div class="bb">${edit?editarBloque(b,P)+`<div class="sec nece"><label class="f" style="flex:1">${b.t=='al'?'Necesidades y observaciones':'Necesidades técnicas'}<input type="text" value="${esc(b.obs)}" placeholder="Micros, atriles, piano, amplis, enchufes…" oninput="setP('${P}.obs',this.value)"></label></div>`:verBloque(b)}</div>`}</article>`;
+function progCard(b){
+  const w=(t)=>`<span class="pw">${t}</span>`;
+  if(b.t=='al'){const nm=b.alumnos.filter(u=>u.n.trim());
+    if(!nm.length&&!b.obra)return `<div class="pc"><div class="pn mu">Bloque vacío: pulsa para completarlo</div></div>`;
+    return `<div class="pc"><div class="pn"><b>${esc(nombres(b))||'Sin nombre'}</b>${b.alumnos.map(u=>nvChip(u.g)).join('')}${b.instr?`<span class="pi">· ${esc(b.instr)}</span>`:''}${b.alumnos.map(u=>chipVez(u.n)).join('')}</div>
+     <div class="po">${b.obra?`«${esc(b.obra)}»`:'<span class="mu">Obra sin indicar</span>'}${b.autor?` <span class="pa">${esc(b.autor)}</span>`:''}</div>
+     <div class="pm"><span class="pill ${b.formato=='acappella'?'ac':''}">${b.formato=='acappella'?ACAP:'Con playback'}</span><span>${fmtMin(b.min)}</span>${b.formato=='playback'&&!b.ok?w('Playback sin probar'):''}</div></div>`}
+  const obras=b.rep.filter(r=>r.obra).map((r,j)=>`<span>${j+1}. ${esc(limpiaTit(r.obra))}${r.autor?` <span class="pa">${esc(r.autor)}</span>`:''}</span>`).join('');
+  if(b.t=='gr'&&b.coro)return `<div class="pc"><div class="pn"><b>«${esc(b.nombre||'Coro')}»</b><span class="pi">· Coro${b.director?` · dir. ${esc(b.director)}`:''}${b.cantantes?` · ${esc(b.cantantes)} voces`:''}</span></div>${obras?`<div class="pl">${obras}</div>`:''}<div class="pm"><span>${fmtMin(minB(b))}</span></div></div>`;
+  if(b.t=='gr')return `<div class="pc"><div class="pn"><b>«${esc(b.nombre||'Grupo sin nombre')}»</b><span class="pi">· Grupo</span></div><div class="pk">${b.comp.filter(c=>c.n).map(c=>`<span><i class="rdot ${c.rol}"></i>${esc(c.n)}${c.instr?` <em>${esc(c.instr)}</em>`:''}</span>`).join('')}</div>${obras?`<div class="pl">${obras}</div>`:''}<div class="pm"><span>${fmtMin(minB(b))}</span></div></div>`;
+  return `<div class="pc"><div class="pn"><b>${esc(b.nombre||'Artista invitado')}</b><span class="pi">· Artista invitado</span></div>${obras?`<div class="pl">${obras}</div>`:''}<div class="pm"><span>${fmtMin(minB(b))}</span></div></div>`;
 }
-/* ---------- Cambiar días de sitio (arrastrando una tecla sobre otra) ---------- */
-function dragDia(e,k){S.drag=k;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',String(k))}catch(_){}e.currentTarget.classList.add('arr')}
-function overDia(e,k){if(S.drag==null||S.drag==k)return;e.preventDefault();e.dataTransfer.dropEffect='move';e.currentTarget.classList.add('drop')}
-function soltarDia(e,k){e.preventDefault();e.currentTarget.classList.remove('drop');const a=S.drag;finDrag();if(a==null||a==k)return;confirmaInter(a,k)}
-function finDrag(){S.drag=null;document.querySelectorAll('.key.drop,.key.arr').forEach(x=>x.classList.remove('drop','arr'))}
+function vBloque(b,i,k,n){
+  const P=`dias.${i}.bloques.${k}`,open=S.edit.has(b.id),num=n>1?`<span class="num">${k+1}</span>`:'';
+  if(!open)return `<article class="blq c ${b.t}" draggable="true" tabindex="0" role="button" aria-label="Abrir para editar"
+    ondragstart="dragB(event,${i},'${b.id}')" ondragend="finDrag()" ondragover="overB(event,'${b.id}')" ondragleave="this.classList.remove('dropb')" ondrop="soltarB(event,${i},'${b.id}')"
+    onclick="abrirB('${b.id}')" onkeydown="if(event.key=='Enter')abrirB('${b.id}')">${num}${progCard(b)}<span class="grip" title="Arrastra para mover">⋮⋮</span></article>`;
+  const tt=b.t=='gr'&&b.coro?'co':b.t;
+  const otros=D().dias.map((x,j)=>j!=i?`<option value="${j}">${DIAS[j]}</option>`:'').join('');
+  return `<article class="blq ${b.t} editando"><div class="bh ${b.t}">${num}<div class="bt"><b>${TB[tt]}</b><span>${resumenB(b)}</span></div><div class="bacc">
+    <select aria-label="Pasar a otro día" onchange="if(this.value!=='')pasarDia(${i},${k},+this.value)"><option value="">Pasar a…</option>${otros}</select>
+    <button class="btn g" title="Borrar bloque" onclick="borrarB(${i},${k})">${ICO.del}</button>
+    <button class="btn p" onclick="cerrarB(${i},'${b.id}')">${ICO.check}Cerrar</button></div></div>
+   <div class="bb">${editarBloque(b,P)}<div class="sec nece"><label class="f" style="flex:1">${b.t=='al'?'Necesidades y observaciones':'Necesidades técnicas'}<input type="text" value="${esc(b.obs)}" placeholder="Micros, atriles, piano, amplis, enchufes…" oninput="setP('${P}.obs',this.value)"></label></div></div></article>`;
+}
+/* ---------- Bloques vacíos: se eliminan solos al cerrarlos ---------- */
+function vacioB(b){const t=s=>String(s||'').trim();
+  if(b.t=='al')return !b.alumnos.some(u=>t(u.n))&&!t(b.obra)&&!t(b.autor)&&!t(b.instr)&&!t(b.obs)&&!t(b.yt);
+  const rep=(b.rep||[]).some(r=>t(r.obra)||t(r.autor));
+  if(b.t=='gr')return !rep&&!t(b.obs)&&!t(b.director)&&!t(b.cantantes)&&!(b.comp||[]).some(c=>t(c.n)||t(c.instr))&&(!t(b.nombre)||(b.coro&&b.nombre=='Coro del IES Infanta Elena'));
+  return !rep&&!t(b.obs)&&!t(b.nombre)&&!t(b.presenta);
+}
+function limpiaVacios(){let n=0;D().dias.forEach(d=>{const a=d.bloques.length;d.bloques=d.bloques.filter(b=>!vacioB(b));n+=a-d.bloques.length});if(n)marcar();return n}
+function abrirB(id){S.edit.add(id);render()}
+function cerrarB(i,id){S.edit.delete(id);const d=D().dias[i],b=d.bloques.find(x=>x.id==id);if(b&&vacioB(b)){d.bloques=d.bloques.filter(x=>x!==b);marcar()}render()}
+/* ---------- Arrastrar: días, tarjetas y presentadores ---------- */
+function iniDrag(e,t,txt){S.dragT=t;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',txt||'rmi')}catch(_){}document.body.classList.add('arrastrando')}
+function dragDia(e,k){iniDrag(e,{tipo:'dia',k});e.currentTarget.classList.add('arr')}
+function dragB(e,i,id){e.stopPropagation();iniDrag(e,{tipo:'b',dia:i,id});e.currentTarget.classList.add('arr')}
+function dragP(e,i,k){e.stopPropagation();iniDrag(e,{tipo:'p',dia:i,k});e.currentTarget.classList.add('arr')}
+function overDia(e,k){const t=S.dragT;if(!t)return;if(t.tipo=='dia'?t.k==k:t.dia==k)return;e.preventDefault();e.dataTransfer.dropEffect='move';e.currentTarget.classList.add('drop')}
+function soltarDia(e,k){e.preventDefault();e.stopPropagation();const t=S.dragT;finDrag();if(!t)return;
+  if(t.tipo=='dia'){if(t.k!=k)confirmaInter(t.k,k)}
+  else if(t.tipo=='b'&&t.dia!=k){const o=D().dias[t.dia],j=o.bloques.findIndex(b=>b.id==t.id);if(j<0)return;const [b]=o.bloques.splice(j,1);
+    D().dias[k].bloques.push(b);D().dias[k].no=false;S.edit.delete(b.id);marcar();toast(`«${tituloB(b)}» pasa al ${DIAS[k]}`);render()}
+  else if(t.tipo=='p'&&t.dia!=k){const o=D().dias[t.dia],[p]=o.pres.splice(t.k,1);if(!p)return;const dst=D().dias[k];dst.sinPres=false;
+    const hueco=dst.pres.findIndex(x=>!x.n.trim());if(hueco>=0)dst.pres[hueco]=p;else dst.pres.push(p);
+    if(!o.pres.length)o.pres.push({n:'',g:''});marcar();toast(`${p.n} presenta ahora el ${DIAS[k]}`);render()}
+}
+function overB(e,id){const t=S.dragT;if(!t||t.tipo!='b'||t.id==id)return;e.preventDefault();e.stopPropagation();e.currentTarget.classList.add('dropb')}
+function soltarB(e,i,id){e.preventDefault();e.stopPropagation();const t=S.dragT;finDrag();if(!t||t.tipo!='b'||t.id==id||t.dia!=i)return;
+  const a=D().dias[i].bloques,from=a.findIndex(b=>b.id==t.id);if(from<0)return;const [b]=a.splice(from,1);const to=a.findIndex(x=>x.id==id);a.splice(to,0,b);marcar();render()}
+function overFin(e){const t=S.dragT;if(!t||t.tipo!='b'||t.dia!=S.dia)return;e.preventDefault()}
+function soltarFin(e,i){const t=S.dragT;if(!t||t.tipo!='b'||t.dia!=i)return;e.preventDefault();finDrag();
+  const a=D().dias[i].bloques,from=a.findIndex(b=>b.id==t.id);if(from<0)return;const [b]=a.splice(from,1);a.push(b);marcar();render()}
+function finDrag(){S.dragT=null;document.body.classList.remove('arrastrando');document.querySelectorAll('.drop,.arr,.dropb').forEach(x=>x.classList.remove('drop','arr','dropb'))}
 const vacioDia=d=>!d.no&&!d.bloques.length;
 const resumenDia=d=>d.no?'sin concierto':d.bloques.length?d.bloques.map(tituloB).join(', '):'vacío';
 function confirmaInter(a,b){
@@ -729,8 +819,6 @@ function intercambiar(a,b){
   const A=ds[a],B=ds[b];fix(A,b);fix(B,a);ds[a]=B;ds[b]=A;
   S.dia=b;S.diaEd=false;cerrar();marcar();toast(`Cambiado: ${DIAS[a]} ⇄ ${DIAS[b]}`);render();
 }
-function toggleEdit(id){S.edit.has(id)?S.edit.delete(id):S.edit.add(id);render()}
-function toggleFold(id){S.fold.has(id)?S.fold.delete(id):S.fold.add(id);render()}
 function addB(i,b){D().dias[i].bloques.push(b);D().dias[i].no=false;S.edit.add(b.id);marcar();render()}
 function mover(i,k,dir){const a=D().dias[i].bloques;[a[k],a[k+dir]]=[a[k+dir],a[k]];marcar();render()}
 function borrarB(i,k){const b=D().dias[i].bloques[k];
@@ -850,11 +938,68 @@ function diplomaHTML(p){
 }
 function imprimirDiplomas(prueba){const l=listaDiplomas();if(!l.length)return toast('Todavía no hay alumnos con nombre',1);
   imprimir((prueba?l.slice(0,1):l).map(diplomaHTML).join(''),'landscape')}
+/* ---------- Cartel del día sobre el modelo con hueco (la imagen no se guarda: solo se usa al generar) ---------- */
+const CFGC={top:38,bot:88,mar:10,size:40,color:'#2A1018'};
+const cfgC=()=>D().cartel||(D().cartel={...CFGC});
+function textoCartel(i){const d=D().dias[i],L=['# '+(nombreDia(d)||d.titulo)];
+  d.bloques.forEach(b=>{L.push('');
+    if(b.t=='al'){const ex=[cursosB(b),b.instr].filter(Boolean).join(' – ');L.push(`${nombres(b)}${ex?` (${ex})`:''}`);if(b.obra)L.push(`«${b.obra}»${b.autor?` (${b.autor})`:''}`)}
+    else{L.push(b.t=='gr'?`«${b.nombre}»`:`${b.nombre}${b.t=='in'?' (artista invitado)':''}`);const o=b.rep.filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}»`);if(o.length)L.push(o.join(' · '))}});
+  return L.join('\n');
+}
+async function pintaCartel(){
+  const cv=document.getElementById('cv');if(!cv||!S.cImg)return;
+  const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.src=S.cImg});
+  try{await document.fonts.ready}catch(_){}
+  const W=img.naturalWidth,H=img.naturalHeight;cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0);
+  const cf=cfgC(),x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=y1-y0;
+  const raw=(S.cTxt[S.cDia]??textoCartel(S.cDia)).split('\n');
+  const tipo=l=>l.startsWith('# ')?'t':!l.trim()?'g':/^[«"“]/.test(l.trim())?'o':'n';
+  const font=(t,s)=>t=='t'?`800 ${s*1.3}px "Bricolage Grotesque", sans-serif`:t=='o'?`italic 400 ${s*.86}px "Atkinson Hyperlegible", sans-serif`:`700 ${s}px "Bricolage Grotesque", sans-serif`;
+  const wrap=(txt,maxw)=>{const out=[];let cur='';txt.split(/\s+/).forEach(w=>{const t=cur?cur+' '+w:w;if(c.measureText(t).width>maxw&&cur){out.push(cur);cur=w}else cur=t});if(cur)out.push(cur);return out};
+  const lay=s=>{let h=0;const it=[];raw.forEach(l=>{const t=tipo(l);if(t=='g'){h+=s*.5;it.push({t,h:s*.5});return}
+    c.font=font(t,s);const lh=(t=='t'?s*1.3:t=='o'?s*.86:s)*1.22,ls=wrap(t=='t'?l.slice(2):l.trim(),aw),extra=t=='t'?s*.4:0;it.push({t,ls,lh,s,extra});h+=ls.length*lh+extra});return{h,it}};
+  let s=Math.max(10,Math.round(H*cf.size/1000));for(;s>8;s--){if(lay(s).h<=ah)break}
+  const Lt=lay(s);let y=y0+Math.max(0,(ah-Lt.h)/2);c.fillStyle=cf.color;c.textAlign='center';c.textBaseline='top';
+  Lt.it.forEach(o=>{if(o.t=='g'){y+=o.h;return}c.font=font(o.t,o.s);o.ls.forEach(l=>{c.fillText(l,(x0+x1)/2,y);y+=o.lh});y+=o.extra});
+  if(S.cGuia){c.save();c.strokeStyle='rgba(232,0,106,.85)';c.lineWidth=Math.max(2,W/350);c.setLineDash([W/70,W/110]);c.strokeRect(x0,y0,aw,ah);c.restore()}
+}
+async function exportaCartel(modo){
+  if(!S.cImg)return toast('Carga primero el modelo del cartel',1);
+  const g=S.cGuia;S.cGuia=false;await pintaCartel();const cv=$('#cv'),nom=`Cartel_${DIAS[S.cDia]}_${S.E.anio}`;
+  if(modo=='png')await new Promise(r=>cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=nom+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);r()},'image/png'));
+  else imprimir(`<div class="pg" style="text-align:center"><img src="${cv.toDataURL('image/jpeg',.92)}" style="max-width:190mm;max-height:275mm"></div>`,'portrait');
+  S.cGuia=g;setTimeout(pintaCartel,600);
+}
+function vCartel(){
+  const cf=cfgC(),opD=D().dias.map((d,i)=>`<option value="${i}" ${i==S.cDia?'selected':''}>${DIAS[i]} ${fechaDia(S.E,i).getDate()}${d.no?' (sin concierto)':''}</option>`).join('');
+  const rng=(k,t,min,max)=>`<label class="f">${t}<input type="range" min="${min}" max="${max}" value="${cf[k]}" oninput="cfgC().${k}=+this.value;marcar();pintaCartel()"></label>`;
+  return `<section class="panel cartel"><h3>Cartel del día con tu modelo</h3>
+   <p class="sm mu" style="margin-top:0">Carga el modelo con el hueco (lo tienes en tu carpeta de Drive). La imagen no se guarda en la app: solo se usa para generar el cartel, que descargas en PNG para redes o imprimes en A4.</p>
+   <div class="cgrid"><div>
+    <div class="row"><label class="btn ${S.cImg?'':'p'}">${S.cImg?'Cambiar modelo':'Cargar modelo'}<input type="file" accept="image/*" hidden onchange="cargaImg(this,'cImg')"></label>
+     ${D().drive?`<a class="btn" href="${esc(D().drive)}" target="_blank" rel="noopener">${ICO.drive}Abrir Drive</a>`:''}
+     <label class="f" style="width:auto">Día<select onchange="S.cDia=+this.value;render()">${opD}</select></label></div>
+    <label class="f" style="margin-top:12px">Texto del cartel<textarea id="ctx" style="min-height:190px;font-size:14px" oninput="S.cTxt[S.cDia]=this.value;pintaCartel()">${esc(S.cTxt[S.cDia]??textoCartel(S.cDia))}</textarea></label>
+    <p class="sm mu" style="margin:4px 0 8px"># al principio = título grande · línea que empieza por «» = obra en cursiva · línea vacía = separación.
+     <button class="btn g" style="padding:0;color:var(--acc)" onclick="delete S.cTxt[S.cDia];render()">Volver a rellenar con el programa</button></p>
+    <div class="cfg">${rng('top','Zona: empieza (%)',5,70)}${rng('bot','Zona: termina (%)',40,98)}${rng('mar','Márgenes laterales (%)',0,25)}${rng('size','Tamaño máximo de letra',20,70)}
+     <label class="f">Color del texto<input type="color" value="${esc(cf.color)}" oninput="cfgC().color=this.value;marcar();pintaCartel()" style="height:38px;padding:2px"></label></div>
+    <label class="chk" style="margin-top:8px"><input type="checkbox" ${S.cGuia?'checked':''} onchange="S.cGuia=this.checked;pintaCartel()">Ver la zona del texto (no sale al descargar)</label>
+    <div class="row" style="margin-top:12px"><button class="btn p" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button><button class="btn" onclick="exportaCartel('pdf')" ${S.cImg?'':'disabled'}>${ICO.print}Imprimir / PDF</button></div>
+   </div><div class="cprev">${S.cImg?'<canvas id="cv" aria-label="Vista previa del cartel"></canvas>':'<div class="vacio" style="margin:0">Carga tu modelo para ver aquí el cartel con el programa del día.</div>'}</div></div></section>`;
+}
+const promptHueco=()=>`Te adjunto el cartel de este año de los «Recreos Musicales del INFANTA» (Semana de Santa Cecilia, IES Infanta Elena). Necesito una versión MODELO para hacer los carteles de cada día:
+- Mismo estilo, colores, tipografía, ilustraciones y adornos que el original.
+- Arriba, conserva solo estos textos: «RECREOS MUSICALES DEL INFANTA», «Semana de Santa Cecilia ${S.E.anio}» y «IES Infanta Elena · Recreo ${D().hora} · ${D().lugar}». Quita cualquier otro texto.
+- Deja una zona central completamente lisa y vacía, sin texto ni dibujos, desde el 38 % hasta el 88 % de la altura del cartel y con un 10 % de margen a cada lado: un fondo claro y uniforme (o un recuadro tipo pergamino o papel) donde yo escribiré después el programa de cada concierto en letra oscura.
+- Formato A4 vertical (proporción 210 × 297) y la mayor resolución posible.`;
 function vImprimir(){
   const opD=D().dias.map((d,i)=>`<option value="${i}" ${i==S.dia?'selected':''}>${DIAS[i]} ${fechaDia(S.E,i).getDate()}${d.no?' (sin concierto)':''}</option>`).join('');
   const nVal=listaAlumnosVales().length,nDip=listaDiplomas().length;
   return `<h2>Imprimir</h2><p class="mu" style="margin:0 0 18px">Todo sale en A4. En el cuadro de impresión puedes elegir «Guardar como PDF» y subirlo a tu carpeta de Drive.</p>
-  <div class="grid2">
+  ${vCartel()}
+  <div class="grid2" style="margin-top:18px">
    <section class="panel"><h3>Hoja de apuntes</h3><p class="sm mu">En blanco y válida para cualquier día: ocho recuadros para tomar notas en clase y pasarlas luego a la app.</p>
     <button class="btn p" onclick="imprimir(hojaApuntes(),'portrait')">${ICO.print}Imprimir en blanco</button></section>
    <section class="panel"><h3>Ficha del día</h3><p class="sm mu">Todo lo programado con detalle: intérpretes, componentes, repertorio, minutos y necesidades técnicas. Para organizar el montaje.</p>
@@ -958,7 +1103,7 @@ Texto exacto, solo en la parte superior:
 Deja la franja central completamente lisa y despejada (entre el 35 % y el 75 % de la altura): ahí imprimiré el nombre del alumno, la obra que tocó y una frase de agradecimiento.
 Abajo, a la izquierda, «Jumilla, noviembre de ${S.E.anio}», y a la derecha una línea para la firma con «El Departamento de Música» debajo.
 Estilo elegante pero alegre, con orla decorativa fina y márgenes limpios para imprimir.`;
-function promptActual(){return{guion:()=>promptGuion(S.iaDia),programa:()=>promptPrograma(S.iaDia),cartel:promptCartel,vales:promptVales,diploma:promptDiploma}[S.iaTipo]()}
+function promptActual(){return{guion:()=>promptGuion(S.iaDia),programa:()=>promptPrograma(S.iaDia),cartel:promptCartel,hueco:promptHueco,vales:promptVales,diploma:promptDiploma}[S.iaTipo]()}
 function actualizaPrompt(){const t=$('#prompt');if(t)t.value=promptActual()}
 async function llevarA(dest){
   const t=$('#prompt').value;await copiar(t);
@@ -967,9 +1112,9 @@ async function llevarA(dest){
 }
 function vIA(){
   const opD=D().dias.map((d,i)=>`<option value="${i}" ${i==S.iaDia?'selected':''}>${DIAS[i]}${d.no?' (sin concierto)':''}</option>`).join('');
-  const T=[['guion','Guion de presentadores'],['programa','Texto del programa'],['cartel','Cartel'],['vales','Vales a juego'],['diploma','Diploma']];
-  const imagen=['cartel','vales','diploma'].includes(S.iaTipo);
-  return `<h2>IA y cartel</h2><p class="mu" style="margin:0 0 18px">La app prepara el encargo con los datos de la semana. Lo copias, lo pegas en la IA y guardas el resultado en tu carpeta de Drive.</p>
+  const T=[['guion','Guion de presentadores'],['programa','Texto del programa'],['cartel','Cartel'],['hueco','Modelo con hueco'],['vales','Vales a juego'],['diploma','Diploma']];
+  const imagen=['cartel','hueco','vales','diploma'].includes(S.iaTipo);
+  return `<h2 style="margin-top:34px">Musical, cartel y encargos para la IA</h2><p class="mu" style="margin:0 0 18px">La app prepara el encargo con los datos de la semana. Lo copias, lo pegas en la IA y guardas el resultado en tu carpeta de Drive.</p>
   <div class="grid2" style="grid-template-columns:minmax(260px,1fr) 2fr">
    <section class="panel"><h3>El musical de este curso</h3>
     <label class="f">Musical<input type="text" value="${esc(D().musical)}" placeholder="Ej.: Descendientes" oninput="setP('musical',this.value);actualizaPrompt()"></label>
@@ -986,7 +1131,7 @@ function vIA(){
        <option value="dia" ${S.cartTipo=='dia'?'selected':''}>De un día, con hueco liso para el programa</option></select></label>`:''}</div>
     <textarea id="prompt" aria-label="Encargo para la IA"></textarea>
     <div class="row" style="margin-top:12px">
-     ${imagen?`<button class="btn p" onclick="llevarA('gemini')">Copiar y abrir Gemini</button><button class="btn" onclick="llevarA('chatgpt')">Copiar y abrir ChatGPT</button>`
+     ${imagen?`<button class="btn p" onclick="llevarA('chatgpt')">Copiar y abrir ChatGPT</button><button class="btn" onclick="llevarA('gemini')">Copiar y abrir Gemini</button>`
       :`<button class="btn p" onclick="llevarA('claude')">Copiar y abrir Claude</button><button class="btn" onclick="llevarA('gemini')">Gemini</button><button class="btn" onclick="llevarA('chatgpt')">ChatGPT</button>`}
      <button class="btn g" onclick="copiar($('#prompt').value).then(()=>toast('Copiado'))">${ICO.copy}Solo copiar</button></div>
     <p class="sm mu" style="margin:10px 0 0">${imagen?'Gemini (Nano Banana) va muy bien editando sobre una imagen: adjúntale el cartel del año para que los vales y el diploma salgan a juego.':'Puedes retocar el texto antes de copiarlo.'}</p></section>
@@ -1094,7 +1239,7 @@ function vAjustes(){
     <div class="row" style="margin-top:10px">${D().drive?`<a class="btn" href="${esc(D().drive)}" target="_blank" rel="noopener">${ICO.drive}Abrir carpeta del año</a>`:''}</div></section>
    <section class="panel"><h3>Sesión</h3><p class="sm">${DEMO?'Modo de prueba: no se guarda nada.':'Has entrado como <b>'+esc(S.user?.email||'')+'</b>.'}</p>
     <button class="btn" onclick="salir()">${DEMO?'Salir de la prueba':'Cerrar sesión'}</button></section>
-  </div>`;
+  </div>${vIA()}`;
 }
 
 init();
