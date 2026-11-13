@@ -131,17 +131,16 @@ body.arrastrando .key{outline:2px dashed color-mix(in srgb,var(--mag) 40%,transp
 .dudas{margin-bottom:18px;border-color:color-mix(in srgb,var(--oro) 60%,var(--ln));background:color-mix(in srgb,var(--oro) 8%,var(--sf))}
 .duda{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--ln)}
 .duda .btn.sm{font-size:13px;padding:5px 10px}
-.sday{background:var(--sf);border:1.5px solid color-mix(in srgb,var(--telon) 30%,var(--ln));border-left:6px solid var(--telon);border-radius:16px;overflow:hidden;margin-bottom:22px;box-shadow:0 3px 14px rgba(60,10,30,.08)}
-:root[data-theme="dark"] .sday{border-left-color:var(--oro);box-shadow:none}
-.sday.off{opacity:.65}
-.sdh{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:12px 18px;background:color-mix(in srgb,var(--telon) 14%,var(--sf));border-bottom:1px solid var(--ln)}
+.sday{background:var(--sf);border:2px solid color-mix(in srgb,var(--telon) 35%,var(--ln));border-left:9px solid var(--telon);border-bottom-width:4px;border-radius:18px;overflow:hidden;margin-bottom:26px;box-shadow:0 8px 24px rgba(60,10,30,.12)}
+:root[data-theme="dark"] .sday{background:#2A1F25;border-color:#5A3A48;border-left-color:var(--oro);box-shadow:0 8px 22px rgba(0,0,0,.45)}
+.sdh{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:14px 20px;background:linear-gradient(90deg,color-mix(in srgb,var(--telon) 20%,var(--sf)),color-mix(in srgb,var(--telon) 6%,var(--sf)));border-bottom:2px solid color-mix(in srgb,var(--telon) 25%,var(--ln))}
 .sdd{display:block;font:700 12px var(--disp);color:var(--acc);text-transform:uppercase;letter-spacing:.07em}
 .sdh b{font:800 20px/1.2 var(--disp)}.sdt{font-size:14px;color:var(--mu)}
 table.prg{width:100%;border-collapse:collapse;font-size:15px}
 table.prg th{font:700 11.5px var(--disp);text-transform:uppercase;letter-spacing:.06em;color:var(--mu);text-align:left;padding:10px 14px 8px;border-bottom:1px solid var(--ln)}
 table.prg td{padding:10px 14px;border-bottom:1px solid var(--ln);vertical-align:top}
 table.prg tbody tr:last-child td{border-bottom:0}
-table.prg tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--papel) 55%,var(--sf))}
+table.prg tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--telon) 4%,var(--sf))}
 table.prg .ln{height:27px;display:flex;align-items:center;gap:6px;white-space:nowrap}
 table.prg .ln .chip{font-size:11px;padding:1px 7px}
 table.prg td.cu,table.prg td.in{color:var(--mu)}
@@ -176,6 +175,29 @@ table.pprg .ob{font-weight:700}.pprg .ob2{line-height:1.45}.pprg .mu{color:#666}
 .pns{gap:4px 16px}.per{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
 .per .pi{display:inline-flex;align-items:center;gap:4px;color:var(--mu);font-size:14px}.per .pi .ico{width:14px;height:14px;color:var(--oro)}
 .per+.per{padding-left:14px;border-left:1px solid var(--ln)}
+/* Pulido: chips iguales, tarjetas con relieve, semana más marcada */
+.nv,.chip{font:700 12px/1.5 var(--disp);padding:2px 9px;border-radius:20px;white-space:nowrap}
+.nv.inv{background:color-mix(in srgb,var(--oro) 24%,transparent);color:#8A5D08}
+:root[data-theme="dark"] .nv.inv{color:#F0C766}
+.pn .gn{font:800 18px/1.25 var(--disp)}
+.gcomp{margin-top:8px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--azul) 6%,var(--sf));display:grid!important;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px}
+.gcomp .per{padding-left:0!important;border-left:0!important;display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:7px;row-gap:1px}
+.gcomp .per .nv{justify-self:start}.gcomp .per .pi,.gcomp .per .chip{grid-column:1/-1;justify-self:start}
+.pl{gap:6px 8px}
+.obi{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:20px;background:color-mix(in srgb,var(--oro) 13%,var(--sf));border:1px solid color-mix(in srgb,var(--oro) 35%,transparent);font-weight:600}
+.obi i{font:800 11px var(--disp);font-style:normal;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:var(--sf);border:1.5px solid var(--oro)}
+.obi .pa{font-size:13px}
+.pm .ico{width:14px;height:14px}.pm span{display:inline-flex;align-items:center;gap:4px}
+.pill.f-karaoke{background:color-mix(in srgb,var(--mag) 14%,transparent)}
+.pill.f-playalong{background:color-mix(in srgb,var(--azul) 16%,transparent)}
+.pill.f-live{background:color-mix(in srgb,var(--prof) 16%,transparent)}
+.pill.f-acappella{background:color-mix(in srgb,var(--telon) 18%,transparent)}
+.pill.f-solo{background:color-mix(in srgb,var(--oro) 26%,transparent)}
+.panel,.blq{box-shadow:0 1px 2px rgba(60,10,30,.05),0 6px 18px rgba(60,10,30,.05)}
+:root[data-theme="dark"] .panel,:root[data-theme="dark"] .blq{box-shadow:none}
+.btn{transition:background .15s,border-color .15s,box-shadow .15s}
+.btn.p{box-shadow:0 2px 8px color-mix(in srgb,var(--telon) 35%,transparent)}
+.seg{flex-wrap:wrap}
 .leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin:-16px 0 18px}
 .leyenda span{display:inline-flex;align-items:center;gap:6px}
 @media (prefers-reduced-motion:reduce){.key{transition:none}}
@@ -269,7 +291,7 @@ table.pprg .ob{font-weight:700}.pprg .ob2{line-height:1.45}.pprg .mu{color:#666}
 .chip{font-size:12px;font-weight:700;padding:3px 8px;border-radius:20px;background:color-mix(in srgb,var(--oro) 26%,transparent);white-space:nowrap;justify-self:start}
 .chip.vet{background:color-mix(in srgb,var(--mag) 16%,transparent)}
 .actg{display:grid;grid-template-columns:2fr 1.2fr;gap:10px;margin-top:10px}
-.actg3{display:grid;grid-template-columns:auto 1fr 90px;gap:10px;margin-top:10px;align-items:end}
+.actg3{display:grid;grid-template-columns:auto 1fr 100px;gap:10px;margin-top:10px;align-items:end}
 .sub3{font:700 14px var(--disp);color:var(--mu);margin:14px 0 6px}
 @media (max-width:760px){.actg,.actg3{grid-template-columns:1fr}.alu{grid-template-columns:1fr 100px auto}.alu .chip{display:none}
   .comp{grid-template-columns:1fr 1fr;}.comp .del{grid-column:2;justify-self:end}.rep{grid-template-columns:1fr 70px auto}.rep .au{grid-column:1/-1}}
@@ -438,6 +460,12 @@ const chipU=u=>esProf(u)?'<span class="nv prof">Profesor/a</span>':nvChip(u.g);
 const ROL={al:'Alumno/a',pr:'Profesor/a',in:'Invitado/a'};
 const NOMBRE='Recreos Musicales del INFANTA';
 const ACAP='<i>a cappella</i>';
+/* Formato de cada actuación: karaoke y play-along suenan sobre un backing track (pista grabada) */
+const FMT={karaoke:'Karaoke',playalong:'Play-along',live:'Live',acappella:ACAP,solo:'Solo'};
+const FMT_AYUDA={karaoke:'Canta en vivo sobre un backing track',playalong:'Toca en vivo sobre un backing track',live:'Todo en vivo, con armonía (piano, guitarra, grupo…)',acappella:'Solo voces, sin instrumentos',solo:'Un instrumento melódico sin acompañamiento'};
+const conPista=b=>b.formato=='karaoke'||b.formato=='playalong';
+const fmtTxt=b=>FMT[b.formato]||'—';
+const fmtPlano=b=>({karaoke:'karaoke (canta sobre un backing track)',playalong:'play-along (toca sobre un backing track)',live:'live (en vivo)',acappella:'a cappella (solo voces)',solo:'solo (instrumento sin acompañamiento)'})[b.formato]||'';
 
 /* Logo: tubos de órgano de Santa Cecilia con los bloques del logo del Infanta y un teclado como base. */
 /* Logo: saxofón (magenta del Infanta) y guitarra (oro) sobre un teclado, con los cuadraditos del logo del instituto. */
@@ -516,7 +544,7 @@ function curso(raw){
 const fmtCurso=g=>{const p=curso(g);return p?NIV[p.niv]+(p.l?' '+p.l:''):String(g||'').trim()};
 
 /* ---------- Modelo ---------- */
-const nuevoAl=()=>({t:'al',id:uid(),alumnos:[{n:'',g:''}],obra:'',autor:'',formato:'playback',instr:'',yt:'',ok:false,obs:'',min:4});
+const nuevoAl=()=>({t:'al',id:uid(),alumnos:[{n:'',g:''}],obra:'',autor:'',formato:'karaoke',instr:'',yt:'',ok:false,obs:'',min:4});
 const nuevoPr=()=>{const b=nuevoAl();b.alumnos[0].r='pr';return b};
 const nuevoGr=coro=>({t:'gr',id:uid(),coro:!!coro,nombre:coro?'Coro del IES Infanta Elena':'',director:'',cantantes:'',comp:coro?[]:[{n:'',instr:'',rol:'pr',g:''}],rep:[{obra:'',autor:'',min:4}],obs:''});
 const nuevoIn=()=>({t:'in',id:uid(),nombre:'',presenta:'',rep:[{obra:'',autor:'',min:4}],obs:''});
@@ -534,6 +562,10 @@ function normaliza(dt){ // compatibilidad con la primera versión (acts / tipo)
     if(d.tipo){d.no=d.tipo=='no';delete d.tipo}
     d.bloques=d.bloques||[];d.pres=d.pres||[];
     d.bloques.forEach(b=>{if(!b.t)b.t='al';if(b.formato=='acapela'||b.formato=='acapella')b.formato='acappella';if(!b.id)b.id=uid();
+      if(b.t=='al'&&(b.formato=='playback'||b.formato=='acappella'||!FMT[b.formato])){ // de «playback / a cappella» a los formatos nuevos
+        const ins=[...(b.alumnos||[]).map(u=>u.i||''),b.instr||''].join(' ').toLowerCase(),voz=/voz|voces|cant|vocal/.test(ins),otro=/piano|guitarr|sax|flaut|viol|tromp|clar|bajo|bater|ukel|tecl|chelo|cello|oboe|tromb|bombard|fagot|acorde|caj/.test(ins);
+        if(b.formato=='playback'||!FMT[b.formato])b.formato=voz?'karaoke':'playalong';
+        else if(otro)b.formato=/piano|guitarr|tecl|ukel|arpa|acorde/.test(ins)||(b.alumnos||[]).length>1?'live':'solo';}
       if(b.t=='al'&&b.instr&&b.instr.trim()){const ps=b.alumnos;if(!ps.some(u=>u.i&&u.i.trim())){ // antes el instrumento era del bloque: se pasa a cada intérprete
         const parts=b.instr.split(/\s*(?:,|\/|&|\+|\sy\s|\se\s)\s*/i).map(x=>x.trim()).filter(Boolean);
         ps.forEach((u,k)=>u.i=parts.length==ps.length?parts[k]:b.instr.trim())}b.instr=''}});
@@ -543,7 +575,7 @@ function normaliza(dt){ // compatibilidad con la primera versión (acts / tipo)
 function demoData(){
   const e=nuevaEdicion(2026);e.id='demo';
   Object.assign(e.datos,{musical:'Descendientes',guinos:'manzana envenenada morada, corona, paleta morado y verde neón, grafiti con spray'});
-  const a1=nuevoAl();Object.assign(a1,{alumnos:[{n:'Alumna de ejemplo',g:'2b'}],obra:'Claro de luna (1.er mov.)',autor:'L. van Beethoven',formato:'acappella',instr:'Piano',min:4});
+  const a1=nuevoAl();Object.assign(a1,{alumnos:[{n:'Alumna de ejemplo',g:'2b'}],obra:'Claro de luna (1.er mov.)',autor:'L. van Beethoven',formato:'live',instr:'Piano',min:4});
   const a2=nuevoAl();Object.assign(a2,{alumnos:[{n:'Cantante Uno',g:'3 eso a'},{n:'Cantante Dos',g:'segundo bach c'}],obra:'Hallelujah',autor:'Leonard Cohen',instr:'Voces',yt:'https://youtube.com/',ok:true,obs:'Dos micros',min:5});
   e.datos.dias[0].bloques=[a1,a2];
   const g=nuevoGr();Object.assign(g,{nombre:'Grupo de ejemplo',comp:[{n:'Profe Uno',instr:'Saxo alto',rol:'pr',g:''},{n:'Cantante Uno',instr:'Voz',rol:'al',g:'3A'},{n:'Invitada Tres',instr:'Batería',rol:'in',g:''}],rep:[{obra:'Fly Me to the Moon',autor:'Bart Howard',min:4},{obra:'Tacones rojos',autor:'Sebastián Yatra',min:4}]});
@@ -785,7 +817,7 @@ const limpiaTit=t=>String(t||'').replace(/^\s*\d+\s*[.)\-–]\s*/,'');
 const nvChip=g=>{const p=curso(g);if(p)return `<span class="nv nv-${p.niv}">${esc(fmtCurso(g))}</span>`;return g&&String(g).trim()?`<span class="nv">${esc(g)}</span>`:''};
 const rolTxt=c=>({al:'Alumno/a',pr:'Profesor/a',in:'Invitado/a'})[c.rol]||'';
 function resumenB(b){
-  if(b.t=='al'){const n=b.alumnos.filter(u=>u.n).length;return `${labelB(b)} · ${n} ${n==1?'intérprete':'intérpretes'} · ${b.formato=='acappella'?ACAP:'Con playback'} · ${dur(minB(b))}`}
+  if(b.t=='al'){const n=b.alumnos.filter(u=>u.n).length;return `${labelB(b)} · ${n} ${n==1?'intérprete':'intérpretes'} · ${fmtTxt(b)} · ${dur(minB(b))}`}
   const no=b.rep.filter(r=>r.obra).length,obr=`${no} ${no==1?'obra':'obras'}`;
   if(b.t=='gr'&&b.coro)return `Coro · ${b.cantantes?esc(b.cantantes)+' voces':'voces sin indicar'} · ${obr} · ${dur(minB(b))}`;
   if(b.t=='gr'){const n=b.comp.filter(c=>c.n).length;return `Grupo · ${n} ${n==1?'músico':'músicos'} · ${obr} · ${dur(minB(b))}`}
@@ -810,8 +842,8 @@ const necesidades=b=>b.obs?`<div class="sec nece">${ICO.plug}<span>${esc(b.obs)}
 function verBloque(b){
   if(b.t=='al')return `<div class="sec"><div class="sl">${ICO.users}Intérpretes</div><div class="cards">${b.alumnos.map(u=>`<div class="mc al nm"><b>${esc(u.n)||'Sin nombre'}</b><span>${nvChip(u.g)}${chipVez(u.n)}</span></div>`).join('')}</div></div>
    <div class="sec obra"><div class="ob">${b.obra?`«${esc(b.obra)}»`:'<span class="mu">Obra sin indicar</span>'}</div>${b.autor?`<div class="oa">${esc(b.autor)}</div>`:''}
-    <div class="meta"><span class="pill ${b.formato=='acappella'?'ac':''}">${b.formato=='acappella'?ACAP:'Con playback'}</span>${instrsB(b)?`<span>${ICO.music}${esc(instrsB(b))}</span>`:''}<span>${ICO.clock}${fmtMin(b.min)}</span>
-    ${b.formato=='playback'?(b.yt&&/^https?:/.test(b.yt)?`<a href="${esc(b.yt)}" target="_blank" rel="noopener">Abrir playback</a>`:'')+`<span class="${b.ok?'okk':'wnn'}">${b.ok?'Playback probado':'Playback sin probar'}</span>`:''}</div></div>${necesidades(b)}`;
+    <div class="meta"><span class="pill f-${b.formato}">${fmtTxt(b)}</span>${instrsB(b)?`<span>${ICO.music}${esc(instrsB(b))}</span>`:''}<span>${ICO.clock}${fmtMin(b.min)}</span>
+    ${conPista(b)?(b.yt&&/^https?:/.test(b.yt)?`<a href="${esc(b.yt)}" target="_blank" rel="noopener">Abrir backing track</a>`:'')+`<span class="${b.ok?'okk':'wnn'}">${b.ok?'Backing track probado':'Backing track sin probar'}</span>`:''}</div></div>${necesidades(b)}`;
   if(b.t=='gr'&&b.coro)return `<div class="sec"><div class="sl">${ICO.users}Coro</div><div class="cards"><div class="mc pr"><b>${esc(b.director)||'Sin indicar'}</b><span>Dirección</span></div><div class="mc"><b>${esc(b.cantantes)||'?'}</b><span>cantantes</span></div></div></div>${setlist(b.rep)}${necesidades(b)}`;
   if(b.t=='gr')return `<div class="sec"><div class="sl">${ICO.users}Músicos</div><div class="cards">${b.comp.filter(c=>c.n||c.instr).map(c=>`<div class="mc ${c.rol}"><b>${esc(c.n)||'Sin nombre'}</b><span class="ins">${ICO.music}${esc(c.instr)||'Instrumento sin indicar'}</span><span class="rl"><i class="rdot ${c.rol}"></i>${rolTxt(c)}${c.rol=='al'&&c.g?nvChip(c.g):''}</span></div>`).join('')||'<span class="mu sm">Sin músicos todavía.</span>'}</div></div>${setlist(b.rep)}${necesidades(b)}`;
   return `${b.presenta?`<div class="sec"><div class="sl">${ICO.users}Presentación</div><p style="margin:0">${esc(b.presenta)}</p></div>`:''}${setlist(b.rep)}${necesidades(b)}`;
@@ -835,13 +867,13 @@ function editarBloque(b,P){
     <div class="sec obra"><div class="actg" style="margin-top:0"><label class="f">Obra<input type="text" value="${esc(b.obra)}" placeholder="Título completo" oninput="setP('${P}.obra',this.value)"></label>
       <label class="f">Autor o intérprete original<input type="text" value="${esc(b.autor)}" oninput="setP('${P}.autor',this.value)"></label></div>
      <div class="actg3"><div class="f"><span>Formato</span><div class="seg" role="group">
-       <button aria-pressed="${b.formato=='playback'}" onclick="setP('${P}.formato','playback',1)">Con playback</button>
-       <button aria-pressed="${b.formato=='acappella'}" onclick="setP('${P}.formato','acappella',1)">${ACAP}</button></div></div>
+${Object.keys(FMT).map(f=>`<button aria-pressed="${b.formato==f}" title="${FMT_AYUDA[f]}" onclick="setP('${P}.formato','${f}',1)">${FMT[f]}</button>`).join('')}</div>
+       <span class="sm mu">${FMT_AYUDA[b.formato]||''}</span></div>
       <span></span>
       <label class="f">Duración<input type="text" inputmode="decimal" placeholder="3:30" value="${fmtMin(b.min)}" onchange="setP('${P}.min',parseMin(this.value),1)"></label></div>
-     ${b.formato=='playback'?`<div class="actg" style="align-items:end"><label class="f">Enlace del playback (YouTube)<input type="url" value="${esc(b.yt)}" placeholder="https://…" oninput="setP('${P}.yt',this.value)"></label>
+     ${conPista(b)?`<div class="actg" style="align-items:end"><label class="f">Enlace del backing track (YouTube)<input type="url" value="${esc(b.yt)}" placeholder="https://…" oninput="setP('${P}.yt',this.value)"></label>
       <div class="row">${b.yt&&/^https?:/.test(b.yt)?`<a class="btn" href="${esc(b.yt)}" target="_blank" rel="noopener">Abrir</a>`:''}
-       <label class="chk"><input type="checkbox" ${b.ok?'checked':''} onchange="setP('${P}.ok',this.checked,1)">Playback probado</label></div></div>`:''}</div>`;
+       <label class="chk"><input type="checkbox" ${b.ok?'checked':''} onchange="setP('${P}.ok',this.checked,1)">Backing track probado</label></div></div>`:''}</div>`;
   if(b.t=='gr')return `<div class="sec"><div class="actg" style="margin-top:0"><label class="f">${b.coro?'Nombre del coro':'Nombre del grupo'}<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)" onchange="render()"></label>
       ${b.coro?`<div class="row" style="flex-wrap:nowrap"><label class="f" style="flex:2">Director/a<input type="text" value="${esc(b.director)}" oninput="setP('${P}.director',this.value)"></label>
        <label class="f" style="flex:1">Cantantes<input type="number" min="1" value="${esc(b.cantantes)}" oninput="setP('${P}.cantantes',this.value)"></label></div>`:'<span></span>'}</div>
@@ -861,11 +893,13 @@ function progCard(b){
     if(!nm.length&&!b.obra)return `<div class="pc"><div class="pn mu">Bloque vacío: pulsa para completarlo</div></div>`;
     return `<div class="pc"><div class="pn pns">${b.alumnos.filter(u=>u.n.trim()).map(u=>`<span class="per"><b>${esc(u.n)}</b>${chipU(u)}${u.i?`<span class="pi">${ICO.music}${esc(u.i)}</span>`:''}${esProf(u)?'':chipVez(u.n)}</span>`).join('')||'<b>Sin nombre</b>'}</div>
      <div class="po">${b.obra?`«${esc(b.obra)}»`:'<span class="mu">Obra sin indicar</span>'}${b.autor?` <span class="pa">${esc(b.autor)}</span>`:''}</div>
-     <div class="pm"><span class="pill ${b.formato=='acappella'?'ac':''}">${b.formato=='acappella'?ACAP:'Con playback'}</span><span>${fmtMin(b.min)}</span>${b.formato=='playback'&&!b.ok?w('Playback sin probar'):''}</div></div>`}
-  const obras=b.rep.filter(r=>r.obra).map((r,j)=>`<span>${j+1}. ${esc(limpiaTit(r.obra))}${r.autor?` <span class="pa">${esc(r.autor)}</span>`:''}</span>`).join('');
-  if(b.t=='gr'&&b.coro)return `<div class="pc"><div class="pn"><b>«${esc(b.nombre||'Coro')}»</b><span class="pi">· Coro${b.director?` · dir. ${esc(b.director)}`:''}${b.cantantes?` · ${esc(b.cantantes)} voces`:''}</span></div>${obras?`<div class="pl">${obras}</div>`:''}<div class="pm"><span>${fmtMin(minB(b))}</span></div></div>`;
-  if(b.t=='gr')return `<div class="pc"><div class="pn"><b>«${esc(b.nombre||'Grupo sin nombre')}»</b><span class="pi">· Grupo</span></div><div class="pk">${b.comp.filter(c=>c.n).map(c=>`<span><i class="rdot ${c.rol}"></i>${esc(c.n)}${c.instr?` <em>${esc(c.instr)}</em>`:''}</span>`).join('')}</div>${obras?`<div class="pl">${obras}</div>`:''}<div class="pm"><span>${fmtMin(minB(b))}</span></div></div>`;
-  return `<div class="pc"><div class="pn"><b>${esc(b.nombre||'Artista invitado')}</b><span class="pi">· Artista invitado</span></div>${obras?`<div class="pl">${obras}</div>`:''}<div class="pm"><span>${fmtMin(minB(b))}</span></div></div>`;
+     <div class="pm"><span class="pill f-${b.formato}">${fmtTxt(b)}</span><span>${fmtMin(b.min)}</span>${conPista(b)&&!b.ok?w('Backing track sin probar'):''}</div></div>`}
+  const obras=b.rep.filter(r=>r.obra).map((r,j)=>`<span class="obi"><i>${j+1}</i>${esc(limpiaTit(r.obra))}${r.autor?` <span class="pa">${esc(r.autor)}</span>`:''}</span>`).join('');
+  const persona=c=>`<span class="per"><b>${esc(c.n)}</b>${c.rol=='pr'?'<span class="nv prof">Profesor/a</span>':c.rol=='in'?'<span class="nv inv">Invitado/a</span>':(nvChip(c.g)||'<span class="nv">Alumno/a</span>')}${c.instr?`<span class="pi">${ICO.music}${esc(c.instr)}</span>`:''}${c.rol=='al'?chipVez(c.n):''}</span>`;
+  const pie=`<div class="pm"><span>${ICO.clock}${fmtMin(minB(b))}</span></div>`;
+  if(b.t=='gr'&&b.coro)return `<div class="pc"><div class="pn"><b class="gn">«${esc(b.nombre||'Coro')}»</b><span class="pi">Coro${b.director?` · dirige ${esc(b.director)}`:''}${b.cantantes?` · ${esc(b.cantantes)} voces`:''}</span></div>${obras?`<div class="pl">${obras}</div>`:''}${pie}</div>`;
+  if(b.t=='gr'){const c=b.comp.filter(x=>x.n.trim());return `<div class="pc"><div class="pn"><b class="gn">«${esc(b.nombre||'Grupo sin nombre')}»</b><span class="pi">Grupo · ${c.length} ${c.length==1?'músico':'músicos'}</span></div>${c.length?`<div class="pn pns gcomp">${c.map(persona).join('')}</div>`:''}${obras?`<div class="pl">${obras}</div>`:''}${pie}</div>`}
+  return `<div class="pc"><div class="pn"><b class="gn">${esc(b.nombre||'Artista invitado')}</b><span class="pi">Artista invitado</span></div>${b.presenta?`<div class="pa" style="margin-top:4px">${esc(b.presenta)}</div>`:''}${obras?`<div class="pl">${obras}</div>`:''}${pie}</div>`;
 }
 function vBloque(b,i,k,n){
   const P=`dias.${i}.bloques.${k}`,open=S.edit.has(b.id),num=n>1?`<span class="num">${k+1}</span>`:'';
@@ -961,7 +995,7 @@ function filasPrograma(d,extra){
       cur=L('')+c.map(x=>L(x.rol=='al'?esc(fmtCurso(x.g))||'Alumno/a':x.rol=='pr'?'Profesor/a':'Invitado/a')).join('');
       ins=L('')+c.map(x=>L(esc(x.instr))).join('');}
     else{who=L(`${num}<b>${esc(b.nombre||'Artista invitado')}</b>`)+L('<span class="mu">Artista invitado</span>');cur=L('');ins=L('');}
-    return `<tr class="${b.t}"><td class="who">${who}</td><td class="cu">${cur}</td><td class="in">${ins}</td><td>${obrasL}</td>${extra?`<td class="x">${b.t=='al'?(b.formato=='acappella'?ACAP:'Playback')+(b.formato=='playback'&&!b.ok?'<div class="wnn">sin probar</div>':''):''}</td><td class="x">${esc(b.obs)}</td>`:''}</tr>`;
+    return `<tr class="${b.t}"><td class="who">${who}</td><td class="cu">${cur}</td><td class="in">${ins}</td><td>${obrasL}</td>${extra?`<td class="x">${b.t=='al'?fmtTxt(b)+(conPista(b)&&!b.ok?'<div class="wnn">pista sin probar</div>':''):''}</td><td class="x">${esc(b.obs)}</td>`:''}</tr>`;
   }).join('');
 }
 const presTxt=d=>d.sinPres?'':d.pres.map(p=>p.n).filter(x=>x.trim()).join(' y ');
@@ -1007,14 +1041,14 @@ function hojaApuntes(){
     <div class="l">Nombres y cursos</div><div class="l"></div><div class="l"></div>
     <div class="l">Obra y autor</div><div class="l"></div>
     <div class="l">Instrumento</div>
-    <div class="tt"><span><span class="cb"></span>Con playback <span class="cb"></span><i>a cappella</i></span><span>Min.: ____</span></div>
+    <div class="tt"><span><span class="cb"></span>Karaoke <span class="cb"></span>Play-along <span class="cb"></span>Live <span class="cb"></span><i>A cappella</i> <span class="cb"></span>Solo</span><span>Min.: ___</span></div>
     <div class="l">Notas</div></div>`;
   return `<div class="pg">${cabeceraPr(null,'<b>Hoja de apuntes</b><br>Presentadores: ______________________')}<div class="ap">${Array.from({length:8},caja).join('')}</div></div>`;
 }
 function fichaBloque(b,k){
-  if(b.t=='al')return `<div class="ficha"><h4><span>${k?k+'. ':''}${labelB(b)}</span><small>${b.formato=='acappella'?'<i>a cappella</i>':'Con playback'}${b.formato=='playback'?(b.ok?' · probado ✓':' · sin probar'):''} · ${dur(minB(b))}</small></h4>
+  if(b.t=='al')return `<div class="ficha"><h4><span>${k?k+'. ':''}${labelB(b)}</span><small>${fmtTxt(b)}${conPista(b)?(b.ok?' · backing track probado ✓':' · backing track sin probar'):''} · ${dur(minB(b))}</small></h4>
    <table><tr><th>Intérprete</th><th>Curso</th><th>Instrumento</th><th>Obra</th></tr>${b.alumnos.map((u,j)=>`<tr><td>${esc(u.n)}${!esProf(u)&&vez(u.n)>1?` <small>(${vez(u.n)}.ª vez)</small>`:''}</td><td>${esc(cursoU(u))}</td><td>${esc(u.i||'')}</td>${j==0?`<td rowspan="${b.alumnos.length}"><b>${esc(b.obra)}</b>${b.autor?`<br>${esc(b.autor)}`:''}</td>`:''}</tr>`).join('')}</table>
-   ${b.obs?`<p><b>Necesidades:</b> ${esc(b.obs)}</p>`:''}${b.yt&&b.formato=='playback'?`<p style="font-size:8.5pt;color:#555;word-break:break-all">${esc(b.yt)}</p>`:''}</div>`;
+   ${b.obs?`<p><b>Necesidades:</b> ${esc(b.obs)}</p>`:''}${b.yt&&conPista(b)?`<p style="font-size:8.5pt;color:#555;word-break:break-all">${esc(b.yt)}</p>`:''}</div>`;
   const rep=`<table><tr><th>#</th><th>Obra</th><th>Autor</th><th>Min.</th></tr>${b.rep.map((r,j)=>`<tr><td>${j+1}</td><td>${esc(r.obra)}</td><td>${esc(r.autor)}</td><td>${fmtMin(r.min)}</td></tr>`).join('')}</table>`;
   if(b.t=='gr')return `<div class="ficha"><h4><span>${k?k+'. ':''}${b.coro?'Coro':'Grupo'}: ${esc(b.nombre)}</span><small>${dur(minB(b))}</small></h4>
    ${b.coro?`<p><b>Director/a:</b> ${esc(b.director||'—')} · <b>Cantantes:</b> ${esc(b.cantantes||'—')}</p>`:
@@ -1156,7 +1190,7 @@ function impFicha(){const v=$('#fdia').value,idx=v=='all'?D().dias.map((d,i)=>d.
 /* ---------- IA y cartel ---------- */
 function siguiente(i){for(let j=i+1;j<5;j++){const d=D().dias[j];if(!d.no)return{j,d}}return null}
 function listaBloques(d){return d.bloques.map((b,k)=>{
-  if(b.t=='al')return `${k+1}. ${labelB(b)}: ${b.alumnos.filter(u=>u.n).map(u=>`${u.n}${esProf(u)?' (profesor/a)':u.g?` (${fmtCurso(u.g)})`:''}${u.i?` – ${u.i}`:''}${!esProf(u)&&vez(u.n)>1?` [es su ${vez(u.n)}.ª Santa Cecilia]`:''}`).join(', ')||'(sin nombre)'} · «${b.obra||'obra sin indicar'}»${b.autor?` de ${b.autor}`:''} · ${b.formato=='acappella'?'a cappella':'con playback'}${b.obs?` · nota: ${b.obs}`:''}`;
+  if(b.t=='al')return `${k+1}. ${labelB(b)}: ${b.alumnos.filter(u=>u.n).map(u=>`${u.n}${esProf(u)?' (profesor/a)':u.g?` (${fmtCurso(u.g)})`:''}${u.i?` – ${u.i}`:''}${!esProf(u)&&vez(u.n)>1?` [es su ${vez(u.n)}.ª Santa Cecilia]`:''}`).join(', ')||'(sin nombre)'} · «${b.obra||'obra sin indicar'}»${b.autor?` de ${b.autor}`:''} · ${fmtPlano(b)}${b.obs?` · nota: ${b.obs}`:''}`;
   const rep=b.rep.filter(r=>r.obra).map(r=>`«${r.obra}»${r.autor?` de ${r.autor}`:''}`).join('; ')||'(repertorio sin indicar)';
   if(b.t=='gr'&&b.coro)return `${k+1}. Coro «${b.nombre}», dirigido por ${b.director||'(sin indicar)'}, con ${b.cantantes||'varios'} cantantes. Repertorio: ${rep}`;
   if(b.t=='gr')return `${k+1}. Grupo «${b.nombre||'sin nombre'}»: ${b.comp.filter(c=>c.n).map(c=>`${c.n} (${c.instr||'?'}, ${ROL[c.rol].toLowerCase()})`).join(', ')}. Repertorio: ${rep}`;
@@ -1286,7 +1320,7 @@ function vStats(){
   const al=A.filter(a=>a.rol=='al'),pr=A.filter(a=>a.rol=='pr'),inv=A.filter(a=>a.rol=='in');
   const distintos=x=>new Set(x.map(a=>idP(a.n))).size;
   const blqAl=S.eds.flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques.filter(b=>b.t=='al')));
-  const pb=blqAl.filter(b=>b.formato=='playback').length,ac=blqAl.length-pb;
+  const fmts=Object.keys(FMT).map(f=>({label:FMT[f],n:blqAl.filter(b=>b.formato==f).length})).filter(x=>x.n);
   const porCurso=años.map(y=>{const c={};al.filter(a=>a.anio==y).forEach(a=>{const p=curso(a.g);const k=p?p.niv:'?';c[k]=(c[k]||0)+1});return{y,c}});
   const cur=porCurso.find(p=>p.y==S.E.anio)||{c:{}};const maxC=Math.max(1,...NIVORD.map(k=>cur.c[k]||0));
   const tabla=`<div class="wrap"><table class="sem"><thead><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th></tr></thead><tbody>
@@ -1305,7 +1339,7 @@ function vStats(){
      <button class="btn g sm" onclick="distintas(${j(a)},${j(b)})">Son distintas</button></span></div>`}).join('');
   return `<h2>Estadísticas</h2><p class="mu" style="margin:0 0 18px">Con todas las ediciones guardadas (${años.join(', ')}). Cuenta cada vez que alguien sube al escenario.</p>
   <div class="big"><div><b>${años.length}</b><span>ediciones</span></div><div><b>${distintos(al)}</b><span>alumnos</span></div><div><b>${distintos(pr)}</b><span>profesores</span></div>
-   <div><b>${distintos(inv)}</b><span>artistas invitados</span></div><div><b>${pb}</b><span>actuaciones con playback</span></div><div><b>${ac}</b><span>actuaciones <i>a cappella</i></span></div></div>
+   <div><b>${distintos(inv)}</b><span>artistas invitados</span></div><div><b>${blqAl.length}</b><span>actuaciones de alumnos y profesores</span></div></div>
   ${dudas?`<section class="panel dudas"><h3>¿Es la misma persona?</h3><p class="sm mu" style="margin-top:0">Nombres parecidos que la app no se atreve a juntar sola. Elige cómo quieres que se llame: se corrige en todos los años y cuenta para los veteranos.</p>${dudas}</section>`:''}
   <div class="grid4">
    <section class="panel"><h3>Los alumnos que más tocan</h3>${barras(top(al))}</section>
@@ -1314,6 +1348,7 @@ function vStats(){
    <section class="panel"><h3>Instrumentos que más suenan</h3>${barras(ins)}</section>
   </div>
   <div class="grid4" style="margin-top:18px">
+   <section class="panel"><h3>Cómo suenan</h3>${barras(fmts)}</section>
    <section class="panel"><h3>Alumnos por curso en ${S.E.anio}</h3><div class="cols">${NIVORD.map(k=>`<div class="c"><b>${cur.c[k]||0}</b><i style="height:${(cur.c[k]||0)/maxC*120}px"></i><span>${NIV[k]}</span></div>`).join('')}</div></section>
    <section class="panel"><h3>Veteranos de este año</h3>${vets.length?vets.map(v=>`<div class="hb"><span>${esc(v.n)}</span><span class="b"><i class="o" style="width:${Math.min(100,v.v/Math.max(...vets.map(x=>x.v))*100)}%"></i></span><span class="n">${v.v}.ª</span></div>`).join(''):'<p class="mu sm">Nadie repite todavía de años anteriores.</p>'}</section>
    <section class="panel"><h3>Obras que se repiten</h3>${obr.length?barras(obr,0,'o'):'<p class="mu sm">Ninguna obra se ha repetido todavía.</p>'}</section>
