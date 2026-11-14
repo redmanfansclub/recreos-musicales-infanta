@@ -190,6 +190,7 @@ table.pprg .ob{font-weight:700}.pprg .ob2{line-height:1.45}.pprg .mu{color:#666}
 .cfp{min-height:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--mu) 10%,var(--papel));border-radius:14px;padding:12px}
 .cfp canvas{max-width:100%;max-height:calc(100vh - 120px);width:auto;height:auto;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .rv{font-weight:700;color:var(--tinta)}
+.aln{display:flex;gap:14px;flex-wrap:wrap;align-items:end;margin-bottom:10px}.aln .seg button{padding:7px 10px;font-size:13.5px}
 @media (max-width:900px){.cfb{grid-template-columns:1fr;overflow:auto}.cfp canvas{max-height:70vh}.cmini{grid-template-columns:1fr}}
 /* ---------- Imprimir: cartel + guion ---------- */
 .ctop{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
@@ -810,7 +811,7 @@ function render(){
   if(S.tab=='programa')scrollTo(0,y);
   if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir')pintaCartel();
 }
-function cambiaEd(a){limpiaVacios();S.edit.clear();S.E=S.eds.find(e=>e.anio==a);S.dia=0;S.cTxt={};render()}
+function cambiaEd(a){limpiaVacios();S.edit.clear();S.E=S.eds.find(e=>e.anio==a);S.dia=0;render()}
 
 /* ---------- Veteranos e identidad: el mismo alumno escrito de varias formas ---------- */
 const clave=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
@@ -1072,6 +1073,7 @@ function intercambiar(a,b){
   const ds=D().dias,re=/^\s*concierto del (lunes|martes|miércoles|miercoles|jueves|viernes)\s*$/i;
   const fix=(d,to)=>{if(re.test(d.titulo||''))d.titulo=`Concierto del ${DIAS[to]}`};
   const A=ds[a],B=ds[b];fix(A,b);fix(B,a);ds[a]=B;ds[b]=A;
+  const ct=D().cartelTxt;if(ct){const ta=ct[a],tb=ct[b];if(tb===undefined)delete ct[a];else ct[a]=tb;if(ta===undefined)delete ct[b];else ct[b]=ta}
   S.dia=b;S.diaEd=false;cerrar();marcar();toast(`Cambiado: ${DIAS[a]} ⇄ ${DIAS[b]}`);render();
 }
 function addB(i,b){D().dias[i].bloques.push(b);D().dias[i].no=false;S.edit.add(b.id);marcar();render()}
@@ -1231,35 +1233,82 @@ function diplomaHTML(p){
 function imprimirDiplomas(prueba){const l=listaDiplomas();if(!l.length)return toast('Todavía no hay alumnos con nombre',1);
   imprimir((prueba?l.slice(0,1):l).map(diplomaHTML).join(''),'landscape')}
 /* ---------- Cartel del día sobre el modelo con hueco (la imagen no se guarda: solo se usa al generar) ---------- */
-const CFGC={top:38,bot:88,mar:10,size:40,color:'#2A1018',f1:'Bricolage Grotesque',f2:'Atkinson Hyperlegible',lh:120,halo:false};
+const CFGC={top:38,bot:88,mar:10,size:40,color:'#2A1018',f1:'Bricolage Grotesque',f2:'Atkinson Hyperlegible',lh:120,halo:false,alin:'p'};
 const FUENTES=[['Bricolage Grotesque','Bricolage (la de la app)'],['Montserrat','Montserrat'],['Oswald','Oswald (estrecha)'],['Bebas Neue','Bebas Neue (cartel)'],['Anton','Anton (impacto)'],['Permanent Marker','Permanent Marker (rotulador)'],['Lobster','Lobster (retro)'],['Playfair Display','Playfair (elegante)'],['Atkinson Hyperlegible','Atkinson (muy legible)']];
 const cfgC=()=>{const c=D().cartel||(D().cartel={...CFGC});for(const k in CFGC)if(c[k]===undefined)c[k]=CFGC[k];return c};
-function textoCartel(i){const d=D().dias[i],L=['# '+(nombreDia(d)||d.titulo)];
+/* Texto del cartel, estilo programa de concierto:
+   «Nombre (3ºESO) Instrumento ... «Obra» (Autor)»: lo de la izquierda pegado al margen izquierdo, la obra al derecho y puntos en medio.
+   Varios intérpretes de una misma obra: uno por línea y la obra en la última. Los «...» (o «…», «|») separan izquierda y derecha. */
+const cursoCartel=u=>{if(esProf(u))return 'Prof.';const p=curso(u.g);if(!p)return String(u.g||'').trim();return p.niv=='FP'?'FP':p.niv.replace(/^(\d)ESO$/,'$1ºESO').replace(/^(\d)BACH$/,'$1ºBach')};
+const lineaU=u=>`${u.n.trim()}${cursoCartel(u)?` (${cursoCartel(u)})`:''}${u.i&&u.i.trim()?` ${u.i.trim()}`:''}`;
+function textoCartel(i){const d=D().dias[i],tit=nombreDia(d)||d.titulo,L=['# '+tit],mismo=n=>clave(n)==clave(tit);
   d.bloques.forEach(b=>{L.push('');
-    if(b.t=='al'){L.push(b.alumnos.filter(u=>u.n.trim()).map(perU).join(', '));if(b.obra)L.push(`«${b.obra}»${b.autor?` (${b.autor})`:''}`)}
-    else{L.push(b.t=='gr'?`«${b.nombre}»`:`${b.nombre}${b.t=='in'?' (artista invitado)':''}`);const o=b.rep.filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}»`);if(o.length)L.push(o.join(' · '))}});
+    const obra=(o,a)=>o?`«${limpiaTit(o)}»${a?` (${a})`:''}`:'';
+    if(b.t=='al'){const al=b.alumnos.filter(u=>u.n.trim());al.forEach((u,k)=>L.push(lineaU(u)+(k==al.length-1&&b.obra?` ... ${obra(b.obra,b.autor)}`:'')));if(!al.length&&b.obra)L.push(`... ${obra(b.obra,b.autor)}`);return}
+    const rep=b.rep.filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}» ... ${(r.autor||'').trim()}`);
+    if(b.t=='gr'&&!b.coro){L.push('[c]GRUPO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);b.comp.filter(x=>x.n.trim()).forEach(x=>L.push(`~ ${x.n.trim()}${x.instr&&x.instr.trim()?` · ${x.instr.trim()}`:''}`))}
+    else if(b.t=='gr'){L.push('[c]CORO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);if(b.director||b.cantantes)L.push(`[c]${[b.director?`Dirige ${b.director}`:'',b.cantantes?`${b.cantantes} voces`:''].filter(Boolean).join(' · ')}`)}
+    else{L.push('[c]ARTISTA INVITADO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`)}
+    if(rep.length){L.push('');rep.forEach(x=>L.push(x))}});
   return L.join('\n');
 }
+const txtC=i=>{const t=D().cartelTxt;return t&&typeof t[i]=='string'?t[i]:null};
+function setTxtC(i,v){(D().cartelTxt=D().cartelTxt||{})[i]=v;marcar()}
+function rellenarC(){if(D().cartelTxt)delete D().cartelTxt[S.cDia];marcar();render()}
+function ceroCartel(){modal(`<h3>¿Empezar de cero el cartel del ${esc(DIAS[S.cDia])}?</h3>
+  <p class="sm">Puedes vaciar solo el texto o empezar de cero del todo: texto del programa, ajustes de zona, letra y color por defecto, y sin modelo cargado.</p>
+  <div class="row"><button class="btn" onclick="setTxtC(S.cDia,'');cerrar();render()">Vaciar el texto</button>
+   <button class="btn p" onclick="if(D().cartelTxt)delete D().cartelTxt[S.cDia];D().cartel={...CFGC};S.cImg=null;marcar();cerrar();render()">Empezar de cero</button>
+   <button class="btn g" onclick="cerrar()">Cancelar</button></div>`)}
+function alinearSel(m){const ta=$('#ctx');if(!ta)return;const v=ta.value,a=ta.selectionStart,b=ta.selectionEnd;
+  const ini=v.lastIndexOf('\n',a-1)+1;let fin=v.indexOf('\n',b);if(fin<0)fin=v.length;
+  const bl=v.slice(ini,fin).split('\n').map(l=>{l=l.replace(/^\[(i|c|d)\]\s?/,'');return m&&l.trim()?`[${m}]${l}`:l}).join('\n');
+  const nv=v.slice(0,ini)+bl+v.slice(fin);ta.value=nv;ta.focus();ta.setSelectionRange(ini,ini+bl.length);setTxtC(S.cDia,nv);pintaCartel()}
 async function pintaCartel(){
   const cv=document.getElementById('cv');if(!cv||!S.cImg)return;
   const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.src=S.cImg});
   const cf=cfgC();
-  try{await Promise.all([document.fonts.load(`800 40px "${cf.f1}"`),document.fonts.load(`700 40px "${cf.f1}"`),document.fonts.load(`italic 400 30px "${cf.f2}"`)]);await document.fonts.ready}catch(_){}
+  try{await Promise.all([document.fonts.load(`800 40px "${cf.f1}"`),document.fonts.load(`700 40px "${cf.f1}"`),document.fonts.load(`400 40px "${cf.f1}"`),document.fonts.load(`italic 400 30px "${cf.f2}"`)]);await document.fonts.ready}catch(_){}
   const W=img.naturalWidth,H=img.naturalHeight;cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0);
-  const x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=Math.max(10,y1-y0),LH=cf.lh/100;
-  const raw=(S.cTxt[S.cDia]??textoCartel(S.cDia)).split('\n');
-  const tipo=l=>l.startsWith('# ')?'t':!l.trim()?'g':/^[«"“]/.test(l.trim())?'o':'n';
-  const font=(t,s)=>t=='t'?`800 ${s*1.3}px "${cf.f1}", sans-serif`:t=='o'?`italic 400 ${s*.86}px "${cf.f2}", sans-serif`:`700 ${s}px "${cf.f1}", sans-serif`;
-  const wrap=(txt,maxw)=>{const out=[];let cur='';txt.split(/\s+/).forEach(w=>{const t=cur?cur+' '+w:w;if(c.measureText(t).width>maxw&&cur){out.push(cur);cur=w}else cur=t});if(cur)out.push(cur);return out};
-  const lay=s=>{let h=0;const it=[];raw.forEach(l=>{const t=tipo(l);if(t=='g'){h+=s*.45;it.push({t,h:s*.45});return}
-    c.font=font(t,s);const lh=(t=='t'?s*1.3:t=='o'?s*.86:s)*LH,ls=wrap(t=='t'?l.slice(2):l.trim(),aw),extra=t=='t'?s*.4:0;it.push({t,ls,lh,s,extra});h+=ls.length*lh+extra});return{h,it}};
-  let s=Math.max(4,Math.round(H*cf.size/1000));for(;s>4;s--){if(lay(s).h<=ah)break}
-  const Lt=lay(s);let y=y0+Math.max(0,(ah-Lt.h)/2);c.textAlign='center';c.textBaseline='top';c.lineJoin='round';
-  Lt.it.forEach(o=>{if(o.t=='g'){y+=o.h;return}c.font=font(o.t,o.s);o.ls.forEach(l=>{
-    if(cf.halo){c.strokeStyle='rgba(255,255,255,.92)';c.lineWidth=Math.max(2,o.s*.18);c.strokeText(l,(x0+x1)/2,y)}
-    c.fillStyle=cf.color;c.fillText(l,(x0+x1)/2,y);y+=o.lh});y+=o.extra});
+  const x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=Math.max(10,y1-y0),LH=cf.lh/100,modo=cf.alin||'p';
+  const raw=(txtC(S.cDia)??textoCartel(S.cDia)).split('\n');
+  const SEP=/\s*(?:\.{3,}|…+|\||\t|>>)\s*/;
+  const F={t:s=>`800 ${s*1.3}px "${cf.f1}", sans-serif`,n:s=>`700 ${s}px "${cf.f1}", sans-serif`,r:s=>`400 ${s*.92}px "${cf.f1}", sans-serif`,o:s=>`italic 400 ${s*.95}px "${cf.f2}", sans-serif`};
+  const ancho=(txt,f)=>{c.font=f;return c.measureText(txt).width};
+  const anchoS=(sg,s)=>sg.reduce((a,g)=>a+ancho(g.t,F[g.f](s)),0);
+  const wrap=(txt,maxw,f)=>{c.font=f;const out=[];let cur='';txt.split(/\s+/).forEach(w=>{const t=cur?cur+' '+w:w;if(c.measureText(t).width>maxw&&cur){out.push(cur);cur=w}else cur=t});if(cur)out.push(cur);return out};
+  const segIzq=t=>{if(!t)return[];if(/^[«"“]/.test(t))return[{t,f:'o'}];const p=t.indexOf(' (');return p>0?[{t:t.slice(0,p),f:'n'},{t:t.slice(p),f:'r'}]:[{t,f:'n'}]};
+  const segDer=t=>t?[{t,f:/^[«"“]/.test(t)?'o':'r'}]:[];
+  const filas=s=>{const R=[];let h=0,cortes=0;const lh=s*LH;
+    const meter=(sg,al,hh)=>{hh=hh||lh;if(anchoS(sg,s)<=aw){R.push({t:'a',sg,al,h:hh});h+=hh;return}cortes++;
+      const g=sg[0];wrap(sg.map(x=>x.t).join(''),aw,F[g.f](s)).forEach(x=>{R.push({t:'a',sg:[{t:x,f:g.f}],al,h:hh});h+=hh})};
+    for(let k=0;k<raw.length;k++){let l=raw[k],al=null;const m=l.match(/^\[(i|c|d)\]\s?/);if(m){al=m[1];l=l.slice(m[0].length)}
+      if(l.startsWith('# ')){meter([{t:l.slice(2).trim(),f:'t'}],al||'c',s*1.3*LH);R.push({t:'g',h:s*.45});h+=s*.45;continue}
+      if(!l.trim()){R.push({t:'g',h:s*.5});h+=s*.5;continue}
+      if(l.startsWith('~ ')){const it=[];while(k<raw.length&&raw[k].startsWith('~ ')){const p=raw[k].slice(2).trim().split(/\s·\s/);it.push([{t:p[0],f:'n'},...(p.length>1?[{t:' · '+p.slice(1).join(' · '),f:'r'}]:[])]);k++}k--;
+        for(let j=0;j<it.length;j+=2){const row=it.slice(j,j+2);row.forEach(x=>{if(anchoS(x,s)>aw/2-s*.5)cortes++});R.push({t:'cols',row,h:lh});h+=lh}continue}
+      const p=l.split(SEP);let izq,der;if(p.length>1){izq=p[0].trim();der=p.slice(1).join(' ').trim()}else{const ob=/^[«"“]/.test(l.trim())&&modo=='p'&&!al;izq=ob?'':l.trim();der=ob?l.trim():''}
+      const I=segIzq(izq),Dd=segDer(der),A=al||(modo=='p'?null:modo);
+      if(!A&&der){const wi=anchoS(I,s),wd=anchoS(Dd,s);
+        if(wi+wd+s*1.2<=aw){R.push({t:'p',I,Dd,h:lh});h+=lh}else{cortes++;if(I.length)meter(I,'i');R.push({t:'p',I:[],Dd,h:lh});h+=lh}continue}
+      if(!der){meter(I,A||'i');continue}
+      const todo=[...I,...(I.length?[{t:'  ',f:'r'}]:[]),...Dd];
+      if(anchoS(todo,s)<=aw)meter(todo,A||'i');else{cortes++;if(I.length)meter(I,A||'i');meter(Dd,A||'i')}}
+    return{R,h,cortes}};
+  const smax=Math.max(4,Math.round(H*cf.size/1000));let s=0;
+  for(let t=smax;t>=Math.max(4,smax*.5);t--){const f=filas(t);if(f.h<=ah&&!f.cortes){s=t;break}}
+  if(!s){s=smax;for(;s>4;s--){if(filas(s).h<=ah)break}}
+  const {R,h}=filas(s);let y=y0+Math.max(0,(ah-h)/2);c.textBaseline='alphabetic';c.lineJoin='round';
+  const pon=(txt,x,yy,f)=>{c.font=f;c.textAlign='left';if(cf.halo){c.strokeStyle='rgba(255,255,255,.92)';c.lineWidth=Math.max(2,s*.18);c.strokeText(txt,x,yy)}c.fillStyle=cf.color;c.fillText(txt,x,yy)};
+  const ponS=(sg,x,yy)=>{sg.forEach(g=>{pon(g.t,x,yy,F[g.f](s));x+=ancho(g.t,F[g.f](s))});return x};
+  R.forEach(r=>{if(r.t=='g'){y+=r.h;return}const base=y+r.h*.78;
+    if(r.t=='a'){const w=anchoS(r.sg,s),x=r.al=='d'?x1-w:r.al=='c'?(x0+x1-w)/2:x0;ponS(r.sg,x,base)}
+    else if(r.t=='cols'){r.row.forEach((sg,j)=>ponS(sg,x0+j*aw/2,base))}
+    else{const x=ponS(r.I,x0,base),wd=anchoS(r.Dd,s),xd=x1-wd;ponS(r.Dd,xd,base);
+      const ini=x+(r.I.length?s*.2:0),fin=xd-s*.2;if(fin-ini>s*.6){c.save();c.globalAlpha=.55;c.font=F.r(s);c.textAlign='left';c.fillStyle=cf.color;const dw=c.measureText('. ').width,n=Math.floor((fin-ini)/dw);c.fillText('. '.repeat(n).trim(),ini+((fin-ini)-n*dw)/2+dw*.25,base);c.restore()}}
+    y+=r.h});
   if(S.cGuia){c.save();c.strokeStyle='rgba(232,0,106,.85)';c.lineWidth=Math.max(2,W/350);c.setLineDash([W/70,W/110]);c.strokeRect(x0,y0,aw,ah);c.restore()}
-  const info=document.getElementById('cinfo');if(info)info.textContent=Lt.h>ah?'El texto no cabe ni a tamaño mínimo: acorta el texto o amplía la zona.':`Letra ajustada a ${Math.round(s/H*1000)} (máximo ${cf.size}).`;
+  const info=document.getElementById('cinfo');if(info)info.textContent=h>ah?'El texto no cabe ni a tamaño mínimo: acorta el texto o amplía la zona.':`Letra ajustada a ${Math.round(s/H*1000)} (máximo ${cf.size}).`;
 }
 async function exportaCartel(modo){
   if(!S.cImg)return toast('Carga primero el modelo del cartel',1);
@@ -1276,9 +1325,11 @@ function controlesCartel(){
   const cf=cfgC();
   const rng=(k,t,min,max,st)=>`<label class="f">${t} <b class="rv">${cf[k]}${st||''}</b><input type="range" min="${min}" max="${max}" value="${cf[k]}" oninput="cfgC().${k}=+this.value;this.previousElementSibling.textContent=this.value+'${st||''}';marcar();pintaCartel()"></label>`;
   const sel=(k,t)=>`<label class="f">${t}<select onchange="cfgC().${k}=this.value;marcar();pintaCartel()">${FUENTES.map(([f,n])=>`<option value="${f}" ${cf[k]==f?'selected':''} style="font-family:'${f}'">${n}</option>`).join('')}</select></label>`;
-  return `<label class="f">Texto del cartel<textarea id="ctx" class="ctxg" oninput="S.cTxt[S.cDia]=this.value;pintaCartel()">${esc(S.cTxt[S.cDia]??textoCartel(S.cDia))}</textarea></label>
-    <p class="sm mu" style="margin:4px 0 10px"># al principio = título grande · línea que empieza por «» = obra en cursiva · línea vacía = separación.
-     <button class="btn g" style="padding:0;color:var(--acc)" onclick="delete S.cTxt[S.cDia];render()">Volver a rellenar con el programa</button></p>
+  return `<div class="aln"><label class="f" style="width:auto">Alineación general<select onchange="cfgC().alin=this.value;marcar();pintaCartel()">${[['p','Programa (con puntos)'],['i','Izquierda'],['c','Centrado'],['d','Derecha']].map(([v,t])=>`<option value="${v}" ${(cf.alin||'p')==v?'selected':''}>${t}</option>`).join('')}</select></label>
+     <div class="f"><span>Líneas seleccionadas</span><div class="seg" role="group"><button title="A la izquierda" onclick="alinearSel('i')">⇤ Izq.</button><button title="Centradas" onclick="alinearSel('c')">↔ Centro</button><button title="A la derecha" onclick="alinearSel('d')">Dcha. ⇥</button><button title="Quitar la alineación propia" onclick="alinearSel('')">Normal</button></div></div></div>
+    <label class="f">Texto del cartel<textarea id="ctx" class="ctxg" oninput="setTxtC(S.cDia,this.value);pintaCartel()">${esc(txtC(S.cDia)??textoCartel(S.cDia))}</textarea></label>
+    <p class="sm mu" style="margin:4px 0 10px"><b>Cómo se escribe:</b> «#» delante = título centrado · <code>Nombre (3ºESO) Voz ... «Obra» (Autor)</code>: lo de antes de los tres puntos va a la izquierda y la obra a la derecha, con puntos en medio · varios intérpretes de una obra, uno por línea y la obra en el último · «~» delante = integrantes en dos columnas · «[c]», «[i]», «[d]» al principio = línea centrada, a la izquierda o a la derecha · línea vacía = separación.
+     <button class="btn g" style="padding:0;color:var(--acc)" onclick="rellenarC()">Volver a rellenar con el programa</button> · <button class="btn g" style="padding:0;font-size:13px" onclick="ceroCartel()">Borrar y empezar de cero</button></p>
     <div class="cfg">${rng('top','Zona: empieza',0,80,' %')}${rng('bot','Zona: termina',20,100,' %')}${rng('mar','Márgenes laterales',0,30,' %')}${rng('size','Tamaño máximo de letra',6,80)}${rng('lh','Interlineado',90,170,' %')}
      <label class="f">Color del texto<input type="color" value="${esc(cf.color)}" oninput="cfgC().color=this.value;marcar();pintaCartel()" style="height:38px;padding:2px"></label>
      ${sel('f1','Letra de títulos y nombres')}${sel('f2','Letra de las obras')}</div>
