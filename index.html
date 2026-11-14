@@ -246,23 +246,28 @@ pre.enc{white-space:pre-wrap;font:12.5px/1.45 var(--txt);background:color-mix(in
 .pdpres{margin-top:6mm;text-align:center;font-size:11.5pt;color:#444}
 .pdpie{margin-top:8mm;padding-top:3mm;border-top:1.5px solid #D9A441;text-align:center;font:600 9pt var(--disp);color:#8a7a82;letter-spacing:.04em}
 /* ---------- Diploma ---------- */
-.dip.dbonito{background:radial-gradient(ellipse at center,#FFFDF7 0%,#FBF3E2 70%,#F3E5C8 100%)}
+.dip.dbonito{background:radial-gradient(ellipse at center,#FFFFFF 0%,var(--e3,#FBF3E2) 70%,color-mix(in srgb,var(--e3,#FBF3E2) 85%,var(--e2,#D9A441)) 100%)}
 .dorla{position:absolute;inset:0;width:100%;height:100%}
-.dcab{position:absolute;top:13mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:6mm}
-.dcab svg{width:20mm;height:20mm}
+.dcab{position:absolute;top:15mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:6mm}
+.dcab svg{width:27mm;height:27mm}
+.dapp{font:800 25pt/1.05 var(--ef,var(--disp)),var(--disp);color:var(--e1,#8C2643)}
+.dsem{font:600 13pt var(--disp);color:color-mix(in srgb,var(--e2,#D9A441) 75%,#000);letter-spacing:.06em;margin-top:1.5mm}
+.dtit2{position:absolute;top:50mm;left:0;right:0;text-align:center}
+.dtit2 b{display:block;font:800 30pt/1 var(--ef,var(--disp)),var(--disp);color:color-mix(in srgb,var(--e1,#8C2643) 55%,#000);letter-spacing:.02em}
+.dtit2 span{display:block;font:600 11pt var(--disp);color:color-mix(in srgb,var(--e2,#D9A441) 75%,#000);letter-spacing:.3em;text-transform:uppercase;margin-top:1.5mm}
 .dcab div{display:flex;flex-direction:column;align-items:flex-start}
 .dtit{font:800 34pt/1 var(--disp);color:#8C2643;letter-spacing:.02em}
 .dsub{font:600 13pt var(--disp);color:#A8761C;letter-spacing:.18em;text-transform:uppercase;margin-top:1.5mm}
 .dtxt{position:absolute;left:30mm;right:30mm;text-align:center;transform:translateY(-50%)}
-.dotorga{font:600 10pt var(--disp);letter-spacing:.2em;text-transform:uppercase;color:#8a7a82}
-.dtxt .nom{font:800 32pt/1.1 var(--disp);color:#2A1018;margin-top:2mm}
-.dlinea{width:90mm;height:.6mm;margin:3mm auto;background:linear-gradient(90deg,transparent,#D9A441,transparent)}
-.dtxt .obra{font-size:14pt;font-style:italic;color:#333}
+.dotorga{font:600 11pt var(--disp);letter-spacing:.2em;text-transform:uppercase;color:#8a7a82}
+.dtxt .nom{font:800 38pt/1.1 var(--ef,var(--disp)),var(--disp);color:color-mix(in srgb,var(--e1,#8C2643) 45%,#000);margin-top:2mm}
+.dlinea{width:90mm;height:.6mm;margin:3mm auto;background:linear-gradient(90deg,transparent,var(--e2,#D9A441),transparent)}
+.dtxt .obra{font-size:15.5pt;font-style:italic;color:#333}
 .dctx{font:600 10.5pt var(--disp);color:#8C2643;margin-top:2mm}
-.dtxt .fr{font-size:12pt;margin-top:4mm;line-height:1.5;color:#444}
-.dpie{position:absolute;bottom:14mm;left:22mm;right:22mm;display:flex;align-items:flex-end;justify-content:space-between;gap:8mm}
+.dtxt .fr{font-size:13pt;margin-top:4mm;line-height:1.5;color:#444}
+.dpie{position:absolute;bottom:15mm;left:42mm;right:42mm;display:flex;align-items:flex-end;justify-content:space-between;gap:8mm}
 .dfe{display:flex;flex-direction:column;gap:2mm;font-size:10pt;color:#555}.dfe img{height:12mm;align-self:flex-start;mix-blend-mode:multiply}
-.dpenta{flex:1;height:7mm;opacity:.9}
+.dpenta{flex:0 0 52mm;height:6mm;opacity:.9}
 .dfi{text-align:center;font-size:10pt;color:#555;min-width:58mm}.dfi .dlin{display:block;border-top:1px solid #777;margin:12mm 0 2mm}
 /* Pulido: chips iguales, tarjetas con relieve, semana más marcada */
 .nv,.chip{font:700 12px/1.5 var(--disp);padding:2px 9px;border-radius:20px;white-space:nowrap}
@@ -288,6 +293,13 @@ pre.enc{white-space:pre-wrap;font:12.5px/1.45 var(--txt);background:color-mix(in
 .btn{transition:background .15s,border-color .15s,box-shadow .15s}
 .btn.p{box-shadow:0 2px 8px color-mix(in srgb,var(--telon) 35%,transparent)}
 .seg{flex-wrap:wrap}
+.estl{display:flex;flex-wrap:wrap;gap:8px}
+.estb{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border:1px solid var(--ln);border-radius:20px;background:var(--sf);cursor:pointer;font-size:15px;color:var(--tinta)}
+.estb i{width:13px;height:13px;border-radius:50%;display:inline-block}.estb.on{border-color:var(--acc);box-shadow:0 0 0 2px color-mix(in srgb,var(--acc) 30%,transparent)}
+.estprev{display:flex;align-items:center;gap:16px;margin-top:14px;padding:14px 18px;border-radius:14px;background:radial-gradient(ellipse at 70% 40%,#fff,var(--e3));border:1.5px solid var(--e1);color:#2A1018}
+.estprev .ep1{background:var(--e1);border-radius:12px;padding:8px}.estprev svg{width:54px;height:54px;display:block}
+.estprev b{display:block;font:800 22px/1.1 var(--ef),var(--disp);color:var(--e1)}.estprev span{display:block;font:700 12px var(--disp);letter-spacing:.15em;text-transform:uppercase;color:color-mix(in srgb,var(--e2) 70%,#000);margin-top:3px}
+.estprev em{display:block;font-style:normal;margin-top:5px}.estprev u{text-decoration:none;color:var(--e2);font-weight:800;text-transform:uppercase}
 .leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin:-16px 0 18px}
 .leyenda span{display:inline-flex;align-items:center;gap:6px}
 @media (prefers-reduced-motion:reduce){.key{transition:none}}
@@ -469,12 +481,17 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 .pr-t .d{text-align:right;font-size:10pt;line-height:1.35}
 .pr-t .d b{font:800 13pt var(--disp);color:#000}
 .cb{display:inline-block;width:3.6mm;height:3.6mm;border:1.2px solid #333;vertical-align:-0.6mm;margin-right:3px;border-radius:.6mm;text-align:center;font-size:8pt;line-height:3.2mm}
-.ap{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
-.apb{border:1.4px solid #8C2643;border-radius:3mm;padding:2.5mm 3.5mm;height:56mm;display:flex;flex-direction:column;gap:1.6mm;font-size:9.5pt}
+.ap{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm}
+.apb{border:1.4px solid #8C2643;border-radius:3mm;padding:2.2mm 3mm;height:53mm;display:flex;flex-direction:column;gap:1.3mm;font-size:9pt;break-inside:avoid}
 .apb .l{border-bottom:1px solid #999;flex:1 1 0;min-height:0;display:flex;align-items:flex-end;color:#666;font-size:8.5pt}
-.apb .tt{display:flex;justify-content:space-between;font-size:9pt}
+.apb .tt{display:flex;justify-content:space-between;gap:2mm;font-size:8pt;white-space:nowrap}
+.apb .tt .cb{width:3mm;height:3mm;margin-right:1px}
 .ficha{border:1.4px solid #8C2643;border-radius:3mm;padding:3mm 4mm;margin-bottom:4mm;break-inside:avoid}
-.ficha h4{margin:0 0 2mm;font:800 12.5pt var(--disp);color:#8C2643;display:flex;justify-content:space-between}
+.ficha h4{margin:0 0 2mm;font:800 12.5pt var(--disp);color:#2A1018;display:flex;justify-content:space-between;align-items:baseline;gap:4mm}
+.ficha h4 em{font:italic 400 10.5pt var(--txt);color:#6E6268}
+.ficha .fn{font-style:normal;display:inline-grid;place-items:center;width:6.5mm;height:6.5mm;border-radius:50%;border:1.5px solid #E8006A;color:#E8006A;font:800 10pt var(--disp);margin-right:2.5mm;vertical-align:1px}
+.ficha.pr .fn{border-color:#13806E;color:#13806E}
+.ficha .fnec{background:#FBF4E4;border-radius:2mm;padding:1.5mm 3mm;margin-top:2mm}
 .ficha h4 small{font:700 9pt var(--txt);color:#555}
 .ficha table{width:100%;border-collapse:collapse;font-size:10pt}
 .ficha td,.ficha th{border-bottom:1px solid #ddd;padding:1.4mm 2mm;text-align:left;vertical-align:top}
@@ -502,7 +519,22 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 .vale .tx .s{font-size:9pt;color:#555}
 .vale .tx .n{font-size:10pt;margin-top:2mm}
 .vale .tx .n span{display:inline-block;border-bottom:1px solid #777;min-width:38mm}
-.dip{position:relative;width:277mm;height:190mm;overflow:hidden}
+.vales2{display:flex;flex-direction:column;gap:0;height:275mm;justify-content:space-between}
+.vcorte{text-align:right;border-top:1px dashed #9a8a92;height:0;line-height:0;font-size:12pt;color:#8C2643;margin:0 2mm}
+.vale2{position:relative;height:86mm;border:1.5px solid var(--e1,#8C2643);border-radius:4mm;overflow:hidden;display:flex;background:radial-gradient(ellipse at 70% 40%,#FFFFFF,var(--e3,#F6EAD2))}
+.vale2 .vart{width:62mm;flex:0 0 auto;background:var(--e1,#8C2643);color:#fff;font-family:var(--ef,var(--disp)),var(--disp)!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3mm;text-align:center;font:800 13pt/1.1 var(--disp)}
+.vale2 .vart svg{width:34mm;height:34mm}
+.vale2 .vtx{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4mm 8mm}
+.vale2 .vsc{font:700 11pt var(--disp);letter-spacing:.2em;text-transform:uppercase;color:color-mix(in srgb,var(--e2,#D9A441) 75%,#000)}
+.vale2 .vv{font:800 46pt/1 var(--ef,var(--disp)),var(--disp);color:var(--e1,#8C2643);letter-spacing:.06em}
+.vale2 .vd{font:700 17pt var(--disp);color:#2A1018}.vale2 .vd b{color:var(--e2,#E8006A);text-transform:uppercase}
+.vale2 .vc{font:500 12pt var(--disp);color:#444;margin-top:1mm}
+.vale2 .vpie{margin-top:4mm;font-size:12pt;color:#2A1018}.vale2 .vpie b{font:800 14pt var(--disp)}
+.vale2 .vlin{display:inline-block;width:60mm;border-bottom:1px solid #777}
+.vale2 .vnotas{position:absolute;right:6mm;top:5mm;width:12mm;height:12mm;opacity:.8;color:var(--e2,#D9A441)}
+.vale2.img{background:none;display:block}.vale2.img img{width:100%;height:100%;object-fit:cover;display:block}
+.vale2 .vtag{position:absolute;right:5mm;bottom:4mm;background:rgba(255,255,255,.92);border-radius:3mm;padding:1.5mm 4mm;font:700 11pt var(--disp);color:#2A1018}
+.dip{position:relative;width:277mm;height:187mm;overflow:hidden}
 .dip img.fondo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .dip .marco{position:absolute;inset:0;border:3mm solid #8C2643;outline:1mm solid #D9A441;outline-offset:-6mm;border-radius:4mm}
 .dip .cab{position:absolute;top:14mm;left:0;right:0;text-align:center}
@@ -738,7 +770,7 @@ function toast(m,e){const t=$('#toast');t.textContent=m;t.className=e?'e':'';t.s
 function modal(h){const m=$('#modal');m.innerHTML=`<div>${h}</div>`;m.style.display='flex'}
 function cerrar(){$('#modal').style.display='none'}
 $('#modal').addEventListener('click',e=>{if(e.target.id=='modal')cerrar()});
-document.addEventListener('keydown',e=>{if(e.key=='Escape'){if(S.cFull&&$('#modal').style.display!='flex'){S.cFull=false;render()}else cerrar()}});
+document.addEventListener('keydown',e=>{if(e.key=='Escape'&&S.vFull&&$('#modal').style.display!='flex'){S.vFull=false;render();return}if(e.key=='Escape'){if(S.cFull&&$('#modal').style.display!='flex'){S.cFull=false;render()}else cerrar()}});
 function setP(path,v,re){const k=path.split('.');let o=D();for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k.at(-1)]=v;marcar();if(re)render()}
 function getP(path){return path.split('.').reduce((o,k)=>o[k],D())}
 function pushP(path,v){getP(path).push(v);marcar();render()}
@@ -818,7 +850,7 @@ function render(){
    <nav class="tabs">${TABS.map(([k,t])=>`<button ${S.tab==k?'aria-current="page"':''} onclick="limpiaVacios();S.edit.clear();S.tab='${k}';render();scrollTo(0,0)">${t}</button>`).join('')}</nav>
   </header><main>${({programa:vPrograma,semana:vSemana,imprimir:vImprimir,ia:vIA,stats:vStats,historial:vHistorial,ajustes:vAjustes})[S.tab]()}</main>`;
   if(S.tab=='programa')scrollTo(0,y);
-  if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir')pintaCartel();
+  if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir'){pintaCartel();if(S.vFull)pintaVale()}
 }
 function cambiaEd(a){limpiaVacios();S.edit.clear();S.E=S.eds.find(e=>e.anio==a);S.dia=0;render()}
 
@@ -1082,7 +1114,7 @@ function intercambiar(a,b){
   const ds=D().dias,re=/^\s*concierto del (lunes|martes|miércoles|miercoles|jueves|viernes)\s*$/i;
   const fix=(d,to)=>{if(re.test(d.titulo||''))d.titulo=`Concierto del ${DIAS[to]}`};
   const A=ds[a],B=ds[b];fix(A,b);fix(B,a);ds[a]=B;ds[b]=A;
-  const ct=D().cartelTxt;if(ct){const ta=ct[a],tb=ct[b];if(tb===undefined)delete ct[a];else ct[a]=tb;if(ta===undefined)delete ct[b];else ct[b]=ta}
+  for(const ct of [D().cartelTxt,D().cartelCfgDia])if(ct){const ta=ct[a],tb=ct[b];if(tb===undefined)delete ct[a];else ct[a]=tb;if(ta===undefined)delete ct[b];else ct[b]=ta}
   S.dia=b;S.diaEd=false;cerrar();marcar();toast(`Cambiado: ${DIAS[a]} ⇄ ${DIAS[b]}`);render();
 }
 function addB(i,b){D().dias[i].bloques.push(b);D().dias[i].no=false;S.edit.add(b.id);marcar();render()}
@@ -1121,7 +1153,7 @@ function filasPrograma(d,extra){
       cur=L('')+c.map(x=>L(x.rol=='al'?esc(fmtCurso(x.g))||'Alumno/a':x.rol=='pr'?'Profesor/a':'Invitado/a')).join('');
       ins=L('')+c.map(x=>L(esc(x.instr))).join('');}
     else{who=L(`${num}<b>${esc(b.nombre||'Artista invitado')}</b>`)+L('<span class="mu">Artista invitado</span>');cur=L('');ins=L('');}
-    return `<tr class="${b.t}"><td class="who">${who}</td><td class="cu">${cur}</td><td class="in">${ins}</td><td>${obrasL}</td>${extra?`<td class="x">${b.t=='al'?fmtTxt(b)+(conPista(b)&&!b.ok?'<div class="wnn">pista sin probar</div>':''):''}</td><td class="x">${esc(b.obs)}</td>`:''}</tr>`;
+    return `<tr class="${b.t}"><td class="who">${who}</td><td class="cu">${cur}</td><td class="in">${ins}</td><td>${b.t=='al'?obrasL:L('')+obrasL}</td>${extra?`<td class="x">${b.t=='al'?fmtTxt(b)+(conPista(b)&&!b.ok?'<div class="wnn">pista sin probar</div>':''):''}</td><td class="x">${esc(b.obs)}</td>`:''}</tr>`;
   }).join('');
 }
 const presTxt=d=>d.sinPres?'':d.pres.map(p=>p.n).filter(x=>x.trim()).join(' y ');
@@ -1163,18 +1195,19 @@ function cabeceraPr(dIdx,derecha){ // como el cartel de pendientes: logo del ins
    <div class="pr-t">${logo()}<div class="t"><b>${NOMBRE}</b><span>Semana de Santa Cecilia</span></div><div class="d">${d}</div></div>`;
 }
 function hojaApuntes(){
-  const caja=()=>`<div class="apb"><div class="tt"><span><span class="cb"></span>Alumnos <span class="cb"></span>Profes <span class="cb"></span>Grupo <span class="cb"></span>Coro <span class="cb"></span>Invitado</span><span>Día: ________</span></div>
+  const caja=()=>`<div class="apb"><div class="tt"><span><span class="cb"></span>Alumnos <span class="cb"></span>Profes <span class="cb"></span>Grupo <span class="cb"></span>Coro <span class="cb"></span>Invitado</span><span>Día: _____</span></div>
     <div class="l">Nombres y cursos</div><div class="l"></div><div class="l"></div>
     <div class="l">Obra y autor</div><div class="l"></div>
     <div class="l">Instrumento</div>
-    <div class="tt"><span><span class="cb"></span>Karaoke <span class="cb"></span>Play-along <span class="cb"></span>Live <span class="cb"></span><i>A cappella</i> <span class="cb"></span>Solo</span><span>Min.: ___</span></div>
+    <div class="tt"><span><span class="cb"></span>Karaoke <span class="cb"></span>Play-along <span class="cb"></span>Live <span class="cb"></span><i>A cappella</i> <span class="cb"></span>Solo</span><span>Min.:__</span></div>
     <div class="l">Notas</div></div>`;
   return `<div class="pg">${cabeceraPr(null,'<b>Hoja de apuntes</b><br>Presentadores: ______________________')}<div class="ap">${Array.from({length:8},caja).join('')}</div></div>`;
 }
 function fichaBloque(b,k){
-  if(b.t=='al')return `<div class="ficha"><h4><span>${k?k+'. ':''}${labelB(b)}</span><small>${fmtTxt(b)}${conPista(b)?(b.ok?' · backing track probado ✓':' · backing track sin probar'):''} · ${dur(minB(b))}</small></h4>
-   <table><tr><th>Intérprete</th><th>Curso</th><th>Instrumento</th><th>Obra</th></tr>${b.alumnos.map((u,j)=>`<tr><td>${esc(u.n)}${!esProf(u)&&vez(u.n)>1?` <small>(${vez(u.n)}.ª vez)</small>`:''}</td><td>${esc(cursoU(u))}</td><td>${esc(u.i||'')}</td>${j==0?`<td rowspan="${b.alumnos.length}"><b>${esc(b.obra)}</b>${b.autor?`<br>${esc(b.autor)}`:''}</td>`:''}</tr>`).join('')}</table>
-   ${b.obs?`<p><b>Necesidades:</b> ${esc(b.obs)}</p>`:''}${b.yt&&conPista(b)?`<p style="font-size:8.5pt;color:#555;word-break:break-all">${esc(b.yt)}</p>`:''}</div>`;
+  if(b.t=='al'){const al=b.alumnos.filter(u=>u.n.trim());
+    return `<div class="ficha ${catB(b)}"><h4><span>${k?`<i class="fn">${k}</i>`:''}${b.obra?`«${esc(b.obra)}»`:'Obra por confirmar'}${b.autor?` <em>${esc(b.autor)}</em>`:''}</span><small>${labelB(b)} · ${fmtTxt(b)}${conPista(b)?(b.ok?' · pista probada ✓':' · <b style="color:#B45309">pista sin probar</b>'):''} · ${dur(minB(b))}</small></h4>
+   <table><tr><th>Intérprete</th><th>Curso</th><th>Instrumento</th></tr>${al.map(u=>`<tr><td><b>${esc(u.n)}</b>${!esProf(u)&&vez(u.n)>1?` <small>(${vez(u.n)}.ª vez)</small>`:''}</td><td>${esc(cursoU(u))}</td><td>${esc(u.i||'')}</td></tr>`).join('')}</table>
+   ${b.obs?`<p class="fnec"><b>Necesidades:</b> ${esc(b.obs)}</p>`:''}${b.yt&&conEnlace(b)?`<p style="font-size:8.5pt;color:#555;word-break:break-all;margin:1mm 0 0">${esc(b.yt)}</p>`:''}</div>`}
   const rep=`<table><tr><th>#</th><th>Obra</th><th>Autor</th><th>Min.</th></tr>${b.rep.map((r,j)=>`<tr><td>${j+1}</td><td>${esc(r.obra)}</td><td>${esc(r.autor)}</td><td>${fmtMin(r.min)}</td></tr>`).join('')}</table>`;
   if(b.t=='gr')return `<div class="ficha"><h4><span>${k?k+'. ':''}${b.coro?'Coro':'Grupo'}: ${esc(b.nombre)}</span><small>${dur(minB(b))}</small></h4>
    ${b.coro?`<p><b>Director/a:</b> ${esc(b.director||'—')} · <b>Cantantes:</b> ${esc(b.cantantes||'—')}</p>`:
@@ -1206,16 +1239,30 @@ function programaDia(i){const d=D().dias[i],pres=d.sinPres?[]:d.pres.map(p=>p.n)
    <div class="pdpie">${NOMBRE} · Semana de Santa Cecilia ${S.E.anio}${D().musical?` · ${esc(D().musical)}`:''}</div></div>`}
 function listaAlumnosVales(){const r=[],v=new Set();alumnosDe(S.E).forEach(a=>{const k=clave(a.n)+'|'+a.dia;if(!v.has(k)){v.add(k);r.push(a)}});return r}
 function valeHTML(nombre,dia){
-  const art=S.vImg?`<div class="art img"><img src="${S.vImg}" alt=""></div>`:`<div class="art">${logo()}Recreos<br>Musicales<br>del INFANTA</div>`;
-  return `<div class="vale">${art}<div class="tx"><span class="v">VALE</span><span class="d">por un desayuno en la cantina del IES Infanta Elena</span>
-   <span class="s">Semana de Santa Cecilia ${S.E.anio}${dia!=null&&dia!==''?` · ${esc(DIAS[dia])}`:''}</span><span class="n">Nombre: <span>${esc(nombre||'')}</span></span></div></div>`;
+  const pie=`<div class="vpie">${nombre?`<b>${esc(nombre)}</b>`:'Nombre: <span class="vlin"></span>'}${dia!=null&&dia!==''?` · ${esc(may(DIAS[dia]))}`:''}</div>`;
+  return `<div class="vale2" style="${estVars()}"><div class="vart">${logo()}<span>Recreos Musicales<br>del INFANTA</span></div>
+   <div class="vtx"><div class="vsc">Santa Cecilia ${S.E.anio}</div><div class="vv">VALE</div><div class="vd">para un desayuno <b>gratuito</b></div><div class="vc">en la cantina del IES Infanta Elena</div>${pie}</div>
+   <svg class="vnotas" viewBox="0 0 40 40" aria-hidden="true"><g fill="currentColor"><ellipse cx="10" cy="30" rx="5" ry="3.6"/><rect x="14" y="8" width="1.6" height="22"/><ellipse cx="28" cy="26" rx="5" ry="3.6"/><rect x="32" y="4" width="1.6" height="22"/><path d="M14 8 L33.6 4 L33.6 8 L15.6 12Z"/></g></svg></div>`;
 }
 function imprimirVales(){
   const modo=$('#vmodo').value;
-  let lista=modo=='nombres'?listaAlumnosVales().map(a=>[a.n,a.dia]):Array.from({length:Math.max(1,Number($('#vnum').value)||8)},()=>['','']);
+  let lista=modo=='nombres'?listaAlumnosVales().map(a=>[a.n,a.dia]):Array.from({length:Math.max(1,Number($('#vnum').value)||6)},()=>['','']);
   if(!lista.length)return toast('Todavía no hay alumnos con nombre',1);
-  let html='';for(let p=0;p<lista.length;p+=8)html+=`<div class="pg"><div class="vales">${lista.slice(p,p+8).map(([n,d])=>valeHTML(n,d)).join('')}</div></div>`;
+  let html='';for(let p=0;p<lista.length;p+=3)html+=`<div class="pg"><div class="vales2">${lista.slice(p,p+3).map(([n,d])=>valeHTML(n,d)).join('<div class="vcorte">✂</div>')}</div></div>`;
   imprimir(html,'portrait');
+}
+const driveVales=()=>D().driveVales||driveAnio();
+function vVales(nVal){const m=S.vModo||'app';
+  return `<section class="panel"><h3>Vales de desayuno</h3><p class="sm mu">Solo para alumnos: uno por alumno y día en que actúa (${nVal} ahora).</p>
+   <div class="seg" role="group" style="margin-bottom:10px">${[['app','Vale de la app'],['hueco','Mi vale con hueco'],['drive','Mi vale en Drive']].map(([k,t])=>`<button aria-pressed="${m==k}" onclick="S.vModo='${k}';render()">${t}</button>`).join('')}</div>
+   ${m=='app'?`<p class="sm mu" style="margin:0 0 8px">Tres por folio, con los colores y la letra de <b>la estética del año</b> (en Ajustes).</p>
+     <div class="row"><select id="vmodo" style="width:auto" onchange="$('#vnumw').style.display=this.value=='nombres'?'none':''"><option value="nombres">Con el nombre de cada alumno</option><option value="blanco">En blanco</option></select>
+      <label id="vnumw" class="f" style="display:none;width:90px">Cuántos<input id="vnum" type="number" min="1" value="6"></label></div>
+     <button class="btn p" style="margin-top:10px" onclick="imprimirVales()">${ICO.print}Imprimir vales</button>`
+   :m=='hueco'?`<p class="sm mu" style="margin:0 0 8px">Tu diseño con un hueco: la app escribe dentro el nombre de cada alumno. Tres por folio.</p>
+     <button class="btn p" onclick="S.vFull=true;render()">Abrir el editor del vale</button>`
+   :`<p class="sm mu" style="margin:0 0 8px">Tu vale ya hecho, tal cual. Se abre la carpeta de Drive: ahí lo ves o arrastras uno nuevo.</p>
+     <a class="btn p" href="${esc(driveVales())}" target="_blank" rel="noopener">${ICO.drive}Ver mi vale en Drive</a>`}</section>`;
 }
 function cargaImg(inp,k){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{S[k]=r.result;render()};r.readAsDataURL(f)}
 function listaDiplomas(){ // un diploma por alumno, con todo lo que ha tocado esa semana
@@ -1225,26 +1272,102 @@ function listaDiplomas(){ // un diploma por alumno, con todo lo que ha tocado es
 }
 function diplomaHTML(p){
   const dp=D().diploma,obras=p.obras.map(o=>o.startsWith('con ')?esc(o):`«${esc(o)}»`).join(', ');
-  const orla=`<svg class="dorla" viewBox="0 0 277 190" preserveAspectRatio="none" aria-hidden="true"><rect x="6" y="6" width="265" height="178" rx="4" fill="none" stroke="#8C2643" stroke-width="1.6"/><rect x="9.5" y="9.5" width="258" height="171" rx="3" fill="none" stroke="#D9A441" stroke-width=".6"/>
-   ${[[14,14,0],[263,14,90],[263,176,180],[14,176,270]].map(([x,y,r])=>`<g transform="translate(${x} ${y}) rotate(${r})"><path d="M0 10 Q0 0 10 0" fill="none" stroke="#D9A441" stroke-width=".8"/><circle cx="2.6" cy="2.6" r="1.3" fill="#8C2643"/><path d="M4 0h18M0 4v18" stroke="#D9A441" stroke-width=".4"/></g>`).join('')}</svg>`;
+  const orla=`<svg class="dorla" viewBox="0 0 277 190" preserveAspectRatio="none" aria-hidden="true"><rect x="6" y="6" width="265" height="178" rx="4" fill="none" stroke="${est().c1}" stroke-width="1.6"/><rect x="9.5" y="9.5" width="258" height="171" rx="3" fill="none" stroke="${est().c2}" stroke-width=".6"/>
+   ${[[14,14,0],[263,14,90],[263,176,180],[14,176,270]].map(([x,y,r])=>`<g transform="translate(${x} ${y}) rotate(${r})"><path d="M0 10 Q0 0 10 0" fill="none" stroke="${est().c2}" stroke-width=".8"/><circle cx="2.6" cy="2.6" r="1.3" fill="${est().c1}"/><path d="M4 0h18M0 4v18" stroke="${est().c2}" stroke-width=".4"/></g>`).join('')}</svg>`;
   const penta=`<svg class="dpenta" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true">${[0,1,2,3,4].map(k=>`<line x1="0" y1="${2+k*3}" x2="200" y2="${2+k*3}" stroke="#D9A441" stroke-width=".35"/>`).join('')}<g fill="#8C2643"><ellipse cx="60" cy="11" rx="2" ry="1.5"/><rect x="61.6" y="2" width=".5" height="9"/><ellipse cx="100" cy="8" rx="2" ry="1.5"/><rect x="101.6" y="0" width=".5" height="8"/><ellipse cx="140" cy="5" rx="2" ry="1.5"/><rect x="141.6" y="-3" width=".5" height="8"/></g></svg>`;
-  const cuerpo=`<div class="dtxt" style="top:${Number(dp.top)||52}%">
+  const cuerpo=`<div class="dtxt" style="top:${Math.max(Number(dp.top)||58,S.dImg?0:56)}%">
      <div class="dotorga">Se concede a</div><div class="nom">${esc(p.n)}</div><div class="dlinea"></div>
      ${obras?`<div class="obra">por su interpretación de ${obras}</div>`:''}
-     <div class="dctx">en los ${NOMBRE} · Semana de Santa Cecilia ${S.E.anio}</div>
      <div class="fr">${esc(dp.frase)}</div></div>`;
   if(S.dImg)return `<div class="pg"><div class="dip"><img class="fondo" src="${S.dImg}" alt="">${cuerpo}</div></div>`;
-  return `<div class="pg"><div class="dip dbonito">${orla}
-   <div class="dcab">${logo()}<div><span class="dtit">Diploma</span><span class="dsub">de participación</span></div></div>
+  return `<div class="pg"><div class="dip dbonito" style="${estVars()}">${orla}
+   <div class="dcab">${logo()}<div><span class="dapp">Recreos Musicales del INFANTA</span><span class="dsem">Semana de Santa Cecilia ${S.E.anio}</span></div></div>
+   <div class="dtit2"><b>Diploma</b><span>de participación</span></div>
    ${cuerpo}
    <div class="dpie"><div class="dfe"><img src="${LOGO_IES}" alt="IES Infanta Elena"><span>Jumilla, noviembre de ${S.E.anio}</span></div>${penta}<div class="dfi"><span class="dlin"></span>El Departamento de Música</div></div></div></div>`;
 }
 function imprimirDiplomas(prueba){const l=listaDiplomas();if(!l.length)return toast('Todavía no hay alumnos con nombre',1);
   imprimir((prueba?l.slice(0,1):l).map(diplomaHTML).join(''),'landscape')}
+/* ---------- La estética del año: colores y letra que comparten vales, diplomas y carteles ---------- */
+const ESTILOS=[
+  {nombre:'Clásico de la app',c1:'#8C2643',c2:'#D9A441',c3:'#FBF3E2',font:'Bricolage Grotesque'},
+  {nombre:'Descendientes',c1:'#4B1E5F',c2:'#E2A31B',c3:'#F7EEF4',font:'Permanent Marker'},
+  {nombre:'Noche de gala',c1:'#1E2A4A',c2:'#C9A54A',c3:'#F6F3EA',font:'Playfair Display'},
+  {nombre:'Rock',c1:'#1B1B1F',c2:'#E0313A',c3:'#F2EFEA',font:'Anton'},
+  {nombre:'Pop',c1:'#E8006A',c2:'#16A3B5',c3:'#FFF6FA',font:'Montserrat'},
+  {nombre:'Retro',c1:'#2F5D50',c2:'#E8833A',c3:'#FBF1DF',font:'Lobster'}];
+const est=()=>({...ESTILOS[0],...(D().estetica||{})});
+const color1Oscuro=()=>est().c1;
+const estVars=()=>{const e=est();return `--e1:${e.c1};--e2:${e.c2};--e3:${e.c3};--ef:'${e.font}'`};
+function setEst(k,v){D().estetica={...est(),[k]:v};marcar();render()}
+function ponEstilo(i){D().estetica={...ESTILOS[i]};marcar();render()}
+function coloresDe(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
+  const W=80,H=Math.round(80*im.height/im.width),cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(im,0,0,W,H);
+  const px=c.getImageData(0,0,W,H).data,cubos=new Map(),claros=[];
+  const hsl=(r,g,b)=>{r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn,s=d?d/(1-Math.abs(2*l-1)):0;return[s,l]};
+  for(let k=0;k<px.length;k+=4){const R=px[k],G=px[k+1],B=px[k+2],[s,l]=hsl(R,G,B);
+    if(l>.86){claros.push([R,G,B]);continue}if(l<.08||s<.25)continue;
+    const key=(R>>5)+','+(G>>5)+','+(B>>5),o=cubos.get(key)||{n:0,r:0,g:0,b:0,s:0,l:0};o.n++;o.r+=R;o.g+=G;o.b+=B;o.s+=s;o.l+=l;cubos.set(key,o)}
+  const hex=(r,g,b)=>'#'+[r,g,b].map(x=>Math.round(x).toString(16).padStart(2,'0')).join('');
+  const L=[...cubos.values()].map(o=>({c:hex(o.r/o.n,o.g/o.n,o.b/o.n),n:o.n,s:o.s/o.n,l:o.l/o.n,rgb:[o.r/o.n,o.g/o.n,o.b/o.n]})).sort((a,b)=>b.n*b.s-a.n*a.s);
+  if(!L.length)return toast('No he encontrado colores claros en esa imagen',1);
+  const dist=(a,b)=>Math.hypot(a.rgb[0]-b.rgb[0],a.rgb[1]-b.rgb[1],a.rgb[2]-b.rgb[2]);
+  const osc=L.filter(x=>x.l<.45).sort((a,b)=>b.n-a.n)[0]||L[0],acc=L.find(x=>x!==osc&&dist(x,osc)>110&&x.l>.35)||L[1]||L[0];
+  const cl=claros.length?claros.reduce((a,p)=>[a[0]+p[0],a[1]+p[1],a[2]+p[2]],[0,0,0]).map(x=>x/claros.length):[251,243,226];
+  D().estetica={...est(),nombre:'Sacada de mi imagen',c1:osc.c,c2:acc.c,c3:hex(...cl)};marcar();toast('Colores sacados de la imagen: retócalos si quieres');render()};im.src=r.result};r.readAsDataURL(f)}
+function vEstetica(){const e=est();
+  return `<section class="panel estp" style="${estVars()}"><h3>La estética del año</h3>
+   <p class="sm mu" style="margin-top:0">Colores y letra de este año. Los usan los vales y diplomas de la app y, como punto de partida, el texto del cartel. Cada año puede tener la suya.</p>
+   <div class="estl">${ESTILOS.map((x,i)=>`<button class="estb ${x.nombre==e.nombre?'on':''}" onclick="ponEstilo(${i})" style="font-family:'${x.font}'"><i style="background:${x.c1}"></i><i style="background:${x.c2}"></i><i style="background:${x.c3};border:1px solid #ccc"></i>${x.nombre}</button>`).join('')}</div>
+   <div class="row" style="margin-top:12px;align-items:end">
+    <label class="f">Principal<input type="color" value="${e.c1}" onchange="setEst('c1',this.value)" style="height:38px;width:70px;padding:2px"></label>
+    <label class="f">Acento<input type="color" value="${e.c2}" onchange="setEst('c2',this.value)" style="height:38px;width:70px;padding:2px"></label>
+    <label class="f">Fondo<input type="color" value="${e.c3}" onchange="setEst('c3',this.value)" style="height:38px;width:70px;padding:2px"></label>
+    <label class="f" style="flex:1;min-width:180px">Letra de títulos<select onchange="setEst('font',this.value)">${FUENTES.map(([f,n])=>`<option value="${f}" ${e.font==f?'selected':''}>${n}</option>`).join('')}</select></label>
+    <label class="btn">Sacar colores de una imagen<input type="file" accept="image/*" hidden onchange="coloresDe(this)"></label></div>
+   <div class="estprev"><div class="ep1">${logo()}</div><div><b>Recreos Musicales del INFANTA</b><span>Santa Cecilia ${S.E.anio}</span><em>VALE para un desayuno <u>gratuito</u></em></div></div></section>`;
+}
+/* ---------- Vale con hueco: la app escribe el nombre en tu diseño ---------- */
+const CFGV={top:62,bot:84,mar:12,size:60,color:'#2A1018',font:'Bricolage Grotesque',dia:true,halo:false};
+const cfgV=()=>{const c=D().valeHueco||(D().valeHueco={...CFGV,font:est().font,color:est().c1});for(const k in CFGV)if(c[k]===undefined)c[k]=CFGV[k];return c};
+async function lienzoVale(cv,nombre,dia,guia){if(!cv||!S.vHImg)return;
+  const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.src=S.vHImg});const cf=cfgV();
+  try{await document.fonts.load(`800 40px "${cf.font}"`);await document.fonts.load(`600 30px "${cf.font}"`)}catch(_){}
+  const W=img.naturalWidth,H=img.naturalHeight;cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0);
+  const x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=Math.max(4,y1-y0);
+  const lineas=[[nombre||'Nombre del alumno',1]];if(cf.dia&&dia!=null&&dia!=='')lineas.push([may(DIAS[dia])+' · Santa Cecilia '+S.E.anio,.55]);
+  let s=Math.round(H*cf.size/400);const alto=s=>lineas.reduce((a,[t,k])=>a+s*k*1.25,0),cabe=s=>lineas.every(([t,k])=>{c.font=`800 ${s*k}px "${cf.font}", sans-serif`;return c.measureText(t).width<=aw});
+  for(;s>6;s--){if(alto(s)<=ah&&cabe(s))break}
+  let y=y0+(ah-alto(s))/2;c.textAlign='center';c.textBaseline='top';
+  lineas.forEach(([t,k])=>{c.font=`${k<1?600:800} ${s*k}px "${cf.font}", sans-serif`;if(cf.halo){c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=Math.max(2,s*k*.18);c.lineJoin='round';c.strokeText(t,(x0+x1)/2,y)}c.fillStyle=cf.color;c.fillText(t,(x0+x1)/2,y);y+=s*k*1.25});
+  if(guia){c.save();c.strokeStyle='rgba(232,0,106,.85)';c.lineWidth=Math.max(2,W/300);c.setLineDash([W/60,W/100]);c.strokeRect(x0,y0,aw,ah);c.restore()}}
+function pintaVale(){const l=listaAlumnosVales(),a=l[0];lienzoVale(document.getElementById('cvv'),a?a.n:'Nombre del alumno',a?a.dia:0,S.vGuia!==false)}
+function soltarVale(e){e.preventDefault();const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(!f||!/^image\//.test(f.type))return toast('Suelta una imagen',1);const r=new FileReader();r.onload=()=>{S.vHImg=r.result;render()};r.readAsDataURL(f)}
+function vValeEditor(){const cf=cfgV();
+  const rng=(k,t,min,max,st)=>`<label class="f">${t} <b class="rv">${cf[k]}${st||''}</b><input type="range" min="${min}" max="${max}" value="${cf[k]}" oninput="cfgV().${k}=+this.value;this.previousElementSibling.textContent=this.value+'${st||''}';marcar();pintaVale()"></label>`;
+  return `<div class="cfull" role="dialog" aria-label="Editor del vale" ondragover="event.preventDefault()" ondrop="soltarVale(event)">
+   <div class="cfh"><b>Mi vale con hueco</b><label class="btn">${S.vHImg?'Cambiar diseño':'Cargar diseño'}<input type="file" accept="image/*" hidden onchange="cargaImg(this,'vHImg')"></label><span class="sp"></span>
+    <button class="btn p" onclick="imprimirValesHueco()" ${S.vHImg?'':'disabled'}>${ICO.print}Imprimir los vales</button><button class="btn" onclick="S.vFull=false;render()">${ICO.check}Cerrar</button></div>
+   <div class="cfb"><div class="cfc"><p class="sm mu" style="margin-top:0">Carga (o arrastra) tu vale con un hueco libre. La app escribe en el hueco el nombre de cada alumno. La imagen no se guarda; los ajustes, sí.</p>
+    <div class="cfg">${rng('top','Zona: empieza',0,95,' %')}${rng('bot','Zona: termina',5,100,' %')}${rng('mar','Márgenes laterales',0,40,' %')}${rng('size','Tamaño máximo de letra',10,120)}
+     <label class="f">Color<input type="color" value="${esc(cf.color)}" oninput="cfgV().color=this.value;marcar();pintaVale()" style="height:38px;padding:2px"></label>
+     <label class="f">Letra<select onchange="cfgV().font=this.value;marcar();pintaVale()">${FUENTES.map(([f,n])=>`<option value="${f}" ${cf.font==f?'selected':''}>${n}</option>`).join('')}</select></label></div>
+    <div class="row" style="margin-top:10px"><label class="chk"><input type="checkbox" ${cf.dia?'checked':''} onchange="cfgV().dia=this.checked;marcar();pintaVale()">Escribir también el día</label>
+     <label class="chk"><input type="checkbox" ${cf.halo?'checked':''} onchange="cfgV().halo=this.checked;marcar();pintaVale()">Contorno blanco</label>
+     <label class="chk"><input type="checkbox" ${S.vGuia!==false?'checked':''} onchange="S.vGuia=this.checked;pintaVale()">Ver la zona</label></div>
+    <p class="sm mu">Vista previa con el primer alumno. Se imprimen tres vales por folio, uno por alumno y día.</p></div>
+   <div class="cfp">${S.vHImg?'<canvas id="cvv" aria-label="Vista previa del vale"></canvas>':'<div class="vacio cdrop">Arrastra aquí tu diseño de vale o pulsa «Cargar diseño».</div>'}</div></div></div>`;
+}
+async function imprimirValesHueco(){if(!S.vHImg)return toast('Carga primero tu diseño',1);
+  const l=listaAlumnosVales();if(!l.length)return toast('Todavía no hay alumnos con nombre',1);
+  const cv=document.createElement('canvas'),imgs=[];for(const a of l){await lienzoVale(cv,a.n,a.dia,false);imgs.push(cv.toDataURL('image/jpeg',.9))}
+  let html='';for(let p=0;p<imgs.length;p+=3)html+=`<div class="pg"><div class="vales2">${imgs.slice(p,p+3).map(u=>`<div class="vale2 img"><img src="${u}" alt=""></div>`).join('<div class="vcorte">✂</div>')}</div></div>`;
+  imprimir(html,'portrait')}
 /* ---------- Cartel del día sobre el modelo con hueco (la imagen no se guarda: solo se usa al generar) ---------- */
 const CFGC={top:38,bot:88,mar:10,size:40,color:'#2A1018',f1:'Bricolage Grotesque',f2:'Atkinson Hyperlegible',lh:120,halo:false,alin:'p'};
 const FUENTES=[['Bricolage Grotesque','Bricolage (la de la app)'],['Montserrat','Montserrat'],['Oswald','Oswald (estrecha)'],['Bebas Neue','Bebas Neue (cartel)'],['Anton','Anton (impacto)'],['Permanent Marker','Permanent Marker (rotulador)'],['Lobster','Lobster (retro)'],['Playfair Display','Playfair (elegante)'],['Atkinson Hyperlegible','Atkinson (muy legible)']];
-const cfgC=()=>{const c=D().cartel||(D().cartel={...CFGC});for(const k in CFGC)if(c[k]===undefined)c[k]=CFGC[k];return c};
+const cfgC=()=>{const m=D().cartelCfgDia||(D().cartelCfgDia={});let c=m[S.cDia];if(!c)c=m[S.cDia]={...CFGC,f1:est().font,color:color1Oscuro(),...(D().cartel||{})}; // cada día guarda su diseño; un día nuevo parte del último usado
+  for(const k in CFGC)if(c[k]===undefined)c[k]=CFGC[k];D().cartel={...c};return c};
 /* Texto del cartel, estilo programa de concierto:
    «Nombre (3ºESO) Instrumento ... «Obra» (Autor)»: lo de la izquierda pegado al margen izquierdo, la obra al derecho y puntos en medio.
    Varios intérpretes de una misma obra: uno por línea y la obra en la última. Los «...» (o «…», «|») separan izquierda y derecha. */
@@ -1267,7 +1390,7 @@ function rellenarC(){if(D().cartelTxt)delete D().cartelTxt[S.cDia];marcar();rend
 function ceroCartel(){modal(`<h3>¿Empezar de cero el cartel del ${esc(DIAS[S.cDia])}?</h3>
   <p class="sm">Puedes vaciar solo el texto o empezar de cero del todo: texto del programa, ajustes de zona, letra y color por defecto, y sin modelo cargado.</p>
   <div class="row"><button class="btn" onclick="setTxtC(S.cDia,'');cerrar();render()">Vaciar el texto</button>
-   <button class="btn p" onclick="if(D().cartelTxt)delete D().cartelTxt[S.cDia];D().cartel={...CFGC};S.cImg=null;marcar();cerrar();render()">Empezar de cero</button>
+   <button class="btn p" onclick="if(D().cartelTxt)delete D().cartelTxt[S.cDia];if(D().cartelCfgDia)delete D().cartelCfgDia[S.cDia];D().cartel={...CFGC};S.cImg=null;marcar();cerrar();render()">Empezar de cero</button>
    <button class="btn g" onclick="cerrar()">Cancelar</button></div>`)}
 function alinearSel(m){const ta=$('#ctx');if(!ta)return;const v=ta.value,a=ta.selectionStart,b=ta.selectionEnd;
   const ini=v.lastIndexOf('\n',a-1)+1;let fin=v.indexOf('\n',b);if(fin<0)fin=v.length;
@@ -1352,7 +1475,7 @@ function vCartel(){
   if(S.cFull)return `<section class="panel cartel"><h3>Cartel del día con tu modelo</h3><p class="mu sm">Editando a pantalla completa…</p></section>
    <div class="cfull" role="dialog" aria-label="Editor del cartel" ${zonaDrop}>
     <div class="cfh"><b>Cartel del día</b>${cargar}<label class="f" style="width:auto">Día<select onchange="S.cDia=+this.value;render()">${opD}</select></label><span class="sp"></span>
-     <button class="btn p" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button><button class="btn" onclick="exportaCartel('pdf')" ${S.cImg?'':'disabled'}>${ICO.print}Imprimir / PDF</button>
+     <button class="btn p" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button>
      <button class="btn" onclick="S.cFull=false;render()">${ICO.check}Cerrar</button></div>
     <div class="cfb"><div class="cfc">${controlesCartel()}</div>
      <div class="cfp">${S.cImg?'<canvas id="cv" aria-label="Vista previa del cartel"></canvas>':`<div class="vacio cdrop">Arrastra aquí tu modelo de cartel o pulsa «Cargar modelo».</div>`}</div></div></div>`;
@@ -1362,7 +1485,7 @@ function vCartel(){
      <p class="sm mu" style="margin:0">Carga o arrastra aquí el modelo con hueco. La imagen no se guarda en la app (no pesa nada): solo se guardan el texto y los ajustes de cada día.</p>
      <div class="row">${cargar}<label class="f" style="width:auto">Día<select onchange="S.cDia=+this.value;render()">${opD}</select></label></div>
      <button class="btn p cbig" onclick="S.cFull=true;render()" ${S.cImg?'':'disabled'}>Abrir el editor a pantalla completa</button>
-     <div class="row"><button class="btn" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button><button class="btn" onclick="exportaCartel('pdf')" ${S.cImg?'':'disabled'}>${ICO.print}Imprimir / PDF</button></div>
+     <div class="row"><button class="btn" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button></div>
      <div class="cest"><span><i class="dot ${ed?'pr':'gr'}"></i>Texto del ${esc(DIAS[S.cDia])}: ${ed?'editado a mano y guardado':'tomado del programa'}</span>
       ${dA?`<a href="${esc(dA)}" target="_blank" rel="noopener">${ICO.drive}Guardar en la carpeta de Drive de ${S.E.anio}</a>`:`<a href="${esc(driveGen())}" target="_blank" rel="noopener">${ICO.drive}Carpeta de Santa Cecilia en Drive</a>`}</div></div>
     <div class="cmp" onclick="if(S.cImg){S.cFull=true;render()}" title="Abrir en grande">${S.cImg?'<canvas id="cv" aria-label="Vista previa del cartel"></canvas>':'<div class="vacio cdrop">Arrastra aquí tu modelo</div>'}</div></div></section>`;
@@ -1411,25 +1534,18 @@ function columnas(series,etiquetas){ // barras agrupadas por año
 function vImprimir(){
   const opD=D().dias.map((d,i)=>`<option value="${i}" ${i==S.dia?'selected':''}>${DIAS[i]} ${fechaDia(S.E,i).getDate()}${d.no?' (sin concierto)':''}</option>`).join('');
   const nVal=listaAlumnosVales().length,nDip=listaDiplomas().length;
-  return `<h2>Imprimir</h2><p class="mu" style="margin:0 0 18px">Todo sale en A4. En el cuadro de impresión puedes elegir «Guardar como PDF» y subirlo a tu carpeta de Drive.</p>
+  return `${S.vFull?vValeEditor():''}<h2>Imprimir</h2><p class="mu" style="margin:0 0 18px">Todo sale en A4. En el cuadro de impresión puedes elegir «Guardar como PDF» y subirlo a tu carpeta de Drive.</p>
   <div class="ctop">${vCartel()}${vPresent()}</div>
   <h3 style="margin:26px 0 12px;font-size:20px">Documentos para imprimir</h3>
   <div class="grid2 imp">
    <section class="panel"><h3>Hoja de apuntes</h3><p class="sm mu">En blanco y válida para cualquier día: ocho recuadros para tomar notas en clase y pasarlas luego a la app.</p>
     <button class="btn p" onclick="imprimir(hojaApuntes(),'portrait')">${ICO.print}Imprimir en blanco</button></section>
-   <section class="panel"><h3>Ficha del día</h3><p class="sm mu">Todo lo programado con detalle: intérpretes, componentes, repertorio, minutos y necesidades técnicas. Para organizar el montaje.</p>
+   <section class="panel"><h3>Ficha del día</h3><p class="sm mu">El programa detallado de cada concierto: obras, intérpretes con su curso e instrumento, formato, duración y necesidades técnicas para el montaje.</p>
     <div class="row"><select id="fdia" style="width:auto">${opD}<option value="all">Toda la semana</option></select>
      <button class="btn p" onclick="impFicha()">${ICO.print}Imprimir</button></div></section>
-   <section class="panel"><h3>Programa del día</h3><p class="sm mu">Para el tablón y para el escenario.</p>
-    <div class="row"><select id="pdia" style="width:auto">${opD}</select><button class="btn p" onclick="imprimir(programaDia(+$('#pdia').value),'portrait')">${ICO.print}Imprimir</button></div></section>
    <section class="panel"><h3>Programa de la semana</h3><p class="sm mu">Los cinco días en un folio.</p>
     <button class="btn p" onclick="imprimirSemana()">${ICO.print}Imprimir</button></section>
-   <section class="panel"><h3>Vales de desayuno</h3><p class="sm mu">Solo para alumnos: uno por alumno y día en que actúa (${nVal} ahora). Ocho por folio.</p>
-    <div class="row"><select id="vmodo" style="width:auto" onchange="$('#vnumw').style.display=this.value=='nombres'?'none':''"><option value="nombres">Con el nombre de cada alumno</option><option value="blanco">En blanco</option></select>
-     <label id="vnumw" class="f" style="display:none;width:90px">Cuántos<input id="vnum" type="number" min="1" value="16"></label></div>
-    <div class="row" style="margin-top:10px"><label class="btn">Usar mi imagen<input type="file" accept="image/*" hidden onchange="cargaImg(this,'vImg')"></label>
-     ${S.vImg?`<span class="sm">Imagen cargada <button class="btn g" onclick="S.vImg=null;render()">Quitar</button></span>`:''}
-     <button class="btn p" onclick="imprimirVales()">${ICO.print}Imprimir vales</button></div></section>
+   ${vVales(nVal)}
    <section class="panel"><h3>Diplomas de participación</h3><p class="sm mu">Uno por alumno (${nDip} ahora), con su nombre, lo que ha tocado y tu frase. Carga el diseño que te haga la IA (apaisado, con el centro libre) o usa el sencillo de la app.</p>
     <label class="f">Frase<textarea style="min-height:64px" oninput="setP('diploma.frase',this.value)">${esc(D().diploma.frase)}</textarea></label>
     <label class="f" style="margin-top:8px">Altura del texto: ${esc(D().diploma.top)} % <input type="range" min="30" max="75" value="${esc(D().diploma.top)}" onchange="setP('diploma.top',+this.value,1)"></label>
@@ -1451,29 +1567,33 @@ function listaBloques(d){return d.bloques.map((b,k)=>{
 }).join('\n')}
 function historialConceptos(){return S.eds.filter(e=>e!==S.E&&(e.datos.concepto||e.datos.musical)).sort((a,b)=>a.anio-b.anio)
   .map(e=>`- ${e.anio}${e.datos.musical?` (temática: ${e.datos.musical})`:''}: ${e.datos.concepto||'sin descripción'}`).join('\n')}
+const corto=n=>{const t=String(n||'').trim().split(/\s+/);return t.length>=3?t.slice(0,-1).join(' '):t.join(' ')};
+const FMT_G={karaoke:'canta sobre una pista grabada',playalong:'toca sobre una pista grabada',live:'en directo',acappella:'a cappella',solo:'instrumento solo, sin acompañamiento',producer:'presenta su propia producción musical'};
+function listaGuion(d){return d.bloques.map((b,k)=>{
+  const rep=(b.rep||[]).filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}»${r.autor?` (${r.autor})`:''}`).join(', ');
+  if(b.t=='al'){const p=b.alumnos.filter(u=>u.n.trim()).map(u=>`${corto(u.n)}${esProf(u)?' (profesor)':u.g?` (${fmtCurso(u.g).replace(/ [A-H]$/,'')})`:''}${u.i?`, ${u.i.toLowerCase()}`:''}${!esProf(u)&&vez(u.n)>1?` [repite: su ${vez(u.n)}.ª Santa Cecilia]`:''}`).join('; ');
+    return `${k+1}. ${p} — ${b.obra?`«${limpiaTit(b.obra)}»${b.autor?` (${b.autor})`:''}`:'obra por confirmar'} — ${FMT_G[b.formato]||''}`}
+  if(b.t=='gr'&&!b.coro)return `${k+1}. Grupo «${b.nombre}»: ${b.comp.filter(c=>c.n.trim()).map(c=>`${corto(c.n)}${c.instr?` (${c.instr.toLowerCase()})`:''}`).join(', ')} — ${rep}`;
+  if(b.t=='gr')return `${k+1}. Coro «${b.nombre}»${b.director?`, dirige ${corto(b.director)}`:''} — ${rep}`;
+  return `${k+1}. Artista invitado: ${b.nombre}${b.presenta?` (${b.presenta})`:''} — ${rep}`;
+}).join('\n')}
 function promptGuion(i,modo){modo=modo||'cada';
-  const E=S.E,d=D().dias[i],sig=siguiente(i),pres=d.sinPres?[]:d.pres.map(p=>p.n).filter(Boolean),f=fLarga(fechaDia(E,i));
-  return `Eres el guionista de los «${NOMBRE}», la Semana de Santa Cecilia del IES Infanta Elena de Jumilla (Murcia). Escribe el guion que ${d.sinPres?'leerá en voz alta un profesor del departamento (hoy no hay alumnos presentadores)':`leerán en voz alta ${pres.length?`los presentadores ${pres.join(' y ')}`:'dos alumnos presentadores'}`} en el ${d.titulo.toLowerCase()} (${f}), durante el recreo (${D().hora}) en el ${D().lugar}.
+  const E=S.E,d=D().dias[i],sig=siguiente(i),pres=d.sinPres?[]:d.pres.map(p=>corto(p.n)).filter(Boolean);
+  const quien=d.sinPres?'un profesor del departamento (hoy no hay alumnos presentadores)':pres.length==2?`${pres[0]} (P1) y ${pres[1]} (P2)`:'dos alumnos presentadores (P1 y P2)';
+  const manana=sig?`${DIAS[sig.j]}: ${nombreDia(sig.d)||sig.d.titulo}`:'';
+  return `Escribe un guion BREVE y ameno para ${quien}: presentan hoy, ${fLarga(fechaDia(E,i))}, el concierto del recreo de los «${NOMBRE}» (Semana de Santa Cecilia, IES Infanta Elena, Jumilla).
 
-Programa${d.sub?` «${d.sub}»`:''}:
-${listaBloques(d)||'(todavía sin nada programado)'}
+Programa de hoy («${nombreDia(d)||d.titulo}»):
+${listaGuion(d)||'(todavía sin nada programado)'}
 
-Temática de la semana este curso: ${D().musical||'—'}.
-Siguiente concierto: ${sig?`${DIAS[sig.j]}, ${sig.d.titulo}${sig.d.sub?` «${sig.d.sub}»`:''}${sig.d.bloques.length?` con ${sig.d.bloques.map(tituloB).join('; ')}`:''}`:'es el último concierto de la semana'}.
-
-${modo=='inicio'?`Cómo lo quiero (vamos justos de tiempo: presentación única al principio):
-1. Una sola intervención al principio, de 2 minutos como máximo en total: bienvenida, Semana de Santa Cecilia (22 de noviembre, patrona de la música) y presentación de TODAS las actuaciones en orden, una o dos frases por actuación (quién, con qué instrumento, qué obra y, si cabe, un dato curioso muy breve y cierto).
-2. Marca en el guion «[Actúan seguidos, sin presentaciones]»: después de la introducción tocan todos sin interrupción.
-3. Cierre muy breve al final (20 segundos): aplauso, agradecimientos y anuncio del siguiente concierto.
-4. ${d.sinPres?'Un solo presentador.':`Reparte el texto entre ${pres.length==2?`${pres[0]} (P1) y ${pres[1]} (P2)`:'P1 y P2'}, alternando frases cortas.`}
-5. Tono cercano, con humor y respetuoso; frases cortas y fáciles de leer en voz alta para alumnado de 12 a 17 años.
-6. Formato: encabezados con un emoji (🎙 PRESENTACIÓN, 🎶 ACTÚAN SEGUIDOS, 🎙 CIERRE).`:`Cómo lo quiero (presentación antes de cada actuación):
-1. Introducción breve: bienvenida, Semana de Santa Cecilia (22 de noviembre, patrona de la música) y qué vamos a escuchar hoy.
-2. Una presentación por bloque, en este orden, con un dato curioso breve sobre la obra, el autor, el instrumento o el grupo. Usa solo datos ciertos; si dudas, cámbialo por otro sobre el instrumento o el estilo. Si un alumno repite de otros años, menciónalo con cariño.
-3. Despedida: agradecimientos, aplauso para los intérpretes y anuncio del siguiente concierto.
-4. ${d.sinPres?'Un solo presentador, intervenciones breves.':`Alterna las intervenciones entre ${pres.length==2?`${pres[0]} (P1) y ${pres[1]} (P2)`:'P1 y P2'}.`} Cada intervención debe leerse en menos de 40 segundos: el recreo deja ${D().util||25} minutos de música.
-5. Tono cercano, con humor y respetuoso; frases cortas y fáciles de leer en voz alta para alumnado de 12 a 17 años.
-6. Formato: encabezados con un emoji (🎙 INTRODUCCIÓN, 1. Nombre – instrumento (curso), 🎙 DESPEDIDA).`}`;
+Cómo lo quiero:
+${modo=='inicio'?`- Vamos justos de tiempo: UNA sola presentación al principio (1 minuto y medio como mucho) que presente todas las actuaciones en orden, una frase por actuación. Después escribe «[Tocan seguidos]». Al final, despedida de 15 segundos.`:`- Introducción de 20 segundos; antes de cada actuación, 2 o 3 frases (20 segundos como mucho); despedida de 15 segundos.`}
+- Nombra a cada intérprete solo con nombre y primer apellido, como aparecen arriba.
+- Si la obra es muy conocida, cuenta algo curioso de la obra (y si solo se toca una parte, dilo); si no, céntrate en los intérpretes. Solo datos ciertos: si dudas, no lo pongas.
+- Algún toque de humor suave, sin burlas. Frases cortas, fáciles de leer en voz alta. Nada de párrafos largos.
+- Despedida: aplauso y UNA sola frase sobre el próximo concierto${manana?` (${manana})`:''}, sin detallar su programa.${sig?'':' Hoy es el último concierto: cierra la semana dando las gracias.'}
+${d.sinPres?'':'- Alterna las frases entre P1 y P2.\n'}- Encabezados con emoji: 🎙 PRESENTACIÓN${modo=='inicio'?', 🎶 TOCAN SEGUIDOS':''}, 🎙 DESPEDIDA.
+- Recuerda que el 22 de noviembre es Santa Cecilia, patrona de la música (menciónalo una vez, de pasada).`;
 }
 function promptPrograma(i){const d=D().dias[i];
   return `Prepara el texto del programa para el cartel del ${d.titulo.toLowerCase()} de los «${NOMBRE}» (Semana de Santa Cecilia, IES Infanta Elena).
@@ -1633,7 +1753,7 @@ function vHistorial(){
     <span class="sm mu">${e.datos.dias.reduce((s,d)=>s+(d.no?0:d.bloques.length),0)} bloques · ${new Set(alumnosDe(e).map(a=>clave(a.n))).size} alumnos</span>
     ${e.datos.concepto?`<p class="sm" style="margin:0">${esc(e.datos.concepto)}</p>`:''}
     <div class="row" style="margin-top:auto">${e===S.E?'<span class="tag">Abierta</span>':`<button class="btn" onclick="cambiaEd(${e.anio});S.tab='programa';render()">Abrir</button>`}
-     ${driveAnio(e)?`<a class="btn" href="${esc(driveAnio(e))}" target="_blank" rel="noopener">${ICO.drive}Carteles y programas</a>`:'<span class="sm mu">Sin carpeta de Drive</span>'}
+     ${driveAnio(e)?`<a class="btn" href="${esc(driveAnio(e))}" target="_blank" rel="noopener">${ICO.drive}Carteles y programas</a>`:'<span class="sm mu">Sin carpeta de Drive</span>'}${e.datos.driveVales?`<a class="btn" href="${esc(e.datos.driveVales)}" target="_blank" rel="noopener">${ICO.drive}Vales</a>`:''}
      <button class="btn g" onclick="exportar(${e.anio})">Exportar</button></div></article>`).join('')}</div>
   <section class="panel" style="margin-top:22px"><h3>Copias e importación</h3>
    <p class="sm mu">«Exportar» descarga la edición en un archivo para guardarlo en Drive como copia. «Importar» carga un archivo de otro año. Estos archivos llevan nombres de alumnos: guárdalos en Drive, no en GitHub.</p>
@@ -1672,11 +1792,13 @@ function vAjustes(){
     <label class="f" style="margin-top:10px">Lugar<input type="text" value="${esc(D().lugar)}" oninput="setP('lugar',this.value)"></label></section>
    <section class="panel"><h3>Drive</h3>
     <label class="f">Carpeta de esta edición<input type="url" value="${esc(driveAnio())}" placeholder="https://drive.google.com/…" oninput="setP('drive',this.value)"></label>
+    <label class="f" style="margin-top:10px">Mis vales en Drive <span class="sm">(si no pones nada, se usa la carpeta del año)</span><input type="url" value="${esc(D().driveVales||'')}" placeholder="https://drive.google.com/…" oninput="setP('driveVales',this.value)"></label>
     <label class="f" style="margin-top:10px">Carpeta general de Santa Cecilia<input type="url" value="${esc(driveGen())}" placeholder="https://drive.google.com/…" oninput="setP('driveRaiz',this.value)"></label>
     <div class="row" style="margin-top:10px">${driveAnio()?`<a class="btn" href="${esc(driveAnio())}" target="_blank" rel="noopener">${ICO.drive}Abrir carpeta del año</a>`:''}<a class="btn" href="${esc(driveGen())}" target="_blank" rel="noopener">${ICO.drive}Carpeta general</a></div></section>
    <section class="panel"><h3>Sesión</h3><p class="sm">${DEMO?'Modo de prueba: no se guarda nada.':'Has entrado como <b>'+esc(S.user?.email||'')+'</b>.'}</p>
     <button class="btn" onclick="salir()">${DEMO?'Salir de la prueba':'Cerrar sesión'}</button></section>
-  </div>${vIA()}`;
+  </div>
+  <div style="margin-top:18px">${vEstetica()}</div>${vIA()}`;
 }
 
 init();
