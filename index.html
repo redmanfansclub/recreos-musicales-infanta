@@ -1397,18 +1397,42 @@ const cfgC=()=>{const m=D().cartelCfgDia||(D().cartelCfgDia={});let c=m[S.cDia];
    «Nombre (3ºESO) Instrumento ... «Obra» (Autor)»: lo de la izquierda pegado al margen izquierdo, la obra al derecho y puntos en medio.
    Varios intérpretes de una misma obra: uno por línea y la obra en la última. Los «...» (o «…», «|») separan izquierda y derecha. */
 const cursoCartel=u=>{if(esProf(u))return 'Prof.';const p=curso(u.g);if(!p)return String(u.g||'').trim();return p.niv=='FP'?'FP':p.niv.replace(/^(\d)ESO$/,'$1ºESO').replace(/^(\d)BACH$/,'$1ºBach')};
-const lineaU=u=>`${u.n.trim()}${cursoCartel(u)?` (${cursoCartel(u)})`:''}${u.i&&u.i.trim()?` ${u.i.trim()}`:''}`;
-function textoCartel(i){const d=D().dias[i],tit=nombreDia(d)||d.titulo,L=['# '+tit],mismo=n=>clave(n)==clave(tit);
+/* Instrumento limpio para carteles y guiones: sin «+ playalong», «con playback»…, con mayúscula inicial */
+const limpiaIns=t=>{t=String(t||'').replace(/\s*(?:\+|\bcon\b|\by\b)?\s*(?:play[\s-]?along|play[\s-]?back|backing\s*track|karaoke)\b/gi,'').replace(/\s+/g,' ').trim();if(/^(voces|voz|vocal|canto|cantante)$/i.test(t))t='voz';return t?t.charAt(0).toUpperCase()+t.slice(1).toLowerCase():''};
+const plural=(t,n)=>n>1&&/^voz$/i.test(t)?'Voces':t;
+const nomL=n=>String(n||'').replace(/\s+/g,' ').trim();
+const lineaU=(u,ins)=>`${nomL(u.n)}${cursoCartel(u)?` (${cursoCartel(u)})`:''}${ins?` ${ins}`:''}`;
+function textoCartel(i){const cfg=(D().cartelCfgDia||{})[i]||{};if((cfg.alin||'p')=='cc')return textoCentrado(i);
+  const d=D().dias[i],tit=nombreDia(d)||d.titulo,L=['# '+tit],mismo=n=>clave(n)==clave(tit);
   d.bloques.forEach(b=>{L.push('');
     const obra=(o,a)=>o?`«${limpiaTit(o)}»${a?` (${a})`:''}`:'';
-    if(b.t=='al'){const al=b.alumnos.filter(u=>u.n.trim());al.forEach((u,k)=>L.push(lineaU(u)+(k==al.length-1&&b.obra?` ... ${obra(b.obra,b.autor)}`:'')));if(!al.length&&b.obra)L.push(`... ${obra(b.obra,b.autor)}`);return}
+    if(b.t=='al'){const al=b.alumnos.filter(u=>u.n.trim()),is=al.map(u=>limpiaIns(u.i)),igual=al.length>1&&is[0]&&is.every(x=>x==is[0]);
+      al.forEach((u,k)=>{const ins=igual?(k==al.length-1?plural(is[0],al.length):''):is[k];L.push(lineaU(u,ins)+(k==al.length-1&&b.obra?` ... ${obra(b.obra,b.autor)}`:''))});
+      if(!al.length&&b.obra)L.push(`... ${obra(b.obra,b.autor)}`);return}
     const rep=b.rep.filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}» ... ${(r.autor||'').trim()}`);
-    if(b.t=='gr'&&!b.coro){L.push('[c]GRUPO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);b.comp.filter(x=>x.n.trim()).forEach(x=>L.push(`~ ${x.n.trim()}${x.instr&&x.instr.trim()?` · ${x.instr.trim()}`:''}`))}
+    if(b.t=='gr'&&!b.coro){L.push('[c]GRUPO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);b.comp.filter(x=>x.n.trim()).forEach(x=>L.push(`~ ${nomL(x.n)}${limpiaIns(x.instr)?` · ${limpiaIns(x.instr)}`:''}`))}
     else if(b.t=='gr'){L.push('[c]CORO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);if(b.director||b.cantantes)L.push(`[c]${[b.director?`Dirige ${b.director}`:'',b.cantantes?`${b.cantantes} voces`:''].filter(Boolean).join(' · ')}`)}
     else{L.push('[c]ARTISTA INVITADO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`)}
     if(rep.length){L.push('');rep.forEach(x=>L.push(x))}});
   return L.join('\n');
 }
+/* Estilo «Cartel centrado»: la obra grande y en color; debajo, los intérpretes en una línea */
+function textoCentrado(i){const d=D().dias[i],tit=nombreDia(d)||d.titulo,L=['# '+tit],mismo=n=>clave(n)==clave(tit);
+  const ob=(o,a)=>`[c]«${limpiaTit(o)}»${a?` ${a.trim()}`:''}`;
+  d.bloques.forEach(b=>{L.push('');
+    if(b.t=='al'){const al=b.alumnos.filter(u=>u.n.trim());if(b.obra)L.push(ob(b.obra,b.autor));if(!al.length)return;
+      const cs=al.map(cursoCartel),is=al.map(u=>limpiaIns(u.i)),cC=cs.every(x=>x==cs[0])?cs[0]:'',iC=is.every(x=>x==is[0])?is[0]:'';
+      const per=al.map((u,k)=>{const ex=[cC?'':cs[k],iC?'':is[k].toLowerCase()].filter(Boolean).join(', ');return corto(nomL(u.n))+(ex?` (${ex})`:'')}).join(' · ');
+      L.push(`[c]${per}${cC?` (${cC})`:''}${iC?` · ${plural(iC,al.length).toLowerCase()}`:''}`);return}
+    if(b.t=='gr'&&!b.coro){L.push('[c]GRUPO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);b.comp.filter(x=>x.n.trim()).forEach(x=>L.push(`~ ${nomL(x.n)}${limpiaIns(x.instr)?` · ${limpiaIns(x.instr)}`:''}`))}
+    else if(b.t=='gr'){L.push('[c]CORO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);if(b.director||b.cantantes)L.push(`[c]${[b.director?`Dirige ${b.director}`:'',b.cantantes?`${b.cantantes} voces`:''].filter(Boolean).join(' · ')}`)}
+    else{L.push('[c]ARTISTA INVITADO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`)}
+    const rep=b.rep.filter(r=>r.obra);if(rep.length){L.push('');rep.forEach(r=>L.push(ob(r.obra,r.autor)))}});
+  return L.join('\n');
+}
+function cambiaAlin(v){const antes=cfgC().alin||'p';cfgC().alin=v;marcar();
+  if((antes=='cc')!=(v=='cc')&&txtC(S.cDia)!=null)toast('Tu texto está editado a mano: pulsa «Volver a rellenar con el programa» para adaptarlo al nuevo estilo');
+  render()}
 const txtC=i=>{const t=D().cartelTxt;return t&&typeof t[i]=='string'?t[i]:null};
 function setTxtC(i,v){(D().cartelTxt=D().cartelTxt||{})[i]=v;marcar()}
 function rellenarC(){if(D().cartelTxt)delete D().cartelTxt[S.cDia];marcar();render()}
@@ -1430,22 +1454,26 @@ async function pintaCartel(){
   const x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=Math.max(10,y1-y0),LH=cf.lh/100,modo=cf.alin||'p';
   const raw=(txtC(S.cDia)??textoCartel(S.cDia)).split('\n');
   const SEP=/\s*(?:\.{3,}|…+|\||\t|>>)\s*/;
-  const F={t:s=>`800 ${s*1.3}px "${cf.f1}", sans-serif`,n:s=>`700 ${s}px "${cf.f1}", sans-serif`,r:s=>`400 ${s*.92}px "${cf.f1}", sans-serif`,o:s=>`italic 400 ${s*.95}px "${cf.f2}", sans-serif`};
+  const F={t:s=>`800 ${s*1.3}px "${cf.f1}", sans-serif`,n:s=>`700 ${s}px "${cf.f1}", sans-serif`,r:s=>`400 ${s*.92}px "${cf.f1}", sans-serif`,o:s=>`italic 400 ${s*.95}px "${cf.f2}", sans-serif`,
+    O:s=>`800 ${s*1.12}px "${cf.f1}", sans-serif`,oa:s=>`italic 400 ${s*.82}px "${cf.f2}", sans-serif`,pp:s=>`500 ${s*.84}px "${cf.f1}", sans-serif`};
+  const col2=cf.color2||est().c1,colorDe=f=>f=='o'||f=='O'||f=='oa'?col2:cf.color;
   const ancho=(txt,f)=>{c.font=f;return c.measureText(txt).width};
   const anchoS=(sg,s)=>sg.reduce((a,g)=>a+ancho(g.t,F[g.f](s)),0);
   const wrap=(txt,maxw,f)=>{c.font=f;const out=[];let cur='';txt.split(/\s+/).forEach(w=>{const t=cur?cur+' '+w:w;if(c.measureText(t).width>maxw&&cur){out.push(cur);cur=w}else cur=t});if(cur)out.push(cur);return out};
-  const segIzq=t=>{if(!t)return[];if(/^[«"“]/.test(t))return[{t,f:'o'}];const p=t.indexOf(' (');return p>0?[{t:t.slice(0,p),f:'n'},{t:t.slice(p),f:'r'}]:[{t,f:'n'}]};
+  const segIzq=t=>{if(!t)return[];if(modo=='cc'){if(/^[«"“]/.test(t)){const m=t.match(/^(«[^»]*»|"[^"]*"|“[^”]*”)\s*(.*)$/);return m?[{t:m[1],f:'O'},...(m[2]?[{t:'  '+m[2],f:'oa'}]:[])]:[{t,f:'O'}]}return[{t,f:'pp'}]}if(/^[«"“]/.test(t))return[{t,f:'o'}];const p=t.indexOf(' (');return p>0?[{t:t.slice(0,p),f:'n'},{t:t.slice(p),f:'r'}]:[{t,f:'n'}]};
   const segDer=t=>t?[{t,f:/^[«"“]/.test(t)?'o':'r'}]:[];
   const filas=s=>{const R=[];let h=0,cortes=0;const lh=s*LH;
     const meter=(sg,al,hh)=>{hh=hh||lh;if(anchoS(sg,s)<=aw){R.push({t:'a',sg,al,h:hh});h+=hh;return}cortes++;
-      const g=sg[0];wrap(sg.map(x=>x.t).join(''),aw,F[g.f](s)).forEach(x=>{R.push({t:'a',sg:[{t:x,f:g.f}],al,h:hh});h+=hh})};
+      const g=sg[0],txt=sg.map(x=>x.t).join('');
+      const wrapSep=()=>{c.font=F.pp(s);const out=[];let cur='';txt.split(' · ').forEach(p=>{const t=cur?cur+' · '+p:p;if(c.measureText(t).width>aw&&cur){out.push(cur);cur=p}else cur=t});if(cur)out.push(cur);return out.flatMap(x=>c.measureText(x).width>aw?wrap(x,aw,F.pp(s)):[x])};
+      (g.f=='pp'&&txt.includes(' · ')?wrapSep():wrap(txt,aw,F[g.f](s))).forEach(x=>{R.push({t:'a',sg:[{t:x,f:g.f}],al,h:hh});h+=hh})};
     for(let k=0;k<raw.length;k++){let l=raw[k],al=null;const m=l.match(/^\[(i|c|d)\]\s?/);if(m){al=m[1];l=l.slice(m[0].length)}
       if(l.startsWith('# ')){meter([{t:l.slice(2).trim(),f:'t'}],al||'c',s*1.3*LH);R.push({t:'g',h:s*.45});h+=s*.45;continue}
       if(!l.trim()){R.push({t:'g',h:s*.5});h+=s*.5;continue}
       if(l.startsWith('~ ')){const it=[];while(k<raw.length&&raw[k].startsWith('~ ')){const p=raw[k].slice(2).trim().split(/\s·\s/);it.push([{t:p[0],f:'n'},...(p.length>1?[{t:' · '+p.slice(1).join(' · '),f:'r'}]:[])]);k++}k--;
         for(let j=0;j<it.length;j+=2){const row=it.slice(j,j+2);row.forEach(x=>{if(anchoS(x,s)>aw/2-s*.5)cortes++});R.push({t:'cols',row,h:lh});h+=lh}continue}
       const p=l.split(SEP);let izq,der;if(p.length>1){izq=p[0].trim();der=p.slice(1).join(' ').trim()}else{const ob=/^[«"“]/.test(l.trim())&&modo=='p'&&!al;izq=ob?'':l.trim();der=ob?l.trim():''}
-      const I=segIzq(izq),Dd=segDer(der),A=al||(modo=='p'?null:modo);
+      const I=segIzq(izq),Dd=segDer(der),A=al||(modo=='p'?null:modo=='cc'?'c':modo);
       if(!A&&der){const wi=anchoS(I,s),wd=anchoS(Dd,s);
         if(wi+wd+s*1.2<=aw){R.push({t:'p',I,Dd,h:lh});h+=lh}else{cortes++;if(I.length)meter(I,'i');R.push({t:'p',I:[],Dd,h:lh});h+=lh}continue}
       if(!der){meter(I,A||'i');continue}
@@ -1456,8 +1484,8 @@ async function pintaCartel(){
   for(let t=smax;t>=Math.max(4,smax*.5);t--){const f=filas(t);if(f.h<=ah&&!f.cortes){s=t;break}}
   if(!s){s=smax;for(;s>4;s--){if(filas(s).h<=ah)break}}
   const {R,h}=filas(s);let y=y0+Math.max(0,(ah-h)/2);c.textBaseline='alphabetic';c.lineJoin='round';
-  const pon=(txt,x,yy,f)=>{c.font=f;c.textAlign='left';if(cf.halo){c.strokeStyle='rgba(255,255,255,.92)';c.lineWidth=Math.max(2,s*.18);c.strokeText(txt,x,yy)}c.fillStyle=cf.color;c.fillText(txt,x,yy)};
-  const ponS=(sg,x,yy)=>{sg.forEach(g=>{pon(g.t,x,yy,F[g.f](s));x+=ancho(g.t,F[g.f](s))});return x};
+  const pon=(txt,x,yy,f,col)=>{c.font=f;c.textAlign='left';if(cf.halo){c.strokeStyle='rgba(255,255,255,.92)';c.lineWidth=Math.max(2,s*.18);c.strokeText(txt,x,yy)}c.fillStyle=col||cf.color;c.fillText(txt,x,yy)};
+  const ponS=(sg,x,yy)=>{sg.forEach(g=>{pon(g.t,x,yy,F[g.f](s),colorDe(g.f));x+=ancho(g.t,F[g.f](s))});return x};
   R.forEach(r=>{if(r.t=='g'){y+=r.h;return}const base=y+r.h*.78;
     if(r.t=='a'){const w=anchoS(r.sg,s),x=r.al=='d'?x1-w:r.al=='c'?(x0+x1-w)/2:x0;ponS(r.sg,x,base)}
     else if(r.t=='cols'){r.row.forEach((sg,j)=>ponS(sg,x0+j*aw/2,base))}
@@ -1482,13 +1510,14 @@ function controlesCartel(){
   const cf=cfgC();
   const rng=(k,t,min,max,st)=>`<label class="f">${t} <b class="rv">${cf[k]}${st||''}</b><input type="range" min="${min}" max="${max}" value="${cf[k]}" oninput="cfgC().${k}=+this.value;this.previousElementSibling.textContent=this.value+'${st||''}';marcar();pintaCartel()"></label>`;
   const sel=(k,t)=>`<label class="f">${t}<select onchange="cfgC().${k}=this.value;marcar();pintaCartel()">${FUENTES.map(([f,n])=>`<option value="${f}" ${cf[k]==f?'selected':''} style="font-family:'${f}'">${n}</option>`).join('')}</select></label>`;
-  return `<div class="aln"><label class="f" style="width:auto">Alineación general<select onchange="cfgC().alin=this.value;marcar();pintaCartel()">${[['p','Programa (con puntos)'],['i','Izquierda'],['c','Centrado'],['d','Derecha']].map(([v,t])=>`<option value="${v}" ${(cf.alin||'p')==v?'selected':''}>${t}</option>`).join('')}</select></label>
+  return `<div class="aln"><label class="f" style="width:auto">Estilo del texto<select onchange="cambiaAlin(this.value)">${[['p','Programa (con puntos)'],['cc','Cartel centrado'],['i','Izquierda'],['c','Centrado'],['d','Derecha']].map(([v,t])=>`<option value="${v}" ${(cf.alin||'p')==v?'selected':''}>${t}</option>`).join('')}</select></label>
      <div class="f"><span>Líneas seleccionadas</span><div class="seg" role="group"><button title="A la izquierda" onclick="alinearSel('i')">⇤ Izq.</button><button title="Centradas" onclick="alinearSel('c')">↔ Centro</button><button title="A la derecha" onclick="alinearSel('d')">Dcha. ⇥</button><button title="Quitar la alineación propia" onclick="alinearSel('')">Normal</button></div></div></div>
     <label class="f">Texto del cartel<textarea id="ctx" class="ctxg" oninput="setTxtC(S.cDia,this.value);pintaCartel()">${esc(txtC(S.cDia)??textoCartel(S.cDia))}</textarea></label>
     <p class="sm mu" style="margin:4px 0 10px"><b>Cómo se escribe:</b> «#» delante = título centrado · <code>Nombre (3ºESO) Voz ... «Obra» (Autor)</code>: lo de antes de los tres puntos va a la izquierda y la obra a la derecha, con puntos en medio · varios intérpretes de una obra, uno por línea y la obra en el último · «~» delante = integrantes en dos columnas · «[c]», «[i]», «[d]» al principio = línea centrada, a la izquierda o a la derecha · línea vacía = separación.
      <button class="btn g" style="padding:0;color:var(--acc)" onclick="rellenarC()">Volver a rellenar con el programa</button> · <button class="btn g" style="padding:0;font-size:13px" onclick="ceroCartel()">Borrar y empezar de cero</button></p>
     <div class="cfg">${rng('top','Zona: empieza',0,80,' %')}${rng('bot','Zona: termina',20,100,' %')}${rng('mar','Márgenes laterales',0,30,' %')}${rng('size','Tamaño máximo de letra',6,80)}${rng('lh','Interlineado',90,170,' %')}
-     <label class="f">Color del texto<input type="color" value="${esc(cf.color)}" oninput="cfgC().color=this.value;marcar();pintaCartel()" style="height:38px;padding:2px"></label>
+     <label class="f">Color de nombres y títulos<input type="color" value="${esc(cf.color)}" oninput="cfgC().color=this.value;marcar();pintaCartel()" style="height:38px;padding:2px"></label>
+     <label class="f">Color de las obras<input type="color" value="${esc(cf.color2||est().c1)}" oninput="cfgC().color2=this.value;marcar();pintaCartel()" style="height:38px;padding:2px"></label>
      ${sel('f1','Letra de títulos y nombres')}${sel('f2','Letra de las obras')}</div>
     <p class="sm mu" id="cinfo" style="margin:8px 0 0"></p>
     <div class="row" style="margin-top:8px"><label class="chk"><input type="checkbox" ${cf.halo?'checked':''} onchange="cfgC().halo=this.checked;marcar();pintaCartel()">Contorno blanco para que se lea sobre el dibujo</label>
@@ -1596,7 +1625,7 @@ const corto=n=>{const t=String(n||'').trim().split(/\s+/);return t.length>=3?t.s
 const FMT_G={karaoke:'canta sobre una pista grabada',playalong:'toca sobre una pista grabada',live:'en directo',acappella:'a cappella',solo:'instrumento solo, sin acompañamiento',producer:'presenta su propia producción musical'};
 function listaGuion(d){return d.bloques.map((b,k)=>{
   const rep=(b.rep||[]).filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}»${r.autor?` (${r.autor})`:''}`).join(', ');
-  if(b.t=='al'){const p=b.alumnos.filter(u=>u.n.trim()).map(u=>`${corto(u.n)}${esProf(u)?' (profesor)':u.g?` (${fmtCurso(u.g).replace(/ [A-H]$/,'')})`:''}${u.i?`, ${u.i.toLowerCase()}`:''}${!esProf(u)&&vez(u.n)>1?` [repite: su ${vez(u.n)}.ª Santa Cecilia]`:''}`).join('; ');
+  if(b.t=='al'){const p=b.alumnos.filter(u=>u.n.trim()).map(u=>`${corto(u.n)}${esProf(u)?' (profesor)':u.g?` (${fmtCurso(u.g).replace(/ [A-H]$/,'')})`:''}${limpiaIns(u.i)?`, ${limpiaIns(u.i).toLowerCase()}`:''}${!esProf(u)&&vez(u.n)>1?` [repite: su ${vez(u.n)}.ª Santa Cecilia]`:''}`).join('; ');
     return `${k+1}. ${p} — ${b.obra?`«${limpiaTit(b.obra)}»${b.autor?` (${b.autor})`:''}`:'obra por confirmar'} — ${FMT_G[b.formato]||''}`}
   if(b.t=='gr'&&!b.coro)return `${k+1}. Grupo «${b.nombre}»: ${b.comp.filter(c=>c.n.trim()).map(c=>`${corto(c.n)}${c.instr?` (${c.instr.toLowerCase()})`:''}`).join(', ')} — ${rep}`;
   if(b.t=='gr')return `${k+1}. Coro «${b.nombre}»${b.director?`, dirige ${corto(b.director)}`:''} — ${rep}`;
