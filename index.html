@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,600;0,800;1,400&family=Oswald:wght@500;700&family=Bebas+Neue&family=Anton&family=Permanent+Marker&family=Lobster&family=Playfair+Display:ital,wght@0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
   --telon:#8C2643;--telon2:#6F1B33;--oro:#D9A441;--oroc:#F6E6BD;--tinta:#241A1F;--mu:#6E6268;
@@ -175,6 +175,22 @@ table.pprg .ob{font-weight:700}.pprg .ob2{line-height:1.45}.pprg .mu{color:#666}
 .pns{gap:4px 16px}.per{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
 .per .pi{display:inline-flex;align-items:center;gap:4px;color:var(--mu);font-size:14px}.per .pi .ico{width:14px;height:14px;color:var(--oro)}
 .per+.per{padding-left:14px;border-left:1px solid var(--ln)}
+.cmini{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:16px;align-items:start}
+.cmc{display:flex;flex-direction:column;gap:12px}
+.cbig{justify-content:center;padding:14px 16px;font-size:16px}
+.cmp canvas{width:100%;height:auto;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.18);display:block;cursor:zoom-in}
+.cdrop{margin:0;padding:22px 10px;font-size:14px}
+.sobre{outline:3px dashed var(--mag);outline-offset:-6px}
+.cfull{position:fixed;inset:0;z-index:35;background:var(--papel);display:flex;flex-direction:column}
+.cfh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 18px;background:var(--sf);border-bottom:1px solid var(--ln);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.cfh b{font:800 18px var(--disp)}.cfh .sp{flex:1}
+.cfb{flex:1;min-height:0;display:grid;grid-template-columns:420px minmax(0,1fr);gap:18px;padding:16px 18px}
+.cfc{overflow:auto;padding-right:6px}
+.ctxg{min-height:260px;font-size:14px}
+.cfp{min-height:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--mu) 10%,var(--papel));border-radius:14px;padding:12px}
+.cfp canvas{max-width:100%;max-height:calc(100vh - 120px);width:auto;height:auto;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.rv{font-weight:700;color:var(--tinta)}
+@media (max-width:900px){.cfb{grid-template-columns:1fr;overflow:auto}.cfp canvas{max-height:70vh}.cmini{grid-template-columns:1fr}}
 /* ---------- Imprimir: cartel + guion ---------- */
 .ctop{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
 .ctop>.panel{margin:0}
@@ -712,7 +728,7 @@ function toast(m,e){const t=$('#toast');t.textContent=m;t.className=e?'e':'';t.s
 function modal(h){const m=$('#modal');m.innerHTML=`<div>${h}</div>`;m.style.display='flex'}
 function cerrar(){$('#modal').style.display='none'}
 $('#modal').addEventListener('click',e=>{if(e.target.id=='modal')cerrar()});
-document.addEventListener('keydown',e=>{if(e.key=='Escape')cerrar()});
+document.addEventListener('keydown',e=>{if(e.key=='Escape'){if(S.cFull&&$('#modal').style.display!='flex'){S.cFull=false;render()}else cerrar()}});
 function setP(path,v,re){const k=path.split('.');let o=D();for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k.at(-1)]=v;marcar();if(re)render()}
 function getP(path){return path.split('.').reduce((o,k)=>o[k],D())}
 function pushP(path,v){getP(path).push(v);marcar();render()}
@@ -1215,8 +1231,9 @@ function diplomaHTML(p){
 function imprimirDiplomas(prueba){const l=listaDiplomas();if(!l.length)return toast('Todavía no hay alumnos con nombre',1);
   imprimir((prueba?l.slice(0,1):l).map(diplomaHTML).join(''),'landscape')}
 /* ---------- Cartel del día sobre el modelo con hueco (la imagen no se guarda: solo se usa al generar) ---------- */
-const CFGC={top:38,bot:88,mar:10,size:40,color:'#2A1018'};
-const cfgC=()=>D().cartel||(D().cartel={...CFGC});
+const CFGC={top:38,bot:88,mar:10,size:40,color:'#2A1018',f1:'Bricolage Grotesque',f2:'Atkinson Hyperlegible',lh:120,halo:false};
+const FUENTES=[['Bricolage Grotesque','Bricolage (la de la app)'],['Montserrat','Montserrat'],['Oswald','Oswald (estrecha)'],['Bebas Neue','Bebas Neue (cartel)'],['Anton','Anton (impacto)'],['Permanent Marker','Permanent Marker (rotulador)'],['Lobster','Lobster (retro)'],['Playfair Display','Playfair (elegante)'],['Atkinson Hyperlegible','Atkinson (muy legible)']];
+const cfgC=()=>{const c=D().cartel||(D().cartel={...CFGC});for(const k in CFGC)if(c[k]===undefined)c[k]=CFGC[k];return c};
 function textoCartel(i){const d=D().dias[i],L=['# '+(nombreDia(d)||d.titulo)];
   d.bloques.forEach(b=>{L.push('');
     if(b.t=='al'){L.push(b.alumnos.filter(u=>u.n.trim()).map(perU).join(', '));if(b.obra)L.push(`«${b.obra}»${b.autor?` (${b.autor})`:''}`)}
@@ -1226,19 +1243,23 @@ function textoCartel(i){const d=D().dias[i],L=['# '+(nombreDia(d)||d.titulo)];
 async function pintaCartel(){
   const cv=document.getElementById('cv');if(!cv||!S.cImg)return;
   const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.src=S.cImg});
-  try{await document.fonts.ready}catch(_){}
+  const cf=cfgC();
+  try{await Promise.all([document.fonts.load(`800 40px "${cf.f1}"`),document.fonts.load(`700 40px "${cf.f1}"`),document.fonts.load(`italic 400 30px "${cf.f2}"`)]);await document.fonts.ready}catch(_){}
   const W=img.naturalWidth,H=img.naturalHeight;cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0);
-  const cf=cfgC(),x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=y1-y0;
+  const x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=Math.max(10,y1-y0),LH=cf.lh/100;
   const raw=(S.cTxt[S.cDia]??textoCartel(S.cDia)).split('\n');
   const tipo=l=>l.startsWith('# ')?'t':!l.trim()?'g':/^[«"“]/.test(l.trim())?'o':'n';
-  const font=(t,s)=>t=='t'?`800 ${s*1.3}px "Bricolage Grotesque", sans-serif`:t=='o'?`italic 400 ${s*.86}px "Atkinson Hyperlegible", sans-serif`:`700 ${s}px "Bricolage Grotesque", sans-serif`;
+  const font=(t,s)=>t=='t'?`800 ${s*1.3}px "${cf.f1}", sans-serif`:t=='o'?`italic 400 ${s*.86}px "${cf.f2}", sans-serif`:`700 ${s}px "${cf.f1}", sans-serif`;
   const wrap=(txt,maxw)=>{const out=[];let cur='';txt.split(/\s+/).forEach(w=>{const t=cur?cur+' '+w:w;if(c.measureText(t).width>maxw&&cur){out.push(cur);cur=w}else cur=t});if(cur)out.push(cur);return out};
-  const lay=s=>{let h=0;const it=[];raw.forEach(l=>{const t=tipo(l);if(t=='g'){h+=s*.5;it.push({t,h:s*.5});return}
-    c.font=font(t,s);const lh=(t=='t'?s*1.3:t=='o'?s*.86:s)*1.22,ls=wrap(t=='t'?l.slice(2):l.trim(),aw),extra=t=='t'?s*.4:0;it.push({t,ls,lh,s,extra});h+=ls.length*lh+extra});return{h,it}};
-  let s=Math.max(10,Math.round(H*cf.size/1000));for(;s>8;s--){if(lay(s).h<=ah)break}
-  const Lt=lay(s);let y=y0+Math.max(0,(ah-Lt.h)/2);c.fillStyle=cf.color;c.textAlign='center';c.textBaseline='top';
-  Lt.it.forEach(o=>{if(o.t=='g'){y+=o.h;return}c.font=font(o.t,o.s);o.ls.forEach(l=>{c.fillText(l,(x0+x1)/2,y);y+=o.lh});y+=o.extra});
+  const lay=s=>{let h=0;const it=[];raw.forEach(l=>{const t=tipo(l);if(t=='g'){h+=s*.45;it.push({t,h:s*.45});return}
+    c.font=font(t,s);const lh=(t=='t'?s*1.3:t=='o'?s*.86:s)*LH,ls=wrap(t=='t'?l.slice(2):l.trim(),aw),extra=t=='t'?s*.4:0;it.push({t,ls,lh,s,extra});h+=ls.length*lh+extra});return{h,it}};
+  let s=Math.max(4,Math.round(H*cf.size/1000));for(;s>4;s--){if(lay(s).h<=ah)break}
+  const Lt=lay(s);let y=y0+Math.max(0,(ah-Lt.h)/2);c.textAlign='center';c.textBaseline='top';c.lineJoin='round';
+  Lt.it.forEach(o=>{if(o.t=='g'){y+=o.h;return}c.font=font(o.t,o.s);o.ls.forEach(l=>{
+    if(cf.halo){c.strokeStyle='rgba(255,255,255,.92)';c.lineWidth=Math.max(2,o.s*.18);c.strokeText(l,(x0+x1)/2,y)}
+    c.fillStyle=cf.color;c.fillText(l,(x0+x1)/2,y);y+=o.lh});y+=o.extra});
   if(S.cGuia){c.save();c.strokeStyle='rgba(232,0,106,.85)';c.lineWidth=Math.max(2,W/350);c.setLineDash([W/70,W/110]);c.strokeRect(x0,y0,aw,ah);c.restore()}
+  const info=document.getElementById('cinfo');if(info)info.textContent=Lt.h>ah?'El texto no cabe ni a tamaño mínimo: acorta el texto o amplía la zona.':`Letra ajustada a ${Math.round(s/H*1000)} (máximo ${cf.size}).`;
 }
 async function exportaCartel(modo){
   if(!S.cImg)return toast('Carga primero el modelo del cartel',1);
@@ -1247,23 +1268,41 @@ async function exportaCartel(modo){
   else imprimir(`<div class="pg" style="text-align:center"><img src="${cv.toDataURL('image/jpeg',.92)}" style="max-width:190mm;max-height:275mm"></div>`,'portrait');
   S.cGuia=g;setTimeout(pintaCartel,600);
 }
-function vCartel(){
-  const cf=cfgC(),opD=D().dias.map((d,i)=>`<option value="${i}" ${i==S.cDia?'selected':''}>${DIAS[i]} ${fechaDia(S.E,i).getDate()}${d.no?' (sin concierto)':''}</option>`).join('');
-  const rng=(k,t,min,max)=>`<label class="f">${t}<input type="range" min="${min}" max="${max}" value="${cf[k]}" oninput="cfgC().${k}=+this.value;marcar();pintaCartel()"></label>`;
-  return `<section class="panel cartel"><h3>Cartel del día con tu modelo</h3>
-   <p class="sm mu" style="margin-top:0">Carga el modelo con el hueco (lo tienes en tu carpeta de Drive). La imagen no se guarda en la app: solo se usa para generar el cartel, que descargas en PNG para redes o imprimes en A4.</p>
-   <div class="cgrid"><div>
-    <div class="row"><label class="btn ${S.cImg?'':'p'}">${S.cImg?'Cambiar modelo':'Cargar modelo'}<input type="file" accept="image/*" hidden onchange="cargaImg(this,'cImg')"></label>
-     ${D().drive?`<a class="btn" href="${esc(D().drive)}" target="_blank" rel="noopener">${ICO.drive}Abrir Drive</a>`:''}
-     <label class="f" style="width:auto">Día<select onchange="S.cDia=+this.value;render()">${opD}</select></label></div>
-    <label class="f" style="margin-top:12px">Texto del cartel<textarea id="ctx" style="min-height:120px;font-size:14px" oninput="S.cTxt[S.cDia]=this.value;pintaCartel()">${esc(S.cTxt[S.cDia]??textoCartel(S.cDia))}</textarea></label>
-    <p class="sm mu" style="margin:4px 0 8px"># al principio = título grande · línea que empieza por «» = obra en cursiva · línea vacía = separación.
+function soltarModelo(e){e.preventDefault();e.stopPropagation();const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
+  if(!f||!/^image\//.test(f.type))return toast('Suelta aquí una imagen (PNG o JPG)',1);
+  const r=new FileReader();r.onload=()=>{S.cImg=r.result;render()};r.readAsDataURL(f)}
+const zonaDrop=`ondragover="event.preventDefault();this.classList.add('sobre')" ondragleave="this.classList.remove('sobre')" ondrop="this.classList.remove('sobre');soltarModelo(event)"`;
+function controlesCartel(){
+  const cf=cfgC();
+  const rng=(k,t,min,max,st)=>`<label class="f">${t} <b class="rv">${cf[k]}${st||''}</b><input type="range" min="${min}" max="${max}" value="${cf[k]}" oninput="cfgC().${k}=+this.value;this.previousElementSibling.textContent=this.value+'${st||''}';marcar();pintaCartel()"></label>`;
+  const sel=(k,t)=>`<label class="f">${t}<select onchange="cfgC().${k}=this.value;marcar();pintaCartel()">${FUENTES.map(([f,n])=>`<option value="${f}" ${cf[k]==f?'selected':''} style="font-family:'${f}'">${n}</option>`).join('')}</select></label>`;
+  return `<label class="f">Texto del cartel<textarea id="ctx" class="ctxg" oninput="S.cTxt[S.cDia]=this.value;pintaCartel()">${esc(S.cTxt[S.cDia]??textoCartel(S.cDia))}</textarea></label>
+    <p class="sm mu" style="margin:4px 0 10px"># al principio = título grande · línea que empieza por «» = obra en cursiva · línea vacía = separación.
      <button class="btn g" style="padding:0;color:var(--acc)" onclick="delete S.cTxt[S.cDia];render()">Volver a rellenar con el programa</button></p>
-    <div class="cfg">${rng('top','Zona: empieza (%)',5,70)}${rng('bot','Zona: termina (%)',40,98)}${rng('mar','Márgenes laterales (%)',0,25)}${rng('size','Tamaño máximo de letra',20,70)}
-     <label class="f">Color del texto<input type="color" value="${esc(cf.color)}" oninput="cfgC().color=this.value;marcar();pintaCartel()" style="height:38px;padding:2px"></label></div>
-    <label class="chk" style="margin-top:8px"><input type="checkbox" ${S.cGuia?'checked':''} onchange="S.cGuia=this.checked;pintaCartel()">Ver la zona del texto (no sale al descargar)</label>
-    <div class="row" style="margin-top:12px"><button class="btn p" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button><button class="btn" onclick="exportaCartel('pdf')" ${S.cImg?'':'disabled'}>${ICO.print}Imprimir / PDF</button></div>
-   </div><div class="cprev">${S.cImg?'<canvas id="cv" aria-label="Vista previa del cartel"></canvas>':'<div class="vacio" style="margin:0">Carga tu modelo para ver aquí el cartel con el programa del día.</div>'}</div></div></section>`;
+    <div class="cfg">${rng('top','Zona: empieza',0,80,' %')}${rng('bot','Zona: termina',20,100,' %')}${rng('mar','Márgenes laterales',0,30,' %')}${rng('size','Tamaño máximo de letra',6,80)}${rng('lh','Interlineado',90,170,' %')}
+     <label class="f">Color del texto<input type="color" value="${esc(cf.color)}" oninput="cfgC().color=this.value;marcar();pintaCartel()" style="height:38px;padding:2px"></label>
+     ${sel('f1','Letra de títulos y nombres')}${sel('f2','Letra de las obras')}</div>
+    <p class="sm mu" id="cinfo" style="margin:8px 0 0"></p>
+    <div class="row" style="margin-top:8px"><label class="chk"><input type="checkbox" ${cf.halo?'checked':''} onchange="cfgC().halo=this.checked;marcar();pintaCartel()">Contorno blanco para que se lea sobre el dibujo</label>
+     <label class="chk"><input type="checkbox" ${S.cGuia?'checked':''} onchange="S.cGuia=this.checked;pintaCartel()">Ver la zona del texto</label></div>`;
+}
+function vCartel(){
+  const opD=D().dias.map((d,i)=>`<option value="${i}" ${i==S.cDia?'selected':''}>${DIAS[i]} ${fechaDia(S.E,i).getDate()}${d.no?' (sin concierto)':''}</option>`).join('');
+  const cargar=`<label class="btn ${S.cImg?'':'p'}">${S.cImg?'Cambiar modelo':'Cargar modelo'}<input type="file" accept="image/*" hidden onchange="cargaImg(this,'cImg')"></label>`;
+  if(S.cFull)return `<section class="panel cartel"><h3>Cartel del día con tu modelo</h3><p class="mu sm">Editando a pantalla completa…</p></section>
+   <div class="cfull" role="dialog" aria-label="Editor del cartel" ${zonaDrop}>
+    <div class="cfh"><b>Cartel del día</b>${cargar}<label class="f" style="width:auto">Día<select onchange="S.cDia=+this.value;render()">${opD}</select></label><span class="sp"></span>
+     <button class="btn p" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button><button class="btn" onclick="exportaCartel('pdf')" ${S.cImg?'':'disabled'}>${ICO.print}Imprimir / PDF</button>
+     <button class="btn" onclick="S.cFull=false;render()">${ICO.check}Cerrar</button></div>
+    <div class="cfb"><div class="cfc">${controlesCartel()}</div>
+     <div class="cfp">${S.cImg?'<canvas id="cv" aria-label="Vista previa del cartel"></canvas>':`<div class="vacio cdrop">Arrastra aquí tu modelo de cartel o pulsa «Cargar modelo».</div>`}</div></div></div>`;
+  return `<section class="panel cartel" ${zonaDrop}><h3>Cartel del día con tu modelo</h3>
+   <p class="sm mu" style="margin-top:0">Carga o arrastra aquí el modelo con hueco (lo tienes en tu Drive). No se guarda en la app: solo sirve para generar el cartel, que descargas en PNG o imprimes en A4.</p>
+   <div class="cmini"><div class="cmc">
+     <div class="row">${cargar}<label class="f" style="width:auto">Día<select onchange="S.cDia=+this.value;render()">${opD}</select></label></div>
+     <button class="btn p cbig" onclick="S.cFull=true;render()" ${S.cImg?'':'disabled'}>Abrir el editor a pantalla completa</button>
+     <div class="row"><button class="btn" onclick="exportaCartel('png')" ${S.cImg?'':'disabled'}>Descargar PNG</button><button class="btn" onclick="exportaCartel('pdf')" ${S.cImg?'':'disabled'}>${ICO.print}Imprimir / PDF</button></div></div>
+    <div class="cmp" onclick="if(S.cImg){S.cFull=true;render()}">${S.cImg?'<canvas id="cv" aria-label="Vista previa del cartel"></canvas>':'<div class="vacio cdrop">Arrastra aquí tu modelo</div>'}</div></div></section>`;
 }
 const promptHueco=()=>`Te adjunto el cartel de este año de los «Recreos Musicales del INFANTA» (Semana de Santa Cecilia, IES Infanta Elena). Necesito una versión MODELO para hacer los carteles de cada día:
 - Mismo estilo, colores, tipografía, ilustraciones y adornos que el original.
