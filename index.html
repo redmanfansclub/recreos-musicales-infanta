@@ -300,6 +300,10 @@ pre.enc{white-space:pre-wrap;font:12.5px/1.45 var(--txt);background:color-mix(in
 .estprev .ep1{background:var(--e1);border-radius:12px;padding:8px}.estprev svg{width:54px;height:54px;display:block}
 .estprev b{display:block;font:800 22px/1.1 var(--ef),var(--disp);color:var(--e1)}.estprev span{display:block;font:700 12px var(--disp);letter-spacing:.15em;text-transform:uppercase;color:color-mix(in srgb,var(--e2) 70%,#000);margin-top:3px}
 .estprev em{display:block;font-style:normal;margin-top:5px}.estprev u{text-decoration:none;color:var(--e2);font-weight:800;text-transform:uppercase}
+.vlist{max-height:55vh;overflow:auto;border:1px solid var(--ln);border-radius:12px}
+.vrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 12px;border-bottom:1px solid var(--ln)}.vrow:last-child{border-bottom:0}
+.vrow em{font-style:normal;font-size:12px;color:var(--mu);margin-left:6px}.vrow.off{opacity:.5}
+.vct{display:inline-flex;align-items:center;gap:8px}.vct .btn.sm{padding:3px 10px;font-size:15px}.vct b{min-width:16px;text-align:center}
 .leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin:-16px 0 18px}
 .leyenda span{display:inline-flex;align-items:center;gap:6px}
 @media (prefers-reduced-motion:reduce){.key{transition:none}}
@@ -1239,29 +1243,46 @@ function programaDia(i){const d=D().dias[i],pres=d.sinPres?[]:d.pres.map(p=>p.n)
    ${pres.length?`<div class="pdpres">Presentan <b>${esc(pres.join(' y '))}</b></div>`:''}
    <div class="pdpie">${NOMBRE} · Semana de Santa Cecilia ${S.E.anio}${D().musical?` · ${esc(D().musical)}`:''}</div></div>`}
 function listaAlumnosVales(){const r=[],v=new Set();alumnosDe(S.E).forEach(a=>{const k=clave(a.n)+'|'+a.dia;if(!v.has(k)){v.add(k);r.push(a)}});return r}
-function valeHTML(nombre,dia){
-  const pie=`<div class="vpie">${nombre?`<b>${esc(nombre)}</b>`:'Nombre: <span class="vlin"></span>'}${dia!=null&&dia!==''?` · ${esc(may(DIAS[dia]))}`:''}</div>`;
+/* ---------- Lista de vales con nombre: alumnos que actúan y presentadores, una vez cada uno; puedes dar dos, quitar o añadir ---------- */
+function baseVales(){const m=new Map(),cu=D().valesCuenta||{};
+  alumnosDe(S.E).forEach(a=>{const k=idP(a.n);if(!m.has(k))m.set(k,{n:a.n,t:'Actúa'})});
+  D().dias.forEach(d=>{if(d.no||d.sinPres)return;d.pres.forEach(p=>{if(p.n.trim()){const k=idP(p.n);if(!m.has(k))m.set(k,{n:p.n.trim(),t:'Presenta'})}})});
+  (D().valesExtra||[]).forEach(n=>{const k='x:'+clave(n);if(!m.has(k))m.set(k,{n,t:'Añadido',extra:true})});
+  return [...m.entries()].map(([k,o])=>({k,...o,c:cu[k]??1}));
+}
+const nombresVales=()=>baseVales().flatMap(o=>Array.from({length:o.c},()=>o.n));
+function cambiaVale(k,d){const cu=D().valesCuenta=D().valesCuenta||{};const o=baseVales().find(x=>x.k==k);cu[k]=Math.max(0,Math.min(5,(o?o.c:1)+d));marcar();abrirListaVales();render()}
+function nuevoVale(){const i=$('#vnuevo'),n=i&&i.value.trim();if(!n)return;(D().valesExtra=D().valesExtra||[]).push(n);marcar();abrirListaVales();render()}
+function quitaExtra(n){D().valesExtra=(D().valesExtra||[]).filter(x=>x!==n);marcar();abrirListaVales();render()}
+function abrirListaVales(){const L=baseVales(),tot=L.reduce((a,o)=>a+o.c,0);
+  modal(`<h3>Vales con nombre · ${tot} ${tot==1?'vale':'vales'}</h3><p class="sm mu" style="margin-top:0">Alumnos que actúan y presentadores, uno cada uno. Con − y + quitas a alguien o le das dos vales.</p>
+   <div class="vlist">${L.map(o=>`<div class="vrow ${o.c?'':'off'}"><span><b>${esc(o.n)}</b> <em>${o.t}</em></span>
+     <span class="vct"><button class="btn sm" onclick="cambiaVale('${esc(o.k)}',-1)" aria-label="Uno menos">−</button><b>${o.c}</b><button class="btn sm" onclick="cambiaVale('${esc(o.k)}',1)" aria-label="Uno más">+</button>
+     ${o.extra?`<button class="btn g sm" title="Quitar de la lista" onclick="quitaExtra(${JSON.stringify(o.n).replace(/"/g,'&quot;')})">${ICO.del}</button>`:''}</span></div>`).join('')||'<p class="mu">Todavía no hay nadie en la lista.</p>'}</div>
+   <div class="row" style="margin-top:12px"><input id="vnuevo" type="text" placeholder="Añadir a alguien más" onkeydown="if(event.key=='Enter')nuevoVale()" style="flex:1"><button class="btn" onclick="nuevoVale()">${ICO.plus}Añadir</button></div>
+   <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn p" onclick="cerrar()">${ICO.check}Listo</button></div>`)}
+function valeHTML(nombre){
   return `<div class="vale2" style="${estVars()}"><div class="vart">${logo()}<span>Recreos Musicales<br>del INFANTA</span></div>
-   <div class="vtx"><div class="vsc">Santa Cecilia ${S.E.anio}</div><div class="vv">VALE</div><div class="vd">para un desayuno <b>gratuito</b></div><div class="vc">en la cantina del IES Infanta Elena</div>${pie}</div>
+   <div class="vtx"><div class="vsc">Santa Cecilia ${S.E.anio}</div><div class="vv">VALE</div><div class="vd">para un desayuno <b>gratuito</b></div><div class="vc">en la cantina del IES Infanta Elena</div>${nombre?`<div class="vpie"><b>${esc(nombre)}</b></div>`:''}</div>
    <svg class="vnotas" viewBox="0 0 40 40" aria-hidden="true"><g fill="currentColor"><ellipse cx="10" cy="30" rx="5" ry="3.6"/><rect x="14" y="8" width="1.6" height="22"/><ellipse cx="28" cy="26" rx="5" ry="3.6"/><rect x="32" y="4" width="1.6" height="22"/><path d="M14 8 L33.6 4 L33.6 8 L15.6 12Z"/></g></svg></div>`;
 }
+const hojaVales=l=>{let h='';for(let p=0;p<l.length;p+=3)h+=`<div class="pg"><div class="vales2">${l.slice(p,p+3).join('<div class="vcorte">✂</div>')}</div></div>`;return h};
 function imprimirVales(){
-  const modo=$('#vmodo').value;
-  let lista=modo=='nombres'?listaAlumnosVales().map(a=>[a.n,a.dia]):Array.from({length:Math.max(1,Number($('#vnum').value)||6)},()=>['','']);
-  if(!lista.length)return toast('Todavía no hay alumnos con nombre',1);
-  let html='';for(let p=0;p<lista.length;p+=3)html+=`<div class="pg"><div class="vales2">${lista.slice(p,p+3).map(([n,d])=>valeHTML(n,d)).join('<div class="vcorte">✂</div>')}</div></div>`;
-  imprimir(html,'portrait');
+  if(!S.vNom){const n=Math.max(1,Number($('#vnum')&&$('#vnum').value)||3);imprimir(hojaVales(Array.from({length:n},()=>valeHTML(''))),'portrait');return}
+  const l=nombresVales();if(!l.length)return toast('La lista de vales está vacía',1);
+  imprimir(hojaVales(l.map(n=>valeHTML(n))),'portrait');
 }
 const driveVales=()=>D().driveVales||driveAnio();
-function vVales(nVal){const m=S.vModo||'app';
-  return `<section class="panel"><h3>Vales de desayuno</h3><p class="sm mu">Solo para alumnos: uno por alumno y día en que actúa (${nVal} ahora).</p>
+function vVales(){const m=S.vModo||'app',tot=nombresVales().length;
+  const lista=`<div class="row" style="margin:8px 0 0"><span class="sm"><b>${tot}</b> ${tot==1?'vale':'vales'} con nombre</span><button class="btn sm" onclick="abrirListaVales()">Revisar la lista</button></div>`;
+  return `<section class="panel"><h3>Vales de desayuno</h3>
    <div class="seg" role="group" style="margin-bottom:10px">${[['app','Vale de la app'],['hueco','Mi vale con hueco'],['drive','Mi vale en Drive']].map(([k,t])=>`<button aria-pressed="${m==k}" onclick="S.vModo='${k}';render()">${t}</button>`).join('')}</div>
-   ${m=='app'?`<p class="sm mu" style="margin:0 0 8px">Tres por folio, con los colores y la letra de <b>la estética del año</b> (en Ajustes).</p>
-     <div class="row"><select id="vmodo" style="width:auto" onchange="$('#vnumw').style.display=this.value=='nombres'?'none':''"><option value="nombres">Con el nombre de cada alumno</option><option value="blanco">En blanco</option></select>
-      <label id="vnumw" class="f" style="display:none;width:90px">Cuántos<input id="vnum" type="number" min="1" value="6"></label></div>
+   ${m=='app'?`<p class="sm mu" style="margin:0 0 8px">Tres por folio, con la estética del año.</p>
+     <div class="seg" role="group"><button aria-pressed="${!S.vNom}" onclick="S.vNom=false;render()">Genéricos</button><button aria-pressed="${!!S.vNom}" onclick="S.vNom=true;render()">Con nombre</button></div>
+     ${S.vNom?lista:`<label class="f" style="width:150px;margin-top:8px">Cuántos vales<input id="vnum" type="number" min="1" value="3"></label>`}
      <button class="btn p" style="margin-top:10px" onclick="imprimirVales()">${ICO.print}Imprimir vales</button>`
-   :m=='hueco'?`<p class="sm mu" style="margin:0 0 8px">Tu diseño con un hueco: la app escribe dentro el nombre de cada alumno. Tres por folio.</p>
-     <button class="btn p" onclick="S.vFull=true;render()">Abrir el editor del vale</button>`
+   :m=='hueco'?`<p class="sm mu" style="margin:0 0 8px">Tu diseño con un hueco: la app escribe dentro el nombre de cada uno. Tres por folio.</p>${lista}
+     <button class="btn p" style="margin-top:10px" onclick="S.vFull=true;render()">Abrir el editor del vale</button>`
    :`<p class="sm mu" style="margin:0 0 8px">Tu vale ya hecho, tal cual. Se abre la carpeta de Drive: ahí lo ves o arrastras uno nuevo.</p>
      <a class="btn p" href="${esc(driveVales())}" target="_blank" rel="noopener">${ICO.drive}Ver mi vale en Drive</a>`}</section>`;
 }
@@ -1336,13 +1357,13 @@ async function lienzoVale(cv,nombre,dia,guia){if(!cv||!S.vHImg)return;
   try{await document.fonts.load(`800 40px "${cf.font}"`);await document.fonts.load(`600 30px "${cf.font}"`)}catch(_){}
   const W=img.naturalWidth,H=img.naturalHeight;cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0);
   const x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=Math.max(4,y1-y0);
-  const lineas=[[nombre||'Nombre del alumno',1]];if(cf.dia&&dia!=null&&dia!=='')lineas.push([may(DIAS[dia])+' · Santa Cecilia '+S.E.anio,.55]);
+  const lineas=[[nombre||'Nombre',1]];
   let s=Math.round(H*cf.size/400);const alto=s=>lineas.reduce((a,[t,k])=>a+s*k*1.25,0),cabe=s=>lineas.every(([t,k])=>{c.font=`800 ${s*k}px "${cf.font}", sans-serif`;return c.measureText(t).width<=aw});
   for(;s>6;s--){if(alto(s)<=ah&&cabe(s))break}
   let y=y0+(ah-alto(s))/2;c.textAlign='center';c.textBaseline='top';
   lineas.forEach(([t,k])=>{c.font=`${k<1?600:800} ${s*k}px "${cf.font}", sans-serif`;if(cf.halo){c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=Math.max(2,s*k*.18);c.lineJoin='round';c.strokeText(t,(x0+x1)/2,y)}c.fillStyle=cf.color;c.fillText(t,(x0+x1)/2,y);y+=s*k*1.25});
   if(guia){c.save();c.strokeStyle='rgba(232,0,106,.85)';c.lineWidth=Math.max(2,W/300);c.setLineDash([W/60,W/100]);c.strokeRect(x0,y0,aw,ah);c.restore()}}
-function pintaVale(){const l=listaAlumnosVales(),a=l[0];lienzoVale(document.getElementById('cvv'),a?a.n:'Nombre del alumno',a?a.dia:0,S.vGuia!==false)}
+function pintaVale(){const l=nombresVales();lienzoVale(document.getElementById('cvv'),l[0]||'Nombre del alumno',null,S.vGuia!==false)}
 function soltarVale(e){e.preventDefault();const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(!f||!/^image\//.test(f.type))return toast('Suelta una imagen',1);const r=new FileReader();r.onload=()=>{S.vHImg=r.result;render()};r.readAsDataURL(f)}
 function vValeEditor(){const cf=cfgV();
   const rng=(k,t,min,max,st)=>`<label class="f">${t} <b class="rv">${cf[k]}${st||''}</b><input type="range" min="${min}" max="${max}" value="${cf[k]}" oninput="cfgV().${k}=+this.value;this.previousElementSibling.textContent=this.value+'${st||''}';marcar();pintaVale()"></label>`;
@@ -1353,15 +1374,15 @@ function vValeEditor(){const cf=cfgV();
     <div class="cfg">${rng('top','Zona: empieza',0,95,' %')}${rng('bot','Zona: termina',5,100,' %')}${rng('mar','Márgenes laterales',0,40,' %')}${rng('size','Tamaño máximo de letra',10,120)}
      <label class="f">Color<input type="color" value="${esc(cf.color)}" oninput="cfgV().color=this.value;marcar();pintaVale()" style="height:38px;padding:2px"></label>
      <label class="f">Letra<select onchange="cfgV().font=this.value;marcar();pintaVale()">${FUENTES.map(([f,n])=>`<option value="${f}" ${cf.font==f?'selected':''}>${n}</option>`).join('')}</select></label></div>
-    <div class="row" style="margin-top:10px"><label class="chk"><input type="checkbox" ${cf.dia?'checked':''} onchange="cfgV().dia=this.checked;marcar();pintaVale()">Escribir también el día</label>
+    <div class="row" style="margin-top:10px">
      <label class="chk"><input type="checkbox" ${cf.halo?'checked':''} onchange="cfgV().halo=this.checked;marcar();pintaVale()">Contorno blanco</label>
      <label class="chk"><input type="checkbox" ${S.vGuia!==false?'checked':''} onchange="S.vGuia=this.checked;pintaVale()">Ver la zona</label></div>
-    <p class="sm mu">Vista previa con el primer alumno. Se imprimen tres vales por folio, uno por alumno y día.</p></div>
+    <p class="sm mu">Vista previa con el primer alumno. Se imprimen tres vales por folio, uno por cada persona de la lista.</p></div>
    <div class="cfp">${S.vHImg?'<canvas id="cvv" aria-label="Vista previa del vale"></canvas>':'<div class="vacio cdrop">Arrastra aquí tu diseño de vale o pulsa «Cargar diseño».</div>'}</div></div></div>`;
 }
 async function imprimirValesHueco(){if(!S.vHImg)return toast('Carga primero tu diseño',1);
-  const l=listaAlumnosVales();if(!l.length)return toast('Todavía no hay alumnos con nombre',1);
-  const cv=document.createElement('canvas'),imgs=[];for(const a of l){await lienzoVale(cv,a.n,a.dia,false);imgs.push(cv.toDataURL('image/jpeg',.9))}
+  const l=nombresVales();if(!l.length)return toast('La lista de vales está vacía',1);
+  const cv=document.createElement('canvas'),imgs=[];for(const n of l){await lienzoVale(cv,n,null,false);imgs.push(cv.toDataURL('image/jpeg',.9))}
   let html='';for(let p=0;p<imgs.length;p+=3)html+=`<div class="pg"><div class="vales2">${imgs.slice(p,p+3).map(u=>`<div class="vale2 img"><img src="${u}" alt=""></div>`).join('<div class="vcorte">✂</div>')}</div></div>`;
   imprimir(html,'portrait')}
 /* ---------- Cartel del día sobre el modelo con hueco (la imagen no se guarda: solo se usa al generar) ---------- */
@@ -1534,7 +1555,7 @@ function columnas(series,etiquetas){ // barras agrupadas por año
 }
 function vImprimir(){
   const opD=D().dias.map((d,i)=>`<option value="${i}" ${i==S.dia?'selected':''}>${DIAS[i]} ${fechaDia(S.E,i).getDate()}${d.no?' (sin concierto)':''}</option>`).join('');
-  const nVal=listaAlumnosVales().length,nDip=listaDiplomas().length;
+  const nVal=0,nDip=listaDiplomas().length;
   return `${S.vFull?vValeEditor():''}<h2>Imprimir</h2><p class="mu" style="margin:0 0 18px">Todo sale en A4. En el cuadro de impresión puedes elegir «Guardar como PDF» y subirlo a tu carpeta de Drive.</p>
   <div class="ctop">${vCartel()}${vPresent()}</div>
   <h3 style="margin:26px 0 12px;font-size:20px">Documentos para imprimir</h3>
@@ -1546,7 +1567,7 @@ function vImprimir(){
      <button class="btn p" onclick="impFicha()">${ICO.print}Imprimir</button></div></section>
    <section class="panel"><h3>Programa de la semana</h3><p class="sm mu">Los cinco días en un folio.</p>
     <button class="btn p" onclick="imprimirSemana()">${ICO.print}Imprimir</button></section>
-   ${vVales(nVal)}
+   ${vVales()}
    <section class="panel"><h3>Diplomas de participación</h3><p class="sm mu">Uno por alumno (${nDip} ahora), con su nombre, lo que ha tocado y tu frase. Carga el diseño que te haga la IA (apaisado, con el centro libre) o usa el sencillo de la app.</p>
     <label class="f">Frase<textarea style="min-height:64px" oninput="setP('diploma.frase',this.value)">${esc(D().diploma.frase)}</textarea></label>
     <label class="f" style="margin-top:8px">Altura del texto: ${esc(D().diploma.top)} % <input type="range" min="30" max="75" value="${esc(D().diploma.top)}" onchange="setP('diploma.top',+this.value,1)"></label>
