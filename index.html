@@ -519,9 +519,10 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 .vale .tx .s{font-size:9pt;color:#555}
 .vale .tx .n{font-size:10pt;margin-top:2mm}
 .vale .tx .n span{display:inline-block;border-bottom:1px solid #777;min-width:38mm}
-.vales2{display:flex;flex-direction:column;gap:0;height:275mm;justify-content:space-between}
-.vcorte{text-align:right;border-top:1px dashed #9a8a92;height:0;line-height:0;font-size:12pt;color:#8C2643;margin:0 2mm}
-.vale2{position:relative;height:86mm;border:1.5px solid var(--e1,#8C2643);border-radius:4mm;overflow:hidden;display:flex;background:radial-gradient(ellipse at 70% 40%,#FFFFFF,var(--e3,#F6EAD2))}
+.vales2{display:flex;flex-direction:column;gap:3mm;width:100%;max-width:190mm;margin:0 auto;padding-top:2mm}
+.pg:has(.vales2){break-inside:avoid;page-break-inside:avoid}
+.vcorte{text-align:right;border-top:1px dashed #9a8a92;height:0;line-height:0;font-size:11pt;color:#8C2643;margin:0 2mm}
+.vale2{position:relative;height:78mm;break-inside:avoid;page-break-inside:avoid;box-sizing:border-box;border:1.5px solid var(--e1,#8C2643);border-radius:4mm;overflow:hidden;display:flex;background:radial-gradient(ellipse at 70% 40%,#FFFFFF,var(--e3,#F6EAD2))}
 .vale2 .vart{width:62mm;flex:0 0 auto;background:var(--e1,#8C2643);color:#fff;font-family:var(--ef,var(--disp)),var(--disp)!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3mm;text-align:center;font:800 13pt/1.1 var(--disp)}
 .vale2 .vart svg{width:34mm;height:34mm}
 .vale2 .vtx{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4mm 8mm}
