@@ -393,6 +393,7 @@ pre.enc{white-space:pre-wrap;font:12.5px/1.45 var(--txt);background:color-mix(in
 .leyenda .nv{font-size:11px}
 .alu{display:grid;grid-template-columns:1.4fr 1fr 110px 108px 128px auto;gap:8px;margin-bottom:6px;align-items:center}
 .comp{display:grid;grid-template-columns:1.3fr 1fr 138px 100px auto;gap:8px;margin-bottom:6px;align-items:center}
+.ord{display:inline-flex}.ord .btn.g{padding:4px 3px}
 .rep{display:grid;grid-template-columns:2fr 1.2fr 80px auto;gap:8px;margin-bottom:6px;align-items:center}
 .chip{font-size:12px;font-weight:700;padding:3px 8px;border-radius:20px;background:color-mix(in srgb,var(--oro) 26%,transparent);white-space:nowrap;justify-self:start}
 .chip.vet{background:color-mix(in srgb,var(--mag) 16%,transparent)}
@@ -1010,12 +1011,14 @@ function verBloque(b){
   if(b.t=='gr')return `<div class="sec"><div class="sl">${ICO.users}Músicos</div><div class="cards">${b.comp.filter(c=>c.n||c.instr).map(c=>`<div class="mc ${c.rol}"><b>${esc(c.n)||'Sin nombre'}</b><span class="ins">${ICO.music}${esc(c.instr)||'Instrumento sin indicar'}</span><span class="rl"><i class="rdot ${c.rol}"></i>${rolTxt(c)}${c.rol=='al'&&c.g?nvChip(c.g):''}</span></div>`).join('')||'<span class="mu sm">Sin músicos todavía.</span>'}</div></div>${setlist(b.rep)}${necesidades(b)}`;
   return `${b.presenta?`<div class="sec"><div class="sl">${ICO.users}Presentación</div><p style="margin:0">${esc(b.presenta)}</p></div>`:''}${setlist(b.rep)}${necesidades(b)}`;
 }
+function subeP(path,j,d){const a=getP(path),k=j+d;if(k<0||k>=a.length)return;[a[j],a[k]]=[a[k],a[j]];marcar();render()}
+const flechas=(path,j,n)=>`<span class="ord"><button class="btn g" title="Subir" aria-label="Subir" ${j==0?'disabled':''} onclick="subeP('${path}',${j},-1)">${ICO.up}</button><button class="btn g" title="Bajar" aria-label="Bajar" ${j==n-1?'disabled':''} onclick="subeP('${path}',${j},1)">${ICO.down}</button></span>`;
 function vRep(P,rep){
   return `<div class="sec setl"><div class="sl">${ICO.list}Repertorio <span class="mu" style="font-weight:400">· la duración como 3:30</span></div>${rep.map((r,j)=>`<div class="rep">
     <input type="text" placeholder="Obra" value="${esc(r.obra)}" oninput="setP('${P}.rep.${j}.obra',this.value)" aria-label="Obra ${j+1}">
     <input class="au" type="text" placeholder="Autor" value="${esc(r.autor)}" oninput="setP('${P}.rep.${j}.autor',this.value)" aria-label="Autor ${j+1}">
     <input type="text" inputmode="decimal" placeholder="3:30" value="${fmtMin(r.min)}" title="Duración (minutos:segundos)" aria-label="Duración" onchange="setP('${P}.rep.${j}.min',parseMin(this.value),1)">
-    <button class="btn g" title="Quitar" ${rep.length<2?'disabled':''} onclick="delP('${P}.rep',${j})">${ICO.del}</button></div>`).join('')}
+    <span class="row" style="gap:0;flex-wrap:nowrap">${flechas(P+'.rep',j,rep.length)}<button class="btn g" title="Quitar" ${rep.length<2?'disabled':''} onclick="delP('${P}.rep',${j})">${ICO.del}</button></span></div>`).join('')}
    <button class="btn sm" onclick="pushP('${P}.rep',{obra:'',autor:'',min:4})">${ICO.plus}Añadir obra</button></div>`;
 }
 function editarBloque(b,P){
@@ -1024,7 +1027,7 @@ function editarBloque(b,P){
        ${esProf(u)?'<span class="sm mu">—</span><span><span class="nv prof">Profesor/a</span></span>':`<input type="text" placeholder="Curso" list="cursos" value="${esc(u.g)}" oninput="setP('${P}.alumnos.${j}.g',this.value)" onchange="render()" aria-label="Curso">
        <span title="Así lo entiende la app">${nvChip(u.g)||'<span class="mu sm">—</span>'}</span>`}
        <select aria-label="Papel" class="rolsel ${esProf(u)?'pr':'al'}" onchange="setP('${P}.alumnos.${j}.r',this.value=='pr'?'pr':'',1)"><option value="al" ${esProf(u)?'':'selected'}>Alumno/a</option><option value="pr" ${esProf(u)?'selected':''}>Profesor/a</option></select>
-       <button class="btn g" title="Quitar" ${b.alumnos.length<2?'disabled':''} onclick="delP('${P}.alumnos',${j})">${ICO.del}</button></div>`).join('')}
+       <span class="row" style="gap:0;flex-wrap:nowrap">${flechas(P+'.alumnos',j,b.alumnos.length)}<button class="btn g" title="Quitar" ${b.alumnos.length<2?'disabled':''} onclick="delP('${P}.alumnos',${j})">${ICO.del}</button></span></div>`).join('')}
      <div class="row"><button class="btn sm" onclick="pushP('${P}.alumnos',{n:'',g:''})">${ICO.plus}Añadir alumno</button><button class="btn sm" onclick="pushP('${P}.alumnos',{n:'',g:'',r:'pr'})">${ICO.plus}Añadir profesor</button></div></div>
     <div class="sec obra"><div class="actg" style="margin-top:0"><label class="f">Obra<input type="text" value="${esc(b.obra)}" placeholder="Título completo" oninput="setP('${P}.obra',this.value)"></label>
       <label class="f">Autor o intérprete original<input type="text" value="${esc(b.autor)}" oninput="setP('${P}.autor',this.value)"></label></div>
@@ -1044,7 +1047,7 @@ ${Object.keys(FMT).map(f=>`<button aria-pressed="${b.formato==f}" title="${FMT_A
        <input type="text" placeholder="Instrumento" value="${esc(c.instr)}" oninput="setP('${P}.comp.${j}.instr',this.value)" aria-label="Instrumento">
        <select aria-label="Papel" class="rolsel ${c.rol}" onchange="setP('${P}.comp.${j}.rol',this.value,1)">${Object.entries(ROL).map(([v,t])=>`<option value="${v}" ${c.rol==v?'selected':''}>${t}</option>`).join('')}</select>
        ${c.rol=='al'?`<input type="text" placeholder="Curso" list="cursos" value="${esc(c.g)}" oninput="setP('${P}.comp.${j}.g',this.value)" onchange="render()" aria-label="Curso">`:'<span></span>'}
-       <button class="btn g del" title="Quitar" onclick="delP('${P}.comp',${j})">${ICO.del}</button></div>`).join('')}
+       <span class="row del" style="gap:0;flex-wrap:nowrap">${flechas(P+'.comp',j,b.comp.length)}<button class="btn g" title="Quitar" onclick="delP('${P}.comp',${j})">${ICO.del}</button></span></div>`).join('')}
       <button class="btn sm" onclick="pushP('${P}.comp',{n:'',instr:'',rol:'pr',g:''})">${ICO.plus}Añadir músico</button>`}</div>${vRep(P,b.rep)}`;
   return `<div class="sec"><label class="f">Artista o grupo invitado<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)" onchange="render()"></label>
      <label class="f" style="margin-top:10px">Presentación breve para los presentadores<textarea style="min-height:70px" oninput="setP('${P}.presenta',this.value)" placeholder="Quién es, de dónde viene, qué estilo toca…">${esc(b.presenta)}</textarea></label></div>${vRep(P,b.rep)}`;
