@@ -1029,7 +1029,7 @@ function editarBloque(b,P){
        <select aria-label="Papel" class="rolsel ${esProf(u)?'pr':'al'}" onchange="setP('${P}.alumnos.${j}.r',this.value=='pr'?'pr':'',1)"><option value="al" ${esProf(u)?'':'selected'}>Alumno/a</option><option value="pr" ${esProf(u)?'selected':''}>Profesor/a</option></select>
        <span class="row" style="gap:0;flex-wrap:nowrap">${flechas(P+'.alumnos',j,b.alumnos.length)}<button class="btn g" title="Quitar" ${b.alumnos.length<2?'disabled':''} onclick="delP('${P}.alumnos',${j})">${ICO.del}</button></span></div>`).join('')}
      <div class="row"><button class="btn sm" onclick="pushP('${P}.alumnos',{n:'',g:''})">${ICO.plus}Añadir alumno</button><button class="btn sm" onclick="pushP('${P}.alumnos',{n:'',g:'',r:'pr'})">${ICO.plus}Añadir profesor</button></div></div>
-    <div class="sec obra"><div class="actg" style="margin-top:0"><label class="f">Obra<input type="text" value="${esc(b.obra)}" placeholder="Título completo" oninput="setP('${P}.obra',this.value)"></label>
+    <div class="sec obra"><p class="sm mu" style="margin:0 0 8px">¿Van a tocar varias obras? <button class="btn g" style="padding:0;color:var(--acc);font-weight:700" onclick="aGrupo(${P.split('.')[1]},${P.split('.')[3]})">Convertir en grupo</button> y añádelas al repertorio.</p><div class="actg" style="margin-top:0"><label class="f">Obra<input type="text" value="${esc(b.obra)}" placeholder="Título completo" oninput="setP('${P}.obra',this.value)"></label>
       <label class="f">Autor o intérprete original<input type="text" value="${esc(b.autor)}" oninput="setP('${P}.autor',this.value)"></label></div>
      <div class="actg3"><div class="f"><span>Formato</span><div class="seg" role="group">
 ${Object.keys(FMT).map(f=>`<button aria-pressed="${b.formato==f}" title="${FMT_AYUDA[f]}" onclick="setP('${P}.formato','${f}',1)">${FMT[f]}</button>`).join('')}</div>
@@ -1074,6 +1074,7 @@ function vBloque(b,i,k,n){
   const tt=b.t=='gr'&&b.coro?'co':b.t;
   const otros=D().dias.map((x,j)=>j!=i?`<option value="${j}">${DIAS[j]}</option>`:'').join('');
   return `<article class="blq ${catB(b)} editando"><div class="bh ${catB(b)} tog" title="Toca aquí para cerrar" onclick="if(!event.target.closest('button,select,input,a,label'))cerrarB(${i},'${b.id}')">${num}<div class="bt"><b>${b.t=='al'?labelB(b):TB[tt]}</b><span>${resumenB(b)}</span></div><div class="bacc">
+    ${b.t=='al'?`<button class="btn sm" title="Pasa los intérpretes a músicos y la obra al repertorio, para poder añadir más obras" onclick="aGrupo(${i},${k})">${ICO.users}Convertir en grupo</button>`:''}
     <select aria-label="Pasar a otro día" onchange="if(this.value!=='')pasarDia(${i},${k},+this.value)"><option value="">Pasar a…</option>${otros}</select>
     <button class="btn g" title="Borrar bloque" onclick="borrarB(${i},${k})">${ICO.del}</button>
     <button class="btn p" onclick="cerrarB(${i},'${b.id}')">${ICO.check}Cerrar</button></div></div>
@@ -1087,6 +1088,12 @@ function vacioB(b){const t=s=>String(s||'').trim();
   return !rep&&!t(b.obs)&&!t(b.nombre)&&!t(b.presenta);
 }
 function limpiaVacios(){let n=0;D().dias.forEach(d=>{const a=d.bloques.length;d.bloques=d.bloques.filter(b=>!vacioB(b));n+=a-d.bloques.length});if(n)marcar();return n}
+/* De bloque de alumnos/profesores (una obra) a grupo (repertorio con varias obras), sin reescribir nada */
+function aGrupo(i,k){const d=D().dias[i],b=d.bloques[k];if(!b||b.t!='al')return;
+  const g=nuevoGr();g.id=uid();g.nombre=catB(b)=='pr'?'Profesores de Música':'';
+  g.comp=b.alumnos.filter(u=>u.n.trim()||(u.i||'').trim()).map(u=>({n:u.n,instr:u.i||'',rol:esProf(u)?'pr':'al',g:u.g||''}));if(!g.comp.length)g.comp=[{n:'',instr:'',rol:'pr',g:''}];
+  g.rep=[{obra:b.obra||'',autor:b.autor||'',min:Number(b.min)||4}];g.obs=[b.obs,b.yt&&conEnlace(b)?'Pista: '+b.yt:''].filter(Boolean).join(' · ');
+  d.bloques[k]=g;S.edit.delete(b.id);S.edit.add(g.id);marcar();toast('Convertido en grupo: ponle nombre y añade las obras al repertorio');render()}
 function abrirB(id){S.edit.add(id);render()}
 function cerrarB(i,id){S.edit.delete(id);const d=D().dias[i],b=d.bloques.find(x=>x.id==id);if(b&&vacioB(b)){d.bloques=d.bloques.filter(x=>x!==b);marcar()}render()}
 /* ---------- Arrastrar: días, tarjetas y presentadores ---------- */
