@@ -1374,7 +1374,7 @@ const cfgV=()=>{const c=D().valeHueco||(D().valeHueco={...CFGV,font:est().font,c
 async function lienzoVale(cv,nombre,dia,guia){if(!cv||!S.vHImg)return;
   const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.src=S.vHImg});const cf=cfgV();
   try{await document.fonts.load(`800 40px "${cf.font}"`);await document.fonts.load(`600 30px "${cf.font}"`)}catch(_){}
-  const W=img.naturalWidth,H=img.naturalHeight;cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0);
+  const k=completa?1:Math.min(1,1700/img.naturalHeight),W=Math.round(img.naturalWidth*k),H=Math.round(img.naturalHeight*k);cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0,W,H);
   const x0=W*cf.mar/100,x1=W*(1-cf.mar/100),y0=H*cf.top/100,y1=H*cf.bot/100,aw=x1-x0,ah=Math.max(4,y1-y0);
   const lineas=[[nombre||'Nombre',1]];
   let s=Math.round(H*cf.size/400);const alto=s=>lineas.reduce((a,[t,k])=>a+s*k*1.25,0),cabe=s=>lineas.every(([t,k])=>{c.font=`800 ${s*k}px "${cf.font}", sans-serif`;return c.measureText(t).width<=aw});
@@ -1461,9 +1461,16 @@ function alinearSel(m){const ta=$('#ctx');if(!ta)return;const v=ta.value,a=ta.se
   const ini=v.lastIndexOf('\n',a-1)+1;let fin=v.indexOf('\n',b);if(fin<0)fin=v.length;
   const bl=v.slice(ini,fin).split('\n').map(l=>{l=l.replace(/^\[(i|c|d)\]\s?/,'');return m&&l.trim()?`[${m}]${l}`:l}).join('\n');
   const nv=v.slice(0,ini)+bl+v.slice(fin);ta.value=nv;ta.focus();ta.setSelectionRange(ini,ini+bl.length);setTxtC(S.cDia,nv);pintaCartel()}
-async function pintaCartel(){
-  const cv=document.getElementById('cv');if(!cv||!S.cImg)return;
-  const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.src=S.cImg});
+/* El modelo se decodifica una sola vez (antes se decodificaba en cada tecla) */
+async function imgModelo(){if(S._ci&&S._ci.src===S.cImg)return S._ci.img;const img=await new Promise((r,e)=>{const im=new Image();im.onload=()=>r(im);im.onerror=e;im.src=S.cImg});S._ci={src:S.cImg,img};return img}
+/* Repintado agrupado: mientras escribes o mueves un ajuste se pinta como mucho una vez cada momento, sin amontonar trabajos */
+function pintaCartel(){clearTimeout(S._pt);return new Promise(res=>{S._pt=setTimeout(async()=>{
+  if(S._pintando){S._otra=true;return res()}S._pintando=true;
+  try{do{S._otra=false;await dibujaCartel(document.getElementById('cv'),false)}while(S._otra)}catch(e){console.error(e)}finally{S._pintando=false}res()},80)})}
+/* completa=true: a la resolución original (para descargar); si no, vista previa más ligera */
+async function dibujaCartel(cv,completa){
+  if(!cv||!S.cImg)return;
+  const img=await imgModelo();
   const cf=cfgC();
   try{await Promise.all([document.fonts.load(`800 40px "${cf.f1}"`),document.fonts.load(`700 40px "${cf.f1}"`),document.fonts.load(`400 40px "${cf.f1}"`),document.fonts.load(`italic 400 30px "${cf.f2}"`)]);await document.fonts.ready}catch(_){}
   const W=img.naturalWidth,H=img.naturalHeight;cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(img,0,0);
@@ -1486,8 +1493,8 @@ async function pintaCartel(){
     for(let k=0;k<raw.length;k++){let l=raw[k],al=null;const m=l.match(/^\[(i|c|d)\]\s?/);if(m){al=m[1];l=l.slice(m[0].length)}
       if(l.startsWith('# ')){meter([{t:l.slice(2).trim(),f:'t'}],al||'c',s*1.3*LH);R.push({t:'g',h:s*.45});h+=s*.45;continue}
       if(!l.trim()){R.push({t:'g',h:s*.5});h+=s*.5;continue}
-      if(l.startsWith('~ ')){const it=[];while(k<raw.length&&raw[k].startsWith('~ ')){const p=raw[k].slice(2).trim().split(/\s·\s/);it.push([{t:p[0],f:'n'},...(p.length>1?[{t:' · '+p.slice(1).join(' · '),f:'r'}]:[])]);k++}k--;
-        for(let j=0;j<it.length;j+=2){const row=it.slice(j,j+2);row.forEach(x=>{if(anchoS(x,s)>aw/2-s*.5)cortes++});R.push({t:'cols',row,h:lh});h+=lh}continue}
+      if(l.startsWith('~ ')){const it=[],sin=x=>x.replace(/^\[(i|c|d)\]\s?/,'');while(k<raw.length&&sin(raw[k]).startsWith('~ ')){const p=sin(raw[k]).slice(2).trim().split(/\s·\s/);it.push([{t:p[0],f:'n'},...(p.length>1?[{t:' · '+p.slice(1).join(' · '),f:'r'}]:[])]);k++}k--;
+        for(let j=0;j<it.length;j+=2){const row=it.slice(j,j+2);row.forEach(x=>{if(anchoS(x,s)>aw/2-s*.5)cortes++});R.push({t:'cols',row,h:lh,al:al||(modo=='cc'||modo=='c'?'c':null)});h+=lh}continue}
       const p=l.split(SEP);let izq,der;if(p.length>1){izq=p[0].trim();der=p.slice(1).join(' ').trim()}else{const ob=/^[«"“]/.test(l.trim())&&modo=='p'&&!al;izq=ob?'':l.trim();der=ob?l.trim():''}
       const I=segIzq(izq),Dd=segDer(der),A=al||(modo=='p'?null:modo=='cc'?'c':modo);
       if(!A&&der){const wi=anchoS(I,s),wd=anchoS(Dd,s);
@@ -1497,14 +1504,15 @@ async function pintaCartel(){
       if(anchoS(todo,s)<=aw)meter(todo,A||'i');else{cortes++;if(I.length)meter(I,A||'i');meter(Dd,A||'i')}}
     return{R,h,cortes}};
   const smax=Math.max(4,Math.round(H*cf.size/1000));let s=0;
-  for(let t=smax;t>=Math.max(4,smax*.5);t--){const f=filas(t);if(f.h<=ah&&!f.cortes){s=t;break}}
-  if(!s){s=smax;for(;s>4;s--){if(filas(s).h<=ah)break}}
+  const mayor=(lo,hi,ok)=>{if(!ok(lo))return 0;while(lo<hi){const m=Math.ceil((lo+hi)/2);if(ok(m))lo=m;else hi=m-1}return lo};
+  s=mayor(Math.max(4,Math.floor(smax*.5)),smax,t=>{const f=filas(t);return f.h<=ah&&!f.cortes});
+  if(!s)s=mayor(4,smax,t=>filas(t).h<=ah)||4;
   const {R,h}=filas(s);let y=y0+Math.max(0,(ah-h)/2);c.textBaseline='alphabetic';c.lineJoin='round';
   const pon=(txt,x,yy,f,col)=>{c.font=f;c.textAlign='left';if(cf.halo){c.strokeStyle='rgba(255,255,255,.92)';c.lineWidth=Math.max(2,s*.18);c.strokeText(txt,x,yy)}c.fillStyle=col||cf.color;c.fillText(txt,x,yy)};
   const ponS=(sg,x,yy)=>{sg.forEach(g=>{pon(g.t,x,yy,F[g.f](s),colorDe(g.f));x+=ancho(g.t,F[g.f](s))});return x};
   R.forEach(r=>{if(r.t=='g'){y+=r.h;return}const base=y+r.h*.78;
     if(r.t=='a'){const w=anchoS(r.sg,s),x=r.al=='d'?x1-w:r.al=='c'?(x0+x1-w)/2:x0;ponS(r.sg,x,base)}
-    else if(r.t=='cols'){r.row.forEach((sg,j)=>ponS(sg,x0+j*aw/2,base))}
+    else if(r.t=='cols'){if(r.al=='c'&&r.row.length==1){const w=anchoS(r.row[0],s);ponS(r.row[0],(x0+x1-w)/2,base)}else r.row.forEach((sg,j)=>{const w=anchoS(sg,s);ponS(sg,r.al=='c'?x0+j*aw/2+Math.max(0,(aw/2-w)/2):x0+j*aw/2,base)})}
     else{const x=ponS(r.I,x0,base),wd=anchoS(r.Dd,s),xd=x1-wd;ponS(r.Dd,xd,base);
       const ini=x+(r.I.length?s*.2:0),fin=xd-s*.2;if(fin-ini>s*.6){c.save();c.globalAlpha=.55;c.font=F.r(s);c.textAlign='left';c.fillStyle=cf.color;const dw=c.measureText('. ').width,n=Math.floor((fin-ini)/dw);c.fillText('. '.repeat(n).trim(),ini+((fin-ini)-n*dw)/2+dw*.25,base);c.restore()}}
     y+=r.h});
@@ -1513,7 +1521,7 @@ async function pintaCartel(){
 }
 async function exportaCartel(modo){
   if(!S.cImg)return toast('Carga primero el modelo del cartel',1);
-  const g=S.cGuia;S.cGuia=false;await pintaCartel();const cv=$('#cv'),nom=`Cartel_${DIAS[S.cDia]}_${S.E.anio}`;
+  const g=S.cGuia;S.cGuia=false;const cv=document.createElement('canvas');await dibujaCartel(cv,true);S.cGuia=g;const nom=`Cartel_${DIAS[S.cDia]}_${S.E.anio}`;
   if(modo=='png')await new Promise(r=>cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=nom+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);r()},'image/png'));
   else imprimir(`<div class="pg" style="text-align:center"><img src="${cv.toDataURL('image/jpeg',.92)}" style="max-width:190mm;max-height:275mm"></div>`,'portrait');
   S.cGuia=g;setTimeout(pintaCartel,600);
