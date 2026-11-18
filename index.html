@@ -1048,7 +1048,7 @@ ${Object.keys(FMT).map(f=>`<button aria-pressed="${b.formato==f}" title="${FMT_A
      ${conEnlace(b)?`<div class="actg" style="align-items:end"><label class="f">${b.formato=='producer'?'Enlace de su tema (YouTube, Drive…)':'Enlace del backing track (YouTube)'}<input type="url" value="${esc(b.yt)}" placeholder="https://…" oninput="setP('${P}.yt',this.value)"></label>
       <div class="row">${b.yt&&/^https?:/.test(b.yt)?`<a class="btn" href="${esc(b.yt)}" target="_blank" rel="noopener">Abrir</a>`:''}
        <label class="chk"><input type="checkbox" ${b.ok?'checked':''} onchange="setP('${P}.ok',this.checked,1)">${b.formato=='producer'?'Tema probado':'Backing track probado'}</label></div></div>`:''}</div>`;
-  if(b.t=='gr')return `<div class="sec"><div class="actg" style="margin-top:0"><label class="f">${b.coro?'Nombre del coro':'Nombre del grupo'}<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)" onchange="render()"></label>
+  if(b.t=='gr')return `<div class="sec"><div class="actg" style="margin-top:0"><label class="f">${b.coro?'Nombre del coro':'Nombre del grupo <span class="sm">(opcional: déjalo vacío si solo tocáis juntos)</span>'}<input type="text" value="${esc(b.nombre)}" oninput="setP('${P}.nombre',this.value)" onchange="render()"></label>
       ${b.coro?`<div class="row" style="flex-wrap:nowrap"><label class="f" style="flex:2">Director/a<input type="text" value="${esc(b.director)}" oninput="setP('${P}.director',this.value)"></label>
        <label class="f" style="flex:1">Cantantes<input type="number" min="1" value="${esc(b.cantantes)}" oninput="setP('${P}.cantantes',this.value)"></label></div>`:'<span></span>'}</div>
      ${b.coro?'':`<div class="sl" style="margin-top:14px">${ICO.users}Músicos</div>${b.comp.map((c,j)=>`<div class="comp">
@@ -1072,7 +1072,7 @@ function progCard(b){
   const persona=c=>`<span class="per"><b>${esc(c.n)}</b>${c.rol=='pr'?'<span class="nv prof">Profesor/a</span>':c.rol=='in'?'<span class="nv inv">Invitado/a</span>':(nvChip(c.g)||'<span class="nv">Alumno/a</span>')}${c.instr?`<span class="pi">${ICO.music}${esc(c.instr)}</span>`:''}${c.rol=='al'?chipVez(c.n):''}</span>`;
   const pie=`<div class="pm"><span>${ICO.clock}${fmtMin(minB(b))}</span></div>`;
   if(b.t=='gr'&&b.coro)return `<div class="pc"><div class="pn"><b class="gn">«${esc(b.nombre||'Coro')}»</b><span class="pi">Coro${b.director?` · dirige ${esc(b.director)}`:''}${b.cantantes?` · ${esc(b.cantantes)} voces`:''}</span></div>${obras}${pie}</div>`;
-  if(b.t=='gr'){const c=b.comp.filter(x=>x.n.trim());return `<div class="pc"><div class="pn"><b class="gn">«${esc(b.nombre||'Grupo sin nombre')}»</b><span class="pi">Grupo · ${c.length} ${c.length==1?'músico':'músicos'}</span></div>${c.length?`<div class="pn pns gcomp">${c.map(persona).join('')}</div>`:''}${obras}${pie}</div>`}
+  if(b.t=='gr'){const c=b.comp.filter(x=>x.n.trim());return `<div class="pc"><div class="pn"><b class="gn">${nomG(b)?`«${esc(nomG(b))}»`:esc(tituloG(b))}</b><span class="pi">Grupo · ${c.length} ${c.length==1?'músico':'músicos'}</span></div>${c.length?`<div class="pn pns gcomp">${c.map(persona).join('')}</div>`:''}${obras}${pie}</div>`}
   return `<div class="pc"><div class="pn"><b class="gn">${esc(b.nombre||'Artista invitado')}</b><span class="pi">Artista invitado</span></div>${b.presenta?`<div class="pa" style="margin-top:4px">${esc(b.presenta)}</div>`:''}${obras}${pie}</div>`;
 }
 function vBloque(b,i,k,n){
@@ -1099,7 +1099,7 @@ function vacioB(b){const t=s=>String(s||'').trim();
 function limpiaVacios(){let n=0;D().dias.forEach(d=>{const a=d.bloques.length;d.bloques=d.bloques.filter(b=>!vacioB(b));n+=a-d.bloques.length});if(n)marcar();return n}
 /* De bloque de alumnos/profesores (una obra) a grupo (repertorio con varias obras), sin reescribir nada */
 function aGrupo(i,k){const d=D().dias[i],b=d.bloques[k];if(!b||b.t!='al')return;
-  const g=nuevoGr();g.id=uid();g.nombre=catB(b)=='pr'?'Profesores de Música':'';
+  const g=nuevoGr();g.id=uid();g.nombre='';
   g.comp=b.alumnos.filter(u=>u.n.trim()||(u.i||'').trim()).map(u=>({n:u.n,instr:u.i||'',rol:esProf(u)?'pr':'al',g:u.g||''}));if(!g.comp.length)g.comp=[{n:'',instr:'',rol:'pr',g:''}];
   g.rep=[{obra:b.obra||'',autor:b.autor||'',min:Number(b.min)||4,formato:b.formato||'',yt:b.yt||'',ok:!!b.ok}];g.obs=b.obs||'';
   d.bloques[k]=g;S.edit.delete(b.id);S.edit.add(g.id);marcar();toast('Convertido en grupo: ponle nombre y añade las obras al repertorio');render()}
@@ -1154,7 +1154,7 @@ const cursosB=b=>[...new Set(b.alumnos.filter(u=>u.n.trim()).map(cursoU).filter(
 const repTxt=b=>(b.rep||[]).filter(r=>r.obra).map(r=>`«${r.obra}»${r.autor?` (${r.autor})`:''}`).join(', ');
 function tituloB(b){
   if(b.t=='al')return `${nombres(b)||'Alumnos sin nombre'}${b.obra?' · '+b.obra:''}`;
-  if(b.t=='gr')return b.nombre||(b.coro?'Coro':'Grupo sin nombre');
+  if(b.t=='gr')return b.coro?(nomG(b)||'Coro'):tituloG(b);
   return b.nombre||'Artista invitado';
 }
 const compTxt=b=>b.comp.filter(c=>c.n).map(c=>`${c.n}${c.instr?` (${c.instr})`:''}`).join(', ');
@@ -1173,7 +1173,7 @@ function filasPrograma(d,extra){
       cur=al.map(u=>L(esc(cursoU(u)))).join('');ins=al.map(u=>L(esc(u.i||''))).join('');}
     else if(b.t=='gr'&&b.coro){who=L(`${num}<b>«${esc(b.nombre)}»</b>`)+L(`<span class="mu">Dirección: ${esc(b.director||'—')}</span>`);cur=L('')+L(`${esc(b.cantantes||'?')} voces`);ins=L('')+L('Voces');}
     else if(b.t=='gr'){const c=b.comp.filter(x=>x.n.trim());
-      who=L(`${num}<b>«${esc(b.nombre||'Grupo')}»</b>`)+c.map(x=>L(`<span class="nu sp"></span>${esc(x.n)}`)).join('');
+      who=L(`${num}<b>${nomG(b)?`«${esc(nomG(b))}»`:esc(tituloG(b))}</b>`)+c.map(x=>L(`<span class="nu sp"></span>${esc(x.n)}`)).join('');
       cur=L('')+c.map(x=>L(x.rol=='al'?esc(fmtCurso(x.g))||'Alumno/a':x.rol=='pr'?'Profesor/a':'Invitado/a')).join('');
       ins=L('')+c.map(x=>L(esc(x.instr))).join('');}
     else{who=L(`${num}<b>${esc(b.nombre||'Artista invitado')}</b>`)+L('<span class="mu">Artista invitado</span>');cur=L('');ins=L('');}
@@ -1233,7 +1233,7 @@ function fichaBloque(b,k){
    <table><tr><th>Intérprete</th><th>Curso</th><th>Instrumento</th></tr>${al.map(u=>`<tr><td><b>${esc(u.n)}</b>${!esProf(u)&&vez(u.n)>1?` <small>(${vez(u.n)}.ª vez)</small>`:''}</td><td>${esc(cursoU(u))}</td><td>${esc(u.i||'')}</td></tr>`).join('')}</table>
    ${b.obs?`<p class="fnec"><b>Necesidades:</b> ${esc(b.obs)}</p>`:''}${b.yt&&conEnlace(b)?`<p style="font-size:8.5pt;color:#555;word-break:break-all;margin:1mm 0 0">${esc(b.yt)}</p>`:''}</div>`}
   const rep=`<table><tr><th>#</th><th>Obra</th><th>Autor</th><th>Formato</th><th>Min.</th></tr>${b.rep.map((r,j)=>`<tr><td>${j+1}</td><td>${esc(r.obra)}</td><td>${esc(r.autor)}</td><td>${r.formato?fmtTxt(r):''}${conPista(r)?(r.ok?' ✓':' <b style="color:#B45309">sin probar</b>'):''}</td><td>${fmtMin(r.min)}</td></tr>`).join('')}</table>`;
-  if(b.t=='gr')return `<div class="ficha"><h4><span>${k?k+'. ':''}${b.coro?'Coro':'Grupo'}: ${esc(b.nombre)}</span><small>${dur(minB(b))}</small></h4>
+  if(b.t=='gr')return `<div class="ficha"><h4><span>${k?k+'. ':''}${b.coro?'Coro: '+esc(nomG(b)):esc(tituloG(b))}</span><small>${dur(minB(b))}</small></h4>
    ${b.coro?`<p><b>Director/a:</b> ${esc(b.director||'—')} · <b>Cantantes:</b> ${esc(b.cantantes||'—')}</p>`:
    `<table><tr><th>Componente</th><th>Instrumento</th><th>Papel</th></tr>${b.comp.map(c=>`<tr><td>${esc(c.n)}</td><td>${esc(c.instr)}</td><td>${ROL[c.rol]}${c.rol=='al'&&c.g?' · '+esc(fmtCurso(c.g)):''}</td></tr>`).join('')}</table>`}
    ${rep}${b.obs?`<p><b>Necesidades técnicas:</b> ${esc(b.obs)}</p>`:''}</div>`;
@@ -1252,7 +1252,7 @@ function itemPrograma(b,num){
      <div class="pint">${al.map(u=>persona(u.n,u.i,esProf(u)?'profesor/a':fmtCurso(u.g))).join('')}</div>${b.formato?`<div class="pfmt">${fmtTxt(b)}</div>`:''}</div></div>`}
   if(b.t=='gr'&&b.coro)return `<div class="pit gr">${nu}<div class="pbody"><div class="pobra">«${esc(b.nombre||'Coro')}»</div><div class="pint"><span class="ppe">${b.director?`Dirección: <b>${esc(b.director)}</b>`:''}${b.cantantes?` · ${esc(b.cantantes)} voces`:''}</span></div><ol class="prep">${rep(b.rep)}</ol></div></div>`;
   if(b.t=='gr'){const c=b.comp.filter(x=>x.n.trim());
-    return `<div class="pit gr">${nu}<div class="pbody"><div class="pobra">«${esc(b.nombre||'Grupo')}»</div><div class="pint">${c.map(x=>persona(x.n,x.instr,x.rol=='pr'?'profesor/a':x.rol=='in'?'invitado/a':fmtCurso(x.g))).join('')}</div><ol class="prep">${rep(b.rep)}</ol></div></div>`}
+    return `<div class="pit gr">${nu}<div class="pbody"><div class="pobra">${nomG(b)?`«${esc(nomG(b))}»`:esc(tituloG(b))}</div><div class="pint">${c.map(x=>persona(x.n,x.instr,x.rol=='pr'?'profesor/a':x.rol=='in'?'invitado/a':fmtCurso(x.g))).join('')}</div><ol class="prep">${rep(b.rep)}</ol></div></div>`}
   return `<div class="pit in">${nu}<div class="pbody"><div class="pobra">${esc(b.nombre||'Artista invitado')} <span class="pau">artista invitado</span></div>${b.presenta?`<div class="pint"><span class="ppe">${esc(b.presenta)}</span></div>`:''}<ol class="prep">${rep(b.rep)}</ol></div></div>`;
 }
 function programaDia(i){const d=D().dias[i],pres=d.sinPres?[]:d.pres.map(p=>p.n).filter(Boolean),n=d.bloques.length;
@@ -1414,6 +1414,9 @@ const cfgC=()=>{const m=D().cartelCfgDia||(D().cartelCfgDia={});let c=m[S.cDia];
    Varios intérpretes de una misma obra: uno por línea y la obra en la última. Los «...» (o «…», «|») separan izquierda y derecha. */
 const cursoCartel=u=>{if(esProf(u))return 'Prof.';const p=curso(u.g);if(!p)return String(u.g||'').trim();return p.niv=='FP'?'FP':p.niv.replace(/^(\d)ESO$/,'$1ºESO').replace(/^(\d)BACH$/,'$1ºBach')};
 /* Instrumento limpio para carteles y guiones: sin «+ playalong», «con playback»…, con mayúscula inicial */
+const nomG=b=>String(b.nombre||'').trim();
+const musicosG=b=>(b.comp||[]).filter(x=>x.n.trim()).map(x=>`${corto(nomL(x.n))}${limpiaIns(x.instr)?` (${limpiaIns(x.instr).toLowerCase()})`:''}`).join(' · ');
+const tituloG=b=>nomG(b)||(b.comp||[]).filter(x=>x.n.trim()).map(x=>corto(nomL(x.n))).join(' & ')||'Grupo';
 const limpiaIns=t=>{t=String(t||'').replace(/\s*(?:\+|\bcon\b|\by\b)?\s*(?:play[\s-]?along|play[\s-]?back|backing\s*track|karaoke)\b/gi,'').replace(/\s+/g,' ').trim();if(/^(voces|voz|vocal|canto|cantante)$/i.test(t))t='voz';return t?t.charAt(0).toUpperCase()+t.slice(1).toLowerCase():''};
 const plural=(t,n)=>n>1&&/^voz$/i.test(t)?'Voces':t;
 const nomL=n=>String(n||'').replace(/\s+/g,' ').trim();
@@ -1426,9 +1429,9 @@ function textoCartel(i){const cfg=(D().cartelCfgDia||{})[i]||{};if((cfg.alin||'p
       al.forEach((u,k)=>{const ins=igual?(k==al.length-1?plural(is[0],al.length):''):is[k];L.push(lineaU(u,ins)+(k==al.length-1&&b.obra?` ... ${obra(b.obra,b.autor)}`:''))});
       if(!al.length&&b.obra)L.push(`... ${obra(b.obra,b.autor)}`);return}
     const rep=b.rep.filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}» ... ${(r.autor||'').trim()}`);
-    if(b.t=='gr'&&!b.coro){L.push('[c]GRUPO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);b.comp.filter(x=>x.n.trim()).forEach(x=>L.push(`~ ${nomL(x.n)}${limpiaIns(x.instr)?` · ${limpiaIns(x.instr)}`:''}`))}
-    else if(b.t=='gr'){L.push('[c]CORO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);if(b.director||b.cantantes)L.push(`[c]${[b.director?`Dirige ${b.director}`:'',b.cantantes?`${b.cantantes} voces`:''].filter(Boolean).join(' · ')}`)}
-    else{L.push('[c]ARTISTA INVITADO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`)}
+    if(b.t=='gr'&&!b.coro){if(nomG(b)&&!mismo(nomG(b)))L.push(`[c]${nomG(b)}`);b.comp.filter(x=>x.n.trim()).forEach(x=>L.push(`~ ${nomL(x.n)}${limpiaIns(x.instr)?` · ${limpiaIns(x.instr)}`:''}`))}
+    else if(b.t=='gr'){if(nomG(b)&&!mismo(nomG(b)))L.push(`[c]Coro ${nomG(b)}`);if(b.director||b.cantantes)L.push(`[c]${[b.director?`Dirige ${b.director}`:'',b.cantantes?`${b.cantantes} voces`:''].filter(Boolean).join(' · ')}`)}
+    else{L.push(`[c]${nomG(b)||'Artista invitado'} (artista invitado)`)}
     if(rep.length){L.push('');rep.forEach(x=>L.push(x))}});
   return L.join('\n');
 }
@@ -1440,10 +1443,10 @@ function textoCentrado(i){const d=D().dias[i],tit=nombreDia(d)||d.titulo,L=['# '
       const cs=al.map(cursoCartel),is=al.map(u=>limpiaIns(u.i)),cC=cs.every(x=>x==cs[0])?cs[0]:'',iC=is.every(x=>x==is[0])?is[0]:'';
       const per=al.map((u,k)=>{const ex=[cC?'':cs[k],iC?'':is[k].toLowerCase()].filter(Boolean).join(', ');return corto(nomL(u.n))+(ex?` (${ex})`:'')}).join(' · ');
       L.push(`[c]${per}${cC?` (${cC})`:''}${iC?` · ${plural(iC,al.length).toLowerCase()}`:''}`);return}
-    if(b.t=='gr'&&!b.coro){L.push('[c]GRUPO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);b.comp.filter(x=>x.n.trim()).forEach(x=>L.push(`~ ${nomL(x.n)}${limpiaIns(x.instr)?` · ${limpiaIns(x.instr)}`:''}`))}
-    else if(b.t=='gr'){L.push('[c]CORO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`);if(b.director||b.cantantes)L.push(`[c]${[b.director?`Dirige ${b.director}`:'',b.cantantes?`${b.cantantes} voces`:''].filter(Boolean).join(' · ')}`)}
-    else{L.push('[c]ARTISTA INVITADO');if(!mismo(b.nombre))L.push(`[c]${b.nombre}`)}
-    const rep=b.rep.filter(r=>r.obra);if(rep.length){L.push('');rep.forEach(r=>L.push(ob(r.obra,r.autor)))}});
+    b.rep.filter(r=>r.obra).forEach(r=>L.push(ob(r.obra,r.autor)));
+    if(b.t=='gr'&&!b.coro){const m=musicosG(b);L.push(`[c]${nomG(b)&&!mismo(nomG(b))?nomG(b)+(m?': ':''):''}${m}`)}
+    else if(b.t=='gr'){L.push(`[c]${['Coro'+(nomG(b)&&!mismo(nomG(b))?' '+nomG(b):''),b.director?`dirige ${corto(b.director)}`:'',b.cantantes?`${b.cantantes} voces`:''].filter(Boolean).join(' · ')}`)}
+    else L.push(`[c]${nomG(b)||'Artista invitado'} (artista invitado)`)});
   return L.join('\n');
 }
 function cambiaAlin(v){const antes=cfgC().alin||'p';cfgC().alin=v;marcar();
@@ -1651,7 +1654,7 @@ function listaGuion(d){return d.bloques.map((b,k)=>{
   const rep=(b.rep||[]).filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}»${r.autor?` (${r.autor})`:''}${r.formato?` [${FMT_G[r.formato]}]`:''}`).join(', ');
   if(b.t=='al'){const p=b.alumnos.filter(u=>u.n.trim()).map(u=>`${corto(u.n)}${esProf(u)?' (profesor)':u.g?` (${fmtCurso(u.g).replace(/ [A-H]$/,'')})`:''}${limpiaIns(u.i)?`, ${limpiaIns(u.i).toLowerCase()}`:''}${!esProf(u)&&vez(u.n)>1?` [repite: su ${vez(u.n)}.ª Santa Cecilia]`:''}`).join('; ');
     return `${k+1}. ${p} — ${b.obra?`«${limpiaTit(b.obra)}»${b.autor?` (${b.autor})`:''}`:'obra por confirmar'} — ${FMT_G[b.formato]||''}`}
-  if(b.t=='gr'&&!b.coro)return `${k+1}. Grupo «${b.nombre}»: ${b.comp.filter(c=>c.n.trim()).map(c=>`${corto(c.n)}${c.instr?` (${c.instr.toLowerCase()})`:''}`).join(', ')} — ${rep}`;
+  if(b.t=='gr'&&!b.coro)return `${k+1}. ${nomG(b)?`Grupo «${nomG(b)}»`:'Actúan juntos'}: ${b.comp.filter(c=>c.n.trim()).map(c=>`${corto(c.n)}${c.instr?` (${c.instr.toLowerCase()})`:''}`).join(', ')} — ${rep}`;
   if(b.t=='gr')return `${k+1}. Coro «${b.nombre}»${b.director?`, dirige ${corto(b.director)}`:''} — ${rep}`;
   return `${k+1}. Artista invitado: ${b.nombre}${b.presenta?` (${b.presenta})`:''} — ${rep}`;
 }).join('\n')}
