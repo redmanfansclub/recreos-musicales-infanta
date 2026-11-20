@@ -539,6 +539,9 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 .vale2 .vc{font:500 12pt var(--disp);color:#444;margin-top:1mm}
 .vale2 .vpie{margin-top:4mm;font-size:12pt;color:#2A1018}.vale2 .vpie b{font:800 14pt var(--disp)}
 .vale2 .vlin{display:inline-block;width:60mm;border-bottom:1px solid #777}
+.vale2 .vtx{padding-right:32mm}
+.vale2 .vcond{margin-top:3mm;font:500 8.5pt/1.3 var(--disp);color:#444;max-width:96mm}.vale2 .vcond b{color:#2A1018}
+.vale2 .vsello{position:absolute;right:5mm;bottom:5mm;width:25mm;height:25mm;border:1.4px dashed color-mix(in srgb,var(--e1,#8C2643) 60%,#fff);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font:600 7.5pt/1.2 var(--disp);color:#999}
 .vale2 .vnotas{position:absolute;right:6mm;top:5mm;width:12mm;height:12mm;opacity:.8;color:var(--e2,#D9A441)}
 .vale2.img{background:none;display:block}.vale2.img img{width:100%;height:100%;object-fit:cover;display:block}
 .vale2 .vtag{position:absolute;right:5mm;bottom:4mm;background:rgba(255,255,255,.92);border-radius:3mm;padding:1.5mm 4mm;font:700 11pt var(--disp);color:#2A1018}
@@ -717,7 +720,7 @@ function nuevaEdicion(anio,base){
   const b=base?.datos||{};
   return{anio,datos:{curso:`${anio}/${anio+1}`,inicio:iso(lunesSantaCecilia(anio)),hora:b.hora||'11:15–11:45',lugar:b.lugar||'Salón de actos (B000)',util:b.util||25,
     musical:'',guinos:'',concepto:'',ideas:'',drive:'',driveRaiz:b.driveRaiz||'',
-    diploma:{frase:b.diploma?.frase||'Por llenar de música los recreos del instituto en la Semana de Santa Cecilia. Gracias por tu esfuerzo, tu valentía y tu talento.',top:b.diploma?.top||52},
+    vale:{importe:b.vale?.importe??3},diploma:{frase:b.diploma?.frase||'Por llenar de música los recreos del instituto en la Semana de Santa Cecilia. Gracias por tu esfuerzo, tu valentía y tu talento.',top:b.diploma?.top||52},
     dias:DIAS.map(n=>({titulo:`Concierto del ${n}`,sub:'',no:false,pres:[{n:'',g:''},{n:'',g:''}],bloques:[]}))}};
 }
 function normaliza(dt){ // compatibilidad con la primera versión (acts / tipo)
@@ -1263,7 +1266,11 @@ function programaDia(i){const d=D().dias[i],pres=d.sinPres?[]:d.pres.map(p=>p.n)
    <div class="pdpie">${NOMBRE} · Semana de Santa Cecilia ${S.E.anio}${D().musical?` · ${esc(D().musical)}`:''}</div></div>`}
 function listaAlumnosVales(){const r=[],v=new Set();alumnosDe(S.E).forEach(a=>{const k=clave(a.n)+'|'+a.dia;if(!v.has(k)){v.add(k);r.push(a)}});return r}
 /* ---------- Lista de vales con nombre: alumnos que actúan y presentadores, una vez cada uno; puedes dar dos, quitar o añadir ---------- */
-function baseVales(){const m=new Map(),cu=D().valesCuenta||{};
+function idSemana(){ // en una misma semana, «Sara López» y «Sara López Gil» son la misma persona
+  const N=[...alumnosDe(S.E).map(a=>a.n),...D().dias.flatMap(d=>d.no||d.sinPres?[]:(d.pres||[]).map(p=>p.n.trim()))].filter(Boolean);
+  const pal=n=>clave(n).split(/\s+/).filter(Boolean);
+  return n=>{const a=pal(n);let mejor=n;if(a.length>=2)N.forEach(o=>{const b=pal(o);if(b.length>pal(mejor).length&&a.every((w,i)=>b[i]==w))mejor=o});return idP(mejor)}}
+function baseVales(){const m=new Map(),cu=D().valesCuenta||{},idP=idSemana();
   alumnosDe(S.E).forEach(a=>{const k=idP(a.n);if(!m.has(k))m.set(k,{n:a.n,t:'Actúa'})});
   D().dias.forEach(d=>{if(d.no||d.sinPres)return;d.pres.forEach(p=>{if(p.n.trim()){const k=idP(p.n);if(!m.has(k))m.set(k,{n:p.n.trim(),t:'Presenta'})}})});
   (D().valesExtra||[]).forEach(n=>{const k='x:'+clave(n);if(!m.has(k))m.set(k,{n,t:'Añadido',extra:true})});
@@ -1280,9 +1287,15 @@ function abrirListaVales(){const L=baseVales(),tot=L.reduce((a,o)=>a+o.c,0);
      ${o.extra?`<button class="btn g sm" title="Quitar de la lista" onclick="quitaExtra(${JSON.stringify(o.n).replace(/"/g,'&quot;')})">${ICO.del}</button>`:''}</span></div>`).join('')||'<p class="mu">Todavía no hay nadie en la lista.</p>'}</div>
    <div class="row" style="margin-top:12px"><input id="vnuevo" type="text" placeholder="Añadir a alguien más" onkeydown="if(event.key=='Enter')nuevoVale()" style="flex:1"><button class="btn" onclick="nuevoVale()">${ICO.plus}Añadir</button></div>
    <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn p" onclick="cerrar()">${ICO.check}Listo</button></div>`)}
+const valeCfg=()=>{const d=D();d.vale=d.vale||{};if(d.vale.importe==null)d.vale.importe=3;return d.vale};
+const valeHasta=()=>{const h=valeCfg().hasta;if(h)return pD(h);const d=pD(D().inicio);d.setDate(d.getDate()+11);return d};
+const euros=v=>`${String(Number(v)||0).replace('.',',')} €`;
+const textoHasta=()=>{const d=valeHasta();return `${fLarga(d)} de ${d.getFullYear()}`};
 function valeHTML(nombre){
   return `<div class="vale2" style="${estVars()}"><div class="vart">${logo()}<span>Recreos Musicales<br>del INFANTA</span></div>
-   <div class="vtx"><div class="vsc">Santa Cecilia ${S.E.anio}</div><div class="vv">VALE</div><div class="vd">para un desayuno <b>gratuito</b></div><div class="vc">en la cantina del IES Infanta Elena</div>${nombre?`<div class="vpie"><b>${esc(nombre)}</b></div>`:''}</div>
+   <div class="vtx"><div class="vsc">Santa Cecilia ${S.E.anio}</div><div class="vv">VALE</div><div class="vd">de <b>${euros(valeCfg().importe)}</b> para tu desayuno</div><div class="vc">en la cantina del IES Infanta Elena</div><div class="vpie">${nombre?`<b>${esc(nombre)}</b>`:'<span class="vlin"></span>'}</div>
+   <div class="vcond">Válido hasta el <b>${textoHasta()}</b>. Antes de usarlo, pásalo por Secretaría para que le pongan el sello del instituto: sin sello no es válido.</div></div>
+   <div class="vsello" aria-hidden="true">Sello del<br>instituto</div>
    <svg class="vnotas" viewBox="0 0 40 40" aria-hidden="true"><g fill="currentColor"><ellipse cx="10" cy="30" rx="5" ry="3.6"/><rect x="14" y="8" width="1.6" height="22"/><ellipse cx="28" cy="26" rx="5" ry="3.6"/><rect x="32" y="4" width="1.6" height="22"/><path d="M14 8 L33.6 4 L33.6 8 L15.6 12Z"/></g></svg></div>`;
 }
 const hojaVales=l=>{let h='';for(let p=0;p<l.length;p+=3)h+=`<div class="pg"><div class="vales2">${l.slice(p,p+3).join('<div class="vcorte">✂</div>')}</div></div>`;return h};
@@ -1294,31 +1307,40 @@ function imprimirVales(){
 const driveVales=()=>D().driveVales||driveAnio();
 function vVales(){const m=S.vModo||'app',tot=nombresVales().length;
   const lista=`<div class="row" style="margin:8px 0 0"><span class="sm"><b>${tot}</b> ${tot==1?'vale':'vales'} con nombre</span><button class="btn sm" onclick="abrirListaVales()">Revisar la lista</button></div>`;
-  return `<section class="panel"><h3>Vales de desayuno</h3>
+  const vc=valeCfg(),datos=`<div class="row" style="margin:0 0 12px;align-items:flex-end">
+     <label class="f" style="width:110px">Importe (€)<input type="number" min="0" step="0.5" value="${esc(vc.importe)}" onchange="valeCfg().importe=Math.max(0,+this.value||0);marcar();render()"></label>
+     <label class="f" style="width:auto">Válido hasta<input type="date" value="${iso(valeHasta())}" onchange="valeCfg().hasta=this.value;marcar();render()"></label>
+     ${vc.hasta?`<button class="btn g sm" title="El viernes de la semana siguiente a Santa Cecilia" onclick="delete valeCfg().hasta;marcar();render()">Fecha automática</button>`:'<span class="sm mu" style="padding-bottom:8px">El viernes de la semana siguiente</span>'}</div>`;
+  const ia=`<button class="btn" style="margin-top:10px" onclick="S.tab='ajustes';S.iaTipo='vales';render();setTimeout(()=>{const p=$('#prompt');p&&p.scrollIntoView({block:'center'})},60)">Encargar el vale de este año a la IA</button>`;
+  return `<section class="panel"><h3>Vales de desayuno</h3>${datos}
    <div class="seg" role="group" style="margin-bottom:10px">${[['app','Vale de la app'],['hueco','Mi vale con hueco'],['drive','Mi vale en Drive']].map(([k,t])=>`<button aria-pressed="${m==k}" onclick="S.vModo='${k}';render()">${t}</button>`).join('')}</div>
    ${m=='app'?`<p class="sm mu" style="margin:0 0 8px">Tres por folio, con la estética del año.</p>
      <div class="seg" role="group"><button aria-pressed="${!S.vNom}" onclick="S.vNom=false;render()">Genéricos</button><button aria-pressed="${!!S.vNom}" onclick="S.vNom=true;render()">Con nombre</button></div>
      ${S.vNom?lista:`<label class="f" style="width:150px;margin-top:8px">Cuántos vales<input id="vnum" type="number" min="1" value="3"></label>`}
      <button class="btn p" style="margin-top:10px" onclick="imprimirVales()">${ICO.print}Imprimir vales</button>`
    :m=='hueco'?`<p class="sm mu" style="margin:0 0 8px">Tu diseño con un hueco: la app escribe dentro el nombre de cada uno. Tres por folio.</p>${lista}
-     <button class="btn p" style="margin-top:10px" onclick="S.vFull=true;render()">Abrir el editor del vale</button>`
+     <div class="row"><button class="btn p" style="margin-top:10px" onclick="S.vFull=true;render()">Abrir el editor del vale</button>${ia}</div>`
    :`<p class="sm mu" style="margin:0 0 8px">Tu vale ya hecho, tal cual. Se abre la carpeta de Drive: ahí lo ves o arrastras uno nuevo.</p>
-     <a class="btn p" href="${esc(driveVales())}" target="_blank" rel="noopener">${ICO.drive}Ver mi vale en Drive</a>`}</section>`;
+     <div class="row"><a class="btn p" style="margin-top:10px" href="${esc(driveVales())}" target="_blank" rel="noopener">${ICO.drive}Ver mi vale en Drive</a>${ia}</div>`}</section>`;
 }
 function cargaImg(inp,k){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{S[k]=r.result;render()};r.readAsDataURL(f)}
-function listaDiplomas(){ // un diploma por alumno, con todo lo que ha tocado esa semana
-  const m=new Map();alumnosDe(S.E).forEach(a=>{const k=clave(a.n);if(!m.has(k))m.set(k,{n:a.n,obras:[]});
-    const o=a.b.t=='al'?a.b.obra:(a.b.nombre?`con ${a.b.nombre}`:'');if(o&&!m.get(k).obras.includes(o))m.get(k).obras.push(o)});
+function listaDiplomas(){ // un diploma por persona: todo lo que ha tocado esa semana y, si presenta, también eso
+  const m=new Map(),idP=idSemana(),de=(n)=>{const k=idP(n);if(!m.has(k))m.set(k,{n,obras:[],pres:false});const p=m.get(k);if(n.length>p.n.length)p.n=n;return p},
+    pon=(p,o)=>{o=String(o||'').trim();if(o&&!p.obras.some(x=>clave(x)==clave(o)))p.obras.push(o)};
+  alumnosDe(S.E).forEach(a=>{const p=de(a.n);if(a.b.t=='al')pon(p,a.b.obra);else(a.b.rep||[]).forEach(r=>pon(p,r.obra))});
+  D().dias.forEach(d=>{if(d.no||d.sinPres)return;(d.pres||[]).forEach(x=>{if(x.n.trim())de(x.n.trim()).pres=true})});
   return [...m.values()];
 }
+const yLista=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' y '+a.at(-1);
 function diplomaHTML(p){
-  const dp=D().diploma,obras=p.obras.map(o=>o.startsWith('con ')?esc(o):`«${esc(o)}»`).join(', ');
+  const dp=D().diploma,obras=yLista(p.obras.map(o=>`«${esc(o)}»`));
+  const motivo=[obras?`por su interpretación de ${obras}`:'',p.pres?'por su labor presentando los conciertos':''].filter(Boolean).join(' y ');
   const orla=`<svg class="dorla" viewBox="0 0 277 190" preserveAspectRatio="none" aria-hidden="true"><rect x="6" y="6" width="265" height="178" rx="4" fill="none" stroke="${est().c1}" stroke-width="1.6"/><rect x="9.5" y="9.5" width="258" height="171" rx="3" fill="none" stroke="${est().c2}" stroke-width=".6"/>
    ${[[14,14,0],[263,14,90],[263,176,180],[14,176,270]].map(([x,y,r])=>`<g transform="translate(${x} ${y}) rotate(${r})"><path d="M0 10 Q0 0 10 0" fill="none" stroke="${est().c2}" stroke-width=".8"/><circle cx="2.6" cy="2.6" r="1.3" fill="${est().c1}"/><path d="M4 0h18M0 4v18" stroke="${est().c2}" stroke-width=".4"/></g>`).join('')}</svg>`;
   const penta=`<svg class="dpenta" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true">${[0,1,2,3,4].map(k=>`<line x1="0" y1="${2+k*3}" x2="200" y2="${2+k*3}" stroke="#D9A441" stroke-width=".35"/>`).join('')}<g fill="#8C2643"><ellipse cx="60" cy="11" rx="2" ry="1.5"/><rect x="61.6" y="2" width=".5" height="9"/><ellipse cx="100" cy="8" rx="2" ry="1.5"/><rect x="101.6" y="0" width=".5" height="8"/><ellipse cx="140" cy="5" rx="2" ry="1.5"/><rect x="141.6" y="-3" width=".5" height="8"/></g></svg>`;
   const cuerpo=`<div class="dtxt" style="top:${Math.max(Number(dp.top)||58,S.dImg?0:56)}%">
      <div class="dotorga">Se concede a</div><div class="nom">${esc(p.n)}</div><div class="dlinea"></div>
-     ${obras?`<div class="obra">por su interpretación de ${obras}</div>`:''}
+     ${motivo?`<div class="obra">${motivo}</div>`:''}
      <div class="fr">${esc(dp.frase)}</div></div>`;
   if(S.dImg)return `<div class="pg"><div class="dip"><img class="fondo" src="${S.dImg}" alt="">${cuerpo}</div></div>`;
   return `<div class="pg"><div class="dip dbonito" style="${estVars()}">${orla}
@@ -1327,7 +1349,7 @@ function diplomaHTML(p){
    ${cuerpo}
    <div class="dpie"><div class="dfe"><img src="${LOGO_IES}" alt="IES Infanta Elena"><span>Jumilla, noviembre de ${S.E.anio}</span></div>${penta}<div class="dfi"><span class="dlin"></span>El Departamento de Música</div></div></div></div>`;
 }
-function imprimirDiplomas(prueba){const l=listaDiplomas();if(!l.length)return toast('Todavía no hay alumnos con nombre',1);
+function imprimirDiplomas(prueba){const l=listaDiplomas();if(!l.length)return toast('Todavía no hay alumnos ni presentadores con nombre',1);
   imprimir((prueba?l.slice(0,1):l).map(diplomaHTML).join(''),'landscape')}
 /* ---------- La estética del año: colores y letra que comparten vales, diplomas y carteles ---------- */
 const ESTILOS=[
@@ -1627,7 +1649,7 @@ function vImprimir(){
    <section class="panel"><h3>Programa de la semana</h3><p class="sm mu">Los cinco días en un folio.</p>
     <button class="btn p" onclick="imprimirSemana()">${ICO.print}Imprimir</button></section>
    ${vVales()}
-   <section class="panel"><h3>Diplomas de participación</h3><p class="sm mu">Uno por alumno (${nDip} ahora), con su nombre, lo que ha tocado y tu frase. Carga el diseño que te haga la IA (apaisado, con el centro libre) o usa el sencillo de la app.</p>
+   <section class="panel"><h3>Diplomas de participación</h3><p class="sm mu">Uno por persona (${nDip} ahora), aunque haya tocado varios días, con todas sus obras y tu frase. Los presentadores tienen también el suyo. Carga el diseño que te haga la IA (apaisado, con el centro libre) o usa el sencillo de la app.</p>
     <label class="f">Frase<textarea style="min-height:64px" oninput="setP('diploma.frase',this.value)">${esc(D().diploma.frase)}</textarea></label>
     <label class="f" style="margin-top:8px">Altura del texto: ${esc(D().diploma.top)} % <input type="range" min="30" max="75" value="${esc(D().diploma.top)}" onchange="setP('diploma.top',+this.value,1)"></label>
     <div class="row" style="margin-top:10px"><label class="btn">Cargar diseño<input type="file" accept="image/*" hidden onchange="cargaImg(this,'dImg')"></label>
@@ -1711,13 +1733,18 @@ Tiene que ser original y distinto de los carteles de otros años${h?`, que fuero
 ${D().ideas?`\nIdeas mías para este año: ${D().ideas}\n`:''}
 Estilo: ilustración plana de cartel con colores inspirados en el musical, buen contraste, texto legible desde lejos y márgenes limpios para imprimir.${t!='general'?'\nSi te adjunto el cartel general de este año, mantén su estilo, colores y tipografía.':''}`;
 }
-const promptVales=()=>`Diseña una hoja A4 vertical con 8 vales iguales (2 columnas × 4 filas), separados por líneas discontinuas de corte, a juego con el cartel que te adjunto (mismos colores, tipografía y algún elemento del dibujo).
-Texto exacto de cada vale, sin faltas:
-«VALE por un desayuno»
-«Cantina del IES Infanta Elena»
+const promptVales=()=>{const t=String(D().musical||'').trim(),g=String(D().guinos||'').trim();return `Te adjunto el vale de desayuno del año pasado de los «Recreos Musicales del INFANTA» (Semana de Santa Cecilia, IES Infanta Elena, Jumilla)${t?' y el cartel de este año':''}. Hazme el vale de este año partiendo de él: misma idea y composición, pero ${t?`con la temática de este curso: ${t}${g?` (guiños: ${g})`:''}, y a juego con el cartel (mismos colores, tipografía y algún elemento del dibujo)`:'renovado y a juego con el cartel de este año, si te lo adjunto'}.
+Es un premio por participar: los alumnos no pagan nada; el vale equivale a ${euros(valeCfg().importe)} para gastar en la cantina.
+Un solo vale, apaisado, con proporción 19 × 7,8 cm (se imprimen tres por folio) y la mayor resolución posible.
+Texto exacto, sin faltas y sin añadir nada más:
+«VALE»
+«de ${euros(valeCfg().importe)} para tu desayuno»
+«en la cantina del IES Infanta Elena»
 «Recreos Musicales del INFANTA · Santa Cecilia ${S.E.anio}»
-«Nombre: ____________»
-Deja espacio en blanco suficiente en la línea del nombre para escribir a mano. Nada más de texto.`;
+«Válido hasta el ${textoHasta()}»
+«Pásalo por Secretaría para que le pongan el sello del instituto: sin sello no es válido»
+Deja un círculo de puntos de unos 2,5 cm, vacío, con la palabra «Sello» en pequeño, para que Secretaría estampe el sello encima.
+Deja también una franja lisa y clara, sin texto ni dibujos, de lado a lado del centro del vale y de un cuarto de su altura: ahí imprimiré el nombre de cada alumno.`}
 const promptDiploma=()=>`Diseña el fondo de un diploma en A4 apaisado (297 × 210 mm), a juego con el cartel que te adjunto (mismos colores, tipografía y algún elemento del dibujo).
 Texto exacto, solo en la parte superior:
 «Diploma de participación»
@@ -1843,7 +1870,7 @@ function vHistorial(){
 }
 function nuevaEd(){const max=Math.max(...S.eds.map(e=>e.anio));
   modal(`<h3>Nueva edición</h3><label class="f">Año<input id="na" type="number" value="${max+1}"></label>
-   <p class="sm mu">Se copian la hora, el lugar, la carpeta general de Drive y la frase del diploma. La semana se calcula sola: si el 22 de noviembre cae entre semana, esa semana; si cae en fin de semana, la anterior. Luego puedes cambiarla en Ajustes.</p>
+   <p class="sm mu">Se copian la hora, el lugar, la carpeta general de Drive, la frase del diploma y el importe del vale (su caducidad se calcula sola con la nueva semana). La semana se calcula sola: si el 22 de noviembre cae entre semana, esa semana; si cae en fin de semana, la anterior. Luego puedes cambiarla en Ajustes.</p>
    <div class="row"><button class="btn p" onclick="crearEd(+$('#na').value)">Crear</button><button class="btn" onclick="cerrar()">Cancelar</button></div>`)}
 async function crearEd(a){if(!a)return;if(S.eds.some(e=>e.anio==a))return toast('Ya existe la edición '+a,1);
   const e=nuevaEdicion(a,S.E);S.eds.push(e);S.eds.sort((x,y)=>y.anio-x.anio);S.E=e;cerrar();await guardar();S.tab='programa';S.dia=0;render()}
