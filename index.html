@@ -423,6 +423,7 @@ table.sem th{font:700 14px var(--disp);color:var(--mu)}
 .hist .panel{margin:0;display:flex;flex-direction:column;gap:8px}
 .hist .yr{font:800 40px/1 var(--disp);color:var(--acc)}
 .hist .cur{outline:3px solid var(--oro)}
+.hist .elegible{cursor:pointer;transition:transform .15s,box-shadow .15s}.hist .elegible:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.12)}.hist .elegible:focus-visible{outline:3px solid var(--acc)}
 pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflow:auto;font-size:13px;line-height:1.45}
 
 /* Estadísticas */
@@ -878,6 +879,7 @@ function render(){
   if(S.tab=='programa')scrollTo(0,y);
   if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir'){pintaCartel();if(S.vFull)pintaVale()}
 }
+function abreEd(a){cambiaEd(a);toast(`Ahora trabajas en ${a}${S.E.datos.musical?' · '+S.E.datos.musical:''}`)}
 function cambiaEd(a){limpiaVacios();S.edit.clear();S.E=S.eds.find(e=>e.anio==a);S.dia=0;render()}
 
 /* ---------- Veteranos e identidad: el mismo alumno escrito de varias formas ---------- */
@@ -1876,11 +1878,11 @@ function vHistorial(){
   return `<div class="row" style="justify-content:space-between;margin-bottom:16px"><div><h2>Historial</h2><p class="mu" style="margin:0">Cada año queda guardado. Los carteles, programas y fotos van en Drive.</p></div>
    <div class="row"><a class="btn" href="${esc(driveGen())}" target="_blank" rel="noopener">${ICO.drive}Carpeta de Santa Cecilia en Drive</a>
    <button class="btn p" onclick="nuevaEd()">${ICO.plus}Nueva edición</button></div></div>
-  <div class="hist">${S.eds.map(e=>`<article class="panel ${e===S.E?'cur':''}"><span class="yr">${e.anio}</span>
+  <div class="hist">${S.eds.map(e=>`<article class="panel ${e===S.E?'cur':'elegible'}" ${e===S.E?'':`role="button" tabindex="0" title="Pasar a ${e.anio}" onclick="if(!event.target.closest('a,button,input,label'))abreEd(${e.anio})" onkeydown="if(event.key=='Enter'&&event.target===this)abreEd(${e.anio})"`}><span class="yr">${e.anio}</span>
     <b>${esc(e.datos.musical?'Temática: '+e.datos.musical:'Sin temática anotada')}</b>
     <span class="sm mu">${e.datos.dias.reduce((s,d)=>s+(d.no?0:d.bloques.length),0)} bloques · ${new Set(alumnosDe(e).map(a=>clave(a.n))).size} alumnos${e.datos.dias.map((d,i)=>d.no&&String(d.motivo||'').trim()?` · ${DIAS[i]}: ${esc(sinTxt(d).toLowerCase())}`:'').join('')}</span>
     ${e.datos.concepto?`<p class="sm" style="margin:0">${esc(e.datos.concepto)}</p>`:''}
-    <div class="row" style="margin-top:auto">${e===S.E?'<span class="tag">Abierta</span>':`<button class="btn" onclick="cambiaEd(${e.anio});S.tab='programa';render()">Abrir</button>`}
+    <div class="row" style="margin-top:auto">${e===S.E?'<span class="tag">Abierta</span>':`<button class="btn p" onclick="cambiaEd(${e.anio});S.tab='programa';render()">Ir a su programa</button>`}
      ${driveAnio(e)?`<a class="btn" href="${esc(driveAnio(e))}" target="_blank" rel="noopener">${ICO.drive}Carteles y programas</a>`:'<span class="sm mu">Sin carpeta de Drive</span>'}${e.datos.driveVales?`<a class="btn" href="${esc(e.datos.driveVales)}" target="_blank" rel="noopener">${ICO.drive}Vales</a>`:''}
      <button class="btn g" onclick="exportar(${e.anio})">Exportar</button></div></article>`).join('')}</div>
   <section class="panel" style="margin-top:22px"><h3>Copias e importación</h3>
