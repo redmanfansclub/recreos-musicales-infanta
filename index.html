@@ -879,6 +879,13 @@ function render(){
   if(S.tab=='programa')scrollTo(0,y);
   if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir'){pintaCartel();if(S.vFull)pintaVale()}
 }
+function carpetaEd(a){const e=S.eds.find(x=>x.anio==a);
+  modal(`<h3>Carpeta de Drive de ${a}</h3><p class="sm mu" style="margin-top:0">En Drive, abre la carpeta de ese año, copia la dirección de arriba del navegador y pégala aquí.</p>
+   <label class="f">Enlace de la carpeta<input id="cdrv" type="url" value="${esc(e.datos.drive||'')}" placeholder="https://drive.google.com/drive/folders/…" onkeydown="if(event.key=='Enter')guardaCarpeta(${a})"></label>
+   <div class="row" style="margin-top:12px"><button class="btn p" onclick="guardaCarpeta(${a})">${ICO.check}Guardar</button><button class="btn" onclick="cerrar()">Cancelar</button></div>`);setTimeout(()=>{const i=$('#cdrv');i&&i.focus()},50)}
+async function guardaCarpeta(a){const e=S.eds.find(x=>x.anio==a),v=$('#cdrv').value.trim();
+  if(v&&!/^https?:\/\//.test(v))return toast('Pega el enlace completo, empezando por https://',1);
+  e.datos.drive=v;cerrar();S.ver++;await guardar(e);toast(v?`Carpeta de ${a} guardada`:`Carpeta de ${a} quitada`);render()}
 function abreEd(a){cambiaEd(a);toast(`Ahora trabajas en ${a}${S.E.datos.musical?' · '+S.E.datos.musical:''}`)}
 function cambiaEd(a){limpiaVacios();S.edit.clear();S.E=S.eds.find(e=>e.anio==a);S.dia=0;render()}
 
@@ -1883,7 +1890,7 @@ function vHistorial(){
     <span class="sm mu">${e.datos.dias.reduce((s,d)=>s+(d.no?0:d.bloques.length),0)} bloques · ${new Set(alumnosDe(e).map(a=>clave(a.n))).size} alumnos${e.datos.dias.map((d,i)=>d.no&&String(d.motivo||'').trim()?` · ${DIAS[i]}: ${esc(sinTxt(d).toLowerCase())}`:'').join('')}</span>
     ${e.datos.concepto?`<p class="sm" style="margin:0">${esc(e.datos.concepto)}</p>`:''}
     <div class="row" style="margin-top:auto">${e===S.E?'<span class="tag">Abierta</span>':`<button class="btn p" onclick="cambiaEd(${e.anio});S.tab='programa';render()">Ir a su programa</button>`}
-     ${driveAnio(e)?`<a class="btn" href="${esc(driveAnio(e))}" target="_blank" rel="noopener">${ICO.drive}Carteles y programas</a>`:'<span class="sm mu">Sin carpeta de Drive</span>'}${e.datos.driveVales?`<a class="btn" href="${esc(e.datos.driveVales)}" target="_blank" rel="noopener">${ICO.drive}Vales</a>`:''}
+     ${driveAnio(e)?`<a class="btn" href="${esc(driveAnio(e))}" target="_blank" rel="noopener">${ICO.drive}Carteles y programas</a><button class="btn g sm" title="Cambiar la carpeta de Drive de ${e.anio}" onclick="carpetaEd(${e.anio})">Cambiar</button>`:`<button class="btn" onclick="carpetaEd(${e.anio})">${ICO.drive}Añadir carpeta de Drive</button>`}${e.datos.driveVales?`<a class="btn" href="${esc(e.datos.driveVales)}" target="_blank" rel="noopener">${ICO.drive}Vales</a>`:''}
      <button class="btn g" onclick="exportar(${e.anio})">Exportar</button></div></article>`).join('')}</div>
   <section class="panel" style="margin-top:22px"><h3>Copias e importación</h3>
    <p class="sm mu">«Exportar» descarga la edición en un archivo para guardarlo en Drive como copia. «Importar» carga un archivo de otro año. Estos archivos llevan nombres de alumnos: guárdalos en Drive, no en GitHub.</p>
