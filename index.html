@@ -627,13 +627,23 @@ const chipU=u=>esProf(u)?'<span class="nv prof">Profesor/a</span>':nvChip(u.g);
 const ROL={al:'Alumno/a',pr:'Profesor/a',in:'Invitado/a'};
 const NOMBRE='Recreos Musicales del INFANTA';
 const ACAP='<i>a cappella</i>';
-/* Formato de cada actuación: karaoke y play-along suenan sobre un backing track (pista grabada) */
+/* Formato de cada actuación. Karaoke (voz) y play-along (instrumento) suenan sobre un backing track: la grabación cuyo enlace se pide.
+   «Playback» no existe (sería hacer como que se canta): si aparece escrito, la app entiende karaoke si es voz y play-along si es instrumento. */
 const FMT={karaoke:'Karaoke',playalong:'Play-along',live:'Live',acappella:ACAP,solo:'Solo',producer:'Producer'};
-const FMT_AYUDA={karaoke:'Canta en vivo sobre un backing track',playalong:'Toca en vivo sobre un backing track',live:'Todo en vivo, con armonía (piano, guitarra, grupo…)',acappella:'Solo voces, sin instrumentos',solo:'Un instrumento melódico sin acompañamiento',producer:'Presenta y reproduce su propia producción (Logic, Ableton, FL Studio…)'};
+const FMT_AYUDA={karaoke:'Canta en vivo sobre un backing track',playalong:'Toca en vivo sobre un backing track',live:'Todo en vivo, sin grabación: instrumentos y/o voces',acappella:'Solo voces, sin instrumentos: una voz, varias o el coro',solo:'Una sola persona con su instrumento, sin acompañamiento',producer:'Presenta y reproduce su propia producción (Logic, Ableton, FL Studio…)'};
+const esVozT=t=>/\b(voz|voces|vocal|cant)/i.test(String(t||''));
+function normFmt(f,ins){const k=clave(f).replace(/[\s_.-]/g,'');if(!k||FMT[k])return k;
+  if(/acap/.test(k))return'acappella';if(/karaoke/.test(k))return'karaoke';if(/playalong|alone|along/.test(k))return'playalong';
+  if(/playback|backing|pista|grabac/.test(k))return esVozT(ins)?'karaoke':'playalong';if(/live|vivo|directo/.test(k))return'live';
+  if(/solo/.test(k))return'solo';if(/produc/.test(k))return'producer';return''}
+/* Instrumento con un nombre fijo: sin palabras de formato y siempre «saxofón» */
+const canonIns=t=>String(t||'').replace(/\s*(?:\+|\bcon\b|\ben\b|\by\b)?\s*(?:play[\s-]?along|play[\s-]?alone|play[\s-]?back|backing\s*track|karaoke)\b/gi,'')
+  .replace(/\bsax(?:ofones|os|o|\.)?(?![a-záéíóúñ])/gi,m=>(/^S/.test(m)?'S':'s')+(/(os|ofones)$/i.test(m)?'axofones':'axofón')).replace(/\s+/g,' ').trim();
+function fijaIns(path,el){const v=canonIns(el.value);if(v!==el.value)el.value=v;setP(path,v,1)}
 const conPista=b=>b.formato=='karaoke'||b.formato=='playalong';
 const conEnlace=b=>conPista(b)||b.formato=='producer';
 const fmtTxt=b=>FMT[b.formato]||'—';
-const fmtPlano=b=>({karaoke:'karaoke (canta sobre un backing track)',playalong:'play-along (toca sobre un backing track)',live:'live (en vivo)',acappella:'a cappella (solo voces)',solo:'solo (instrumento sin acompañamiento)',producer:'producer (presenta su propia producción musical, creada con un programa como Logic, y la reproducimos)'})[b.formato]||'';
+const fmtPlano=b=>({karaoke:'karaoke (canta sobre un backing track)',playalong:'play-along (toca sobre un backing track)',live:'live (todo en vivo, sin grabación)',acappella:'a cappella (solo voces, sin instrumentos)',solo:'solo (una persona con su instrumento, sin acompañamiento)',producer:'producer (presenta su propia producción musical, creada con un programa como Logic, y la reproducimos)'})[b.formato]||'';
 
 /* Logo: tubos de órgano de Santa Cecilia con los bloques del logo del Infanta y un teclado como base. */
 /* Logo: saxofón (magenta del Infanta) y guitarra (oro) sobre un teclado, con los cuadraditos del logo del instituto. */
@@ -729,7 +739,12 @@ function normaliza(dt){ // compatibilidad con la primera versión (acts / tipo)
     if(d.acts){d.bloques=d.acts.map(a=>Object.assign({t:'al'},a));delete d.acts}
     if(d.tipo){d.no=d.tipo=='no';delete d.tipo}
     d.bloques=d.bloques||[];d.pres=d.pres||[];
-    d.bloques.forEach(b=>{if(!b.t)b.t='al';if(b.formato=='acapela'||b.formato=='acapella')b.formato='acappella';if(!b.id)b.id=uid();
+    if(d.no&&d.motivo==null)d.motivo='';
+    d.bloques.forEach(b=>{if(!b.t)b.t='al';if(!b.id)b.id=uid();
+      const insB=[...(b.alumnos||[]).map(u=>u.i||''),...(b.comp||[]).map(c=>c.instr||''),b.instr||''].join(' ');
+      if(b.formato&&b.formato!='playback'&&!FMT[b.formato])b.formato=normFmt(b.formato,insB)||b.formato;
+      (b.rep||[]).forEach(r=>{if(r.formato&&!FMT[r.formato])r.formato=normFmt(r.formato,insB)});
+      (b.alumnos||[]).forEach(u=>{if(u.i)u.i=canonIns(u.i)});(b.comp||[]).forEach(c=>{if(c.instr)c.instr=canonIns(c.instr)});if(b.instr)b.instr=canonIns(b.instr);
       if(b.t=='al'&&(b.formato=='playback'||b.formato=='acappella'||!FMT[b.formato])){ // de «playback / a cappella» a los formatos nuevos
         const ins=[...(b.alumnos||[]).map(u=>u.i||''),b.instr||''].join(' ').toLowerCase(),voz=/voz|voces|cant|vocal/.test(ins),otro=/piano|guitarr|sax|flaut|viol|tromp|clar|bajo|bater|ukel|tecl|chelo|cello|oboe|tromb|bombard|fagot|acorde|caj/.test(ins);
         if(b.formato=='playback'||!FMT[b.formato])b.formato=voz?'karaoke':'playalong';
@@ -930,7 +945,7 @@ function vPrograma(){
       <span class="dots">${x.no?'':tipos.map(t=>`<i class="dot ${t}"></i>`).join('')}</span>
       <span class="dn">${DIAS[k]}</span><span class="dd">${f.getDate()}</span>
       ${nom?`<span class="dc">${esc(nom)}</span>`:''}
-      <span class="dm">${x.no?'Sin concierto':`${x.bloques.length} ${x.bloques.length==1?'bloque':'bloques'} · ${dur(minutos(x))}`}</span></button>`}).join('');
+      <span class="dm">${x.no?esc(sinTxt(x)):`${x.bloques.length} ${x.bloques.length==1?'bloque':'bloques'} · ${dur(minutos(x))}`}</span></button>`}).join('');
   const blacks=[1,2,3,4].map(k=>`<span class="blk" style="left:calc(10px + (100% - 20px) * ${k}/5)"></span>`).join('');
   const pct=Math.min(100,m/util*100),cls=m>util?'er':m>util-3?'wn':'';
   const presOk=d.pres.filter(p=>p.n.trim());
@@ -942,7 +957,7 @@ function vPrograma(){
   <div class="leyenda"><span><i class="dot al"></i>Alumnos</span><span><i class="dot pr"></i>Profesores</span><span><i class="dot gr"></i>Grupo o coro</span><span><i class="dot in"></i>Artista invitado</span><span class="mu">· Arrastra un día, una tarjeta o un presentador sobre otro día para moverlo</span><span style="margin-left:auto;gap:4px">${NIVORD.map(k=>`<span class="nv nv-${k}">${NIV[k]}</span>`).join('')}</span></div>
   <section class="dia">
    <span class="df"><b>${esc(may(fLarga(fechaDia(E,i))))}</b> · ${esc(D().hora)} · ${esc(D().lugar)}</span>
-   ${d.no?'<span class="dno">Sin concierto</span>':`<span class="dbar barra ${cls}" title="Tiempo previsto"><i style="width:${pct}%"></i></span><span class="dt ${cls}"><b>${dur(m)}</b> de ${util} min${m>util?' · ¡te pasas!':''}</span>`}
+   ${d.no?`<span class="dno">${esc(sinTxt(d))}</span>`:`<span class="dbar barra ${cls}" title="Tiempo previsto"><i style="width:${pct}%"></i></span><span class="dt ${cls}"><b>${dur(m)}</b> de ${util} min${m>util?' · ¡te pasas!':''}</span>`}
    <button class="btn g" title="Editar el día" aria-expanded="${!!S.diaEd}" onclick="S.diaEd=!S.diaEd;render()">${ICO.edit}</button>
    ${d.no?'':`<div class="drow">${presChip}${mont.length?`<button class="mini" aria-expanded="${!!S.montaje}" onclick="S.montaje=!S.montaje;render()">${ICO.plug}Montaje (${mont.length})</button>`:''}</div>`}
    ${S.montaje&&mont.length&&!d.no?`<ul class="mont">${mont.map(b=>`<li><b>${esc(tituloB(b))}:</b> ${esc(b.obs)}</li>`).join('')}</ul>`:''}
@@ -958,6 +973,7 @@ function vPrograma(){
     <label class="f">Título del concierto<input type="text" value="${esc(d.titulo)}" oninput="setP('dias.${i}.titulo',this.value)"></label>
     <label class="f">Nombre que sale en la tecla <span class="sm">(opcional)</span><input type="text" value="${esc(d.sub)}" placeholder="Ej.: Concierto de alumnos, Infanta Rockets" oninput="setP('dias.${i}.sub',this.value)" onchange="render()"></label></div>
     <div class="row" style="justify-content:space-between;margin-top:10px"><div class="row"><label class="chk"><input type="checkbox" ${d.no?'checked':''} onchange="setP('dias.${i}.no',this.checked,1)">Este día no hay concierto</label>
+     ${d.no?`<input type="text" style="width:220px" value="${esc(d.motivo||'')}" placeholder="Motivo: huelga, excursión…" oninput="setP('dias.${i}.motivo',this.value)" onchange="render()" aria-label="Motivo">`:''}
      <select style="width:auto" aria-label="Mover este día a otro" onchange="if(this.value!=='')confirmaInter(${i},+this.value)"><option value="">Mover este día a…</option>${DIAS.map((n,j)=>j!=i?`<option value="${j}">${n} ${fechaDia(E,j).getDate()}</option>`:'').join('')}</select></div>
      <button class="btn p" onclick="S.diaEd=false;render()">${ICO.check}Listo</button></div></div>`:''}
   </section>
@@ -969,7 +985,7 @@ function vPrograma(){
    <button class="btn" onclick="addB(${i},nuevoGr())">${ICO.plus}Grupo</button>
    <button class="btn" onclick="addB(${i},nuevoGr(1))">${ICO.plus}Coro</button>
    <button class="btn" onclick="addB(${i},nuevoIn())">${ICO.plus}Artista invitado</button></div>`}
-  <datalist id="cursos">${Object.values(NIV).map(v=>`<option value="${v}">`).join('')}</datalist><datalist id="instrs">${['Voz','Piano','Guitarra','Guitarra eléctrica','Bajo','Batería','Ukelele','Violín','Flauta travesera','Flauta dulce','Saxo alto','Saxo tenor','Trompeta','Clarinete','Teclado'].map(v=>`<option value="${v}">`).join('')}</datalist>`;
+  <datalist id="cursos">${Object.values(NIV).map(v=>`<option value="${v}">`).join('')}</datalist><datalist id="instrs">${['Voz','Piano','Guitarra','Guitarra eléctrica','Bajo','Batería','Ukelele','Violín','Flauta travesera','Flauta dulce','Saxofón soprano','Saxofón alto','Saxofón tenor','Saxofón barítono','Trompeta','Clarinete','Teclado'].map(v=>`<option value="${v}">`).join('')}</datalist>`;
 }
 const RE_TIT=/^\s*concierto del (lunes|martes|miércoles|miercoles|jueves|viernes)\s*$/i;
 function nombreDia(d){if(d.no)return '';if(d.sub&&d.sub.trim())return d.sub.trim();return d.titulo&&!RE_TIT.test(d.titulo)?d.titulo:''}
@@ -1035,7 +1051,7 @@ function vRep(P,rep){
 }
 function editarBloque(b,P){
   if(b.t=='al')return `<div class="sec"><div class="sl">${ICO.users}Intérpretes</div>${b.alumnos.map((u,j)=>`<div class="alu ${esProf(u)?'esprof':''}"><input type="text" placeholder="Nombre y apellidos" value="${esc(u.n)}" oninput="setP('${P}.alumnos.${j}.n',this.value)" onchange="render()" aria-label="Intérprete ${j+1}">
-       <input type="text" placeholder="Voz, piano, guitarra…" list="instrs" value="${esc(u.i||'')}" oninput="setP('${P}.alumnos.${j}.i',this.value)" onchange="render()" aria-label="Instrumento de ${esc(u.n)||'este intérprete'}">
+       <input type="text" placeholder="Voz, piano, guitarra…" list="instrs" value="${esc(u.i||'')}" oninput="setP('${P}.alumnos.${j}.i',this.value)" onchange="fijaIns('${P}.alumnos.${j}.i',this)" aria-label="Instrumento de ${esc(u.n)||'este intérprete'}">
        ${esProf(u)?'<span class="sm mu">—</span><span><span class="nv prof">Profesor/a</span></span>':`<input type="text" placeholder="Curso" list="cursos" value="${esc(u.g)}" oninput="setP('${P}.alumnos.${j}.g',this.value)" onchange="render()" aria-label="Curso">
        <span title="Así lo entiende la app">${nvChip(u.g)||'<span class="mu sm">—</span>'}</span>`}
        <select aria-label="Papel" class="rolsel ${esProf(u)?'pr':'al'}" onchange="setP('${P}.alumnos.${j}.r',this.value=='pr'?'pr':'',1)"><option value="al" ${esProf(u)?'':'selected'}>Alumno/a</option><option value="pr" ${esProf(u)?'selected':''}>Profesor/a</option></select>
@@ -1056,7 +1072,7 @@ ${Object.keys(FMT).map(f=>`<button aria-pressed="${b.formato==f}" title="${FMT_A
        <label class="f" style="flex:1">Cantantes<input type="number" min="1" value="${esc(b.cantantes)}" oninput="setP('${P}.cantantes',this.value)"></label></div>`:'<span></span>'}</div>
      ${b.coro?'':`<div class="sl" style="margin-top:14px">${ICO.users}Músicos</div>${b.comp.map((c,j)=>`<div class="comp">
        <input type="text" placeholder="Nombre" value="${esc(c.n)}" oninput="setP('${P}.comp.${j}.n',this.value)" aria-label="Músico ${j+1}">
-       <input type="text" placeholder="Instrumento" value="${esc(c.instr)}" oninput="setP('${P}.comp.${j}.instr',this.value)" aria-label="Instrumento">
+       <input type="text" placeholder="Instrumento" value="${esc(c.instr)}" list="instrs" oninput="setP('${P}.comp.${j}.instr',this.value)" onchange="fijaIns('${P}.comp.${j}.instr',this)" aria-label="Instrumento">
        <select aria-label="Papel" class="rolsel ${c.rol}" onchange="setP('${P}.comp.${j}.rol',this.value,1)">${Object.entries(ROL).map(([v,t])=>`<option value="${v}" ${c.rol==v?'selected':''}>${t}</option>`).join('')}</select>
        ${c.rol=='al'?`<input type="text" placeholder="Curso" list="cursos" value="${esc(c.g)}" oninput="setP('${P}.comp.${j}.g',this.value)" onchange="render()" aria-label="Curso">`:'<span></span>'}
        <span class="row del" style="gap:0;flex-wrap:nowrap">${flechas(P+'.comp',j,b.comp.length)}<button class="btn g" title="Quitar" onclick="delP('${P}.comp',${j})">${ICO.del}</button></span></div>`).join('')}
@@ -1130,7 +1146,8 @@ function soltarFin(e,i){const t=S.dragT;if(!t||t.tipo!='b'||t.dia!=i)return;e.pr
   const a=D().dias[i].bloques,from=a.findIndex(b=>b.id==t.id);if(from<0)return;const [b]=a.splice(from,1);a.push(b);marcar();render()}
 function finDrag(){S.dragT=null;document.body.classList.remove('arrastrando');document.querySelectorAll('.drop,.arr,.dropb').forEach(x=>x.classList.remove('drop','arr','dropb'))}
 const vacioDia=d=>!d.no&&!d.bloques.length;
-const resumenDia=d=>d.no?'sin concierto':d.bloques.length?d.bloques.map(tituloB).join(', '):'vacío';
+const sinTxt=d=>`Sin concierto${String(d.motivo||'').trim()?` (${String(d.motivo).trim()})`:''}`;
+const resumenDia=d=>d.no?sinTxt(d).toLowerCase():d.bloques.length?d.bloques.map(tituloB).join(', '):'vacío';
 function confirmaInter(a,b){
   const ds=D().dias,A=ds[a],B=ds[b],fa=`${DIAS[a]} ${fechaDia(S.E,a).getDate()}`,fb=`${DIAS[b]} ${fechaDia(S.E,b).getDate()}`;
   modal(`<h3>¿Cambiar de día?</h3><p>Lo del <b>${fa}</b> (${esc(resumenDia(A))}) pasa al <b>${fb}</b>${vacioDia(B)?`, y el ${esc(DIAS[a])} queda en blanco.`:`, y lo del ${esc(fb)} (${esc(resumenDia(B))}) pasa al ${esc(fa)}.`}</p>
@@ -1188,14 +1205,14 @@ function vSemana(){
   const E=S.E;
   return `<div class="row" style="justify-content:space-between;margin-bottom:16px"><div><h2>La semana completa</h2><p class="mu" style="margin:0">${esc(rango(E))} · Recreo ${esc(D().hora)} · ${esc(D().lugar)}</p></div>
    <button class="btn p" onclick="imprimirSemana()">${ICO.print}Imprimir programa de la semana</button></div>
-  ${D().dias.map((d,i)=>`<section class="sday ${d.no?'off':''}"><header class="sdh"><div><span class="sdd">${esc(may(fLarga(fechaDia(E,i))))}</span><b>${d.no?'Sin concierto':esc(nombreDia(d)||d.titulo)}</b></div>
+  ${D().dias.map((d,i)=>`<section class="sday ${d.no?'off':''}"><header class="sdh"><div><span class="sdd">${esc(may(fLarga(fechaDia(E,i))))}</span><b>${d.no?esc(sinTxt(d)):esc(nombreDia(d)||d.titulo)}</b></div>
     ${d.no?'':`<span class="sdt">${dur(minutos(d))}${presTxt(d)?` · Presentan ${esc(presTxt(d))}`:''}</span>`}</header>
    ${d.no?'':d.bloques.length?`<div class="wrap"><table class="prg"><thead><tr><th>Intérprete</th><th>Curso</th><th>Instrumento</th><th>Obra</th><th class="x">Formato</th><th class="x">Observaciones</th></tr></thead><tbody>${filasPrograma(d,1)}</tbody></table></div>`:'<p class="mu" style="padding:6px 16px 14px;margin:0">Sin nada programado todavía.</p>'}
   </section>`).join('')}`;
 }
 function imprimirSemana(){ // reparte los días en folios sin partir nunca un concierto
   const E=S.E;
-  const dias=D().dias.map((d,i)=>`<div class="pday"><div class="pdh"><span>${esc(may(fLarga(fechaDia(E,i))))}</span><b>${d.no?'Sin concierto':esc(nombreDia(d)||d.titulo)}</b></div>
+  const dias=D().dias.map((d,i)=>`<div class="pday"><div class="pdh"><span>${esc(may(fLarga(fechaDia(E,i))))}</span><b>${d.no?esc(sinTxt(d)):esc(nombreDia(d)||d.titulo)}</b></div>
     ${d.no?'':d.bloques.length?`<table class="pprg"><thead><tr><th>Intérprete</th><th>Curso</th><th>Instrumento</th><th>Obra</th></tr></thead><tbody>${filasPrograma(d,0)}</tbody></table>${presTxt(d)?`<div class="ppre">Presentan: ${esc(presTxt(d))}</div>`:''}`:'<p class="ppor">Programa por confirmar</p>'}</div>`);
   const cab1=`${cabeceraPr(null)}<h1 style="margin-top:3mm">Programa de la semana</h1><div class="sub">Alumnos y profesores en concierto</div>`,cabN=cabeceraPr(null);
   const m=document.createElement('div');m.style.cssText='position:absolute;left:-10000px;top:0;width:190mm;visibility:hidden';m.className='prog';document.body.appendChild(m);
@@ -1354,15 +1371,15 @@ function imprimirDiplomas(prueba){const l=listaDiplomas();if(!l.length)return to
 /* ---------- La estética del año: colores y letra que comparten vales, diplomas y carteles ---------- */
 const ESTILOS=[
   {nombre:'Clásico de la app',c1:'#8C2643',c2:'#D9A441',c3:'#FBF3E2',font:'Bricolage Grotesque'},
-  {nombre:'Descendientes',c1:'#4B1E5F',c2:'#E2A31B',c3:'#F7EEF4',font:'Permanent Marker'},
   {nombre:'Noche de gala',c1:'#1E2A4A',c2:'#C9A54A',c3:'#F6F3EA',font:'Playfair Display'},
   {nombre:'Rock',c1:'#1B1B1F',c2:'#E0313A',c3:'#F2EFEA',font:'Anton'},
   {nombre:'Pop',c1:'#E8006A',c2:'#16A3B5',c3:'#FFF6FA',font:'Montserrat'},
-  {nombre:'Retro',c1:'#2F5D50',c2:'#E8833A',c3:'#FBF1DF',font:'Lobster'}];
+  {nombre:'Retro',c1:'#2F5D50',c2:'#E8833A',c3:'#FBF1DF',font:'Lobster'},
+  {nombre:'Urbano',c1:'#22223B',c2:'#F2C94C',c3:'#F4F4F6',font:'Bebas Neue'}];
 const est=()=>({...ESTILOS[0],...(D().estetica||{})});
 const color1Oscuro=()=>est().c1;
 const estVars=()=>{const e=est();return `--e1:${e.c1};--e2:${e.c2};--e3:${e.c3};--ef:'${e.font}'`};
-function setEst(k,v){D().estetica={...est(),[k]:v};marcar();render()}
+function setEst(k,v){D().estetica={...est(),nombre:'propia',[k]:v};marcar();render()}
 function ponEstilo(i){D().estetica={...ESTILOS[i]};marcar();render()}
 function coloresDe(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
   const W=80,H=Math.round(80*im.height/im.width),cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');c.drawImage(im,0,0,W,H);
@@ -1377,18 +1394,18 @@ function coloresDe(inp){const f=inp.files[0];if(!f)return;const r=new FileReader
   const dist=(a,b)=>Math.hypot(a.rgb[0]-b.rgb[0],a.rgb[1]-b.rgb[1],a.rgb[2]-b.rgb[2]);
   const osc=L.filter(x=>x.l<.45).sort((a,b)=>b.n-a.n)[0]||L[0],acc=L.find(x=>x!==osc&&dist(x,osc)>110&&x.l>.35)||L[1]||L[0];
   const cl=claros.length?claros.reduce((a,p)=>[a[0]+p[0],a[1]+p[1],a[2]+p[2]],[0,0,0]).map(x=>x/claros.length):[251,243,226];
-  D().estetica={...est(),nombre:'Sacada de mi imagen',c1:osc.c,c2:acc.c,c3:hex(...cl)};marcar();toast('Colores sacados de la imagen: retócalos si quieres');render()};im.src=r.result};r.readAsDataURL(f)}
+  D().estetica={...est(),nombre:'propia',c1:osc.c,c2:acc.c,c3:hex(...cl)};marcar();toast('Colores sacados de la imagen: retócalos si quieres');render()};im.src=r.result};r.readAsDataURL(f)}
 function vEstetica(){const e=est();
   return `<section class="panel estp" style="${estVars()}"><h3>La estética del año</h3>
-   <p class="sm mu" style="margin-top:0">Colores y letra de este año. Los usan los vales y diplomas de la app y, como punto de partida, el texto del cartel. Cada año puede tener la suya.</p>
-   <div class="estl">${ESTILOS.map((x,i)=>`<button class="estb ${x.nombre==e.nombre?'on':''}" onclick="ponEstilo(${i})" style="font-family:'${x.font}'"><i style="background:${x.c1}"></i><i style="background:${x.c2}"></i><i style="background:${x.c3};border:1px solid #ccc"></i>${x.nombre}</button>`).join('')}</div>
+   <p class="sm mu" style="margin-top:0">Colores y letra de este año. Los usan los vales y diplomas de la app y, como punto de partida, el texto del cartel. Parte de un estilo genérico o saca los colores del cartel del musical: lo que retoques queda como «la de este año» y no se ofrece a otros años.</p>
+   <div class="estl">${ESTILOS.some(x=>x.nombre==e.nombre)?'':`<button class="estb on" style="font-family:'${e.font}'"><i style="background:${e.c1}"></i><i style="background:${e.c2}"></i><i style="background:${e.c3};border:1px solid #ccc"></i>La de ${S.E.anio}${D().musical?` · ${esc(D().musical)}`:''}</button>`}${ESTILOS.map((x,i)=>`<button class="estb ${x.nombre==e.nombre?'on':''}" onclick="ponEstilo(${i})" style="font-family:'${x.font}'"><i style="background:${x.c1}"></i><i style="background:${x.c2}"></i><i style="background:${x.c3};border:1px solid #ccc"></i>${x.nombre}</button>`).join('')}</div>
    <div class="row" style="margin-top:12px;align-items:end">
     <label class="f">Principal<input type="color" value="${e.c1}" onchange="setEst('c1',this.value)" style="height:38px;width:70px;padding:2px"></label>
     <label class="f">Acento<input type="color" value="${e.c2}" onchange="setEst('c2',this.value)" style="height:38px;width:70px;padding:2px"></label>
     <label class="f">Fondo<input type="color" value="${e.c3}" onchange="setEst('c3',this.value)" style="height:38px;width:70px;padding:2px"></label>
     <label class="f" style="flex:1;min-width:180px">Letra de títulos<select onchange="setEst('font',this.value)">${FUENTES.map(([f,n])=>`<option value="${f}" ${e.font==f?'selected':''}>${n}</option>`).join('')}</select></label>
     <label class="btn">Sacar colores de una imagen<input type="file" accept="image/*" hidden onchange="coloresDe(this)"></label></div>
-   <div class="estprev"><div class="ep1">${logo()}</div><div><b>Recreos Musicales del INFANTA</b><span>Santa Cecilia ${S.E.anio}</span><em>VALE para un desayuno <u>gratuito</u></em></div></div></section>`;
+   <div class="estprev"><div class="ep1">${logo()}</div><div><b>Recreos Musicales del INFANTA</b><span>Santa Cecilia ${S.E.anio}</span><em>VALE de ${euros(valeCfg().importe)} para tu desayuno</em></div></div></section>`;
 }
 /* ---------- Vale con hueco: la app escribe el nombre en tu diseño ---------- */
 const CFGV={top:62,bot:84,mar:12,size:60,color:'#2A1018',font:'Bricolage Grotesque',dia:true,halo:false};
@@ -1439,7 +1456,7 @@ const cursoCartel=u=>{if(esProf(u))return 'Prof.';const p=curso(u.g);if(!p)retur
 const nomG=b=>String(b.nombre||'').trim();
 const musicosG=b=>(b.comp||[]).filter(x=>x.n.trim()).map(x=>`${corto(nomL(x.n))}${limpiaIns(x.instr)?` (${limpiaIns(x.instr).toLowerCase()})`:''}`).join(' · ');
 const tituloG=b=>nomG(b)||(b.comp||[]).filter(x=>x.n.trim()).map(x=>corto(nomL(x.n))).join(' & ')||'Grupo';
-const limpiaIns=t=>{t=String(t||'').replace(/\s*(?:\+|\bcon\b|\by\b)?\s*(?:play[\s-]?along|play[\s-]?back|backing\s*track|karaoke)\b/gi,'').replace(/\s+/g,' ').trim();if(/^(voces|voz|vocal|canto|cantante)$/i.test(t))t='voz';return t?t.charAt(0).toUpperCase()+t.slice(1).toLowerCase():''};
+const limpiaIns=t=>{t=canonIns(t);if(/^(voces|voz|vocal|canto|cantante)$/i.test(t))t='voz';return t?t.charAt(0).toUpperCase()+t.slice(1).toLowerCase():''};
 const plural=(t,n)=>n>1&&/^voz$/i.test(t)?'Voces':t;
 const nomL=n=>String(n||'').replace(/\s+/g,' ').trim();
 const lineaU=(u,ins)=>`${nomL(u.n)}${cursoCartel(u)?` (${cursoCartel(u)})`:''}${ins?` ${ins}`:''}`;
@@ -1671,7 +1688,7 @@ function listaBloques(d){return d.bloques.map((b,k)=>{
 function historialConceptos(){return S.eds.filter(e=>e!==S.E&&(e.datos.concepto||e.datos.musical)).sort((a,b)=>a.anio-b.anio)
   .map(e=>`- ${e.anio}${e.datos.musical?` (temática: ${e.datos.musical})`:''}: ${e.datos.concepto||'sin descripción'}`).join('\n')}
 const corto=n=>{const t=String(n||'').trim().split(/\s+/);return t.length>=3?t.slice(0,-1).join(' '):t.join(' ')};
-const FMT_G={karaoke:'canta sobre una pista grabada',playalong:'toca sobre una pista grabada',live:'en directo',acappella:'a cappella',solo:'instrumento solo, sin acompañamiento',producer:'presenta su propia producción musical'};
+const FMT_G={karaoke:'canta sobre un backing track',playalong:'toca sobre un backing track',live:'en directo',acappella:'a cappella, solo voces',solo:'una persona con su instrumento, sin acompañamiento',producer:'presenta su propia producción musical'};
 function listaGuion(d){return d.bloques.map((b,k)=>{
   const rep=(b.rep||[]).filter(r=>r.obra).map(r=>`«${limpiaTit(r.obra)}»${r.autor?` (${r.autor})`:''}${r.formato?` [${FMT_G[r.formato]}]`:''}`).join(', ');
   if(b.t=='al'){const p=b.alumnos.filter(u=>u.n.trim()).map(u=>`${corto(u.n)}${esProf(u)?' (profesor)':u.g?` (${fmtCurso(u.g).replace(/ [A-H]$/,'')})`:''}${limpiaIns(u.i)?`, ${limpiaIns(u.i).toLowerCase()}`:''}${!esProf(u)&&vez(u.n)>1?` [repite: su ${vez(u.n)}.ª Santa Cecilia]`:''}`).join('; ');
@@ -1766,7 +1783,7 @@ function vIA(){
   return `<h2 style="margin-top:34px">Musical, cartel y encargos para la IA</h2><p class="mu" style="margin:0 0 18px">La app prepara el encargo con los datos de la semana. Lo copias, lo pegas en la IA y guardas el resultado en tu carpeta de Drive.</p>
   <div class="grid2" style="grid-template-columns:minmax(260px,1fr) 2fr">
    <section class="panel"><h3>La temática de este curso</h3>
-    <label class="f">Temática<input type="text" value="${esc(D().musical)}" placeholder="Ej.: musical Descendientes, centenario de Mozart" oninput="setP('musical',this.value);actualizaPrompt()"></label>
+    <label class="f">Temática<input type="text" value="${esc(D().musical)}" placeholder="Ej.: el musical de este año, centenario de Mozart" oninput="setP('musical',this.value);actualizaPrompt()"></label>
     <label class="f" style="margin-top:10px">Símbolos para el guiño<textarea style="min-height:70px" oninput="setP('guinos',this.value);actualizaPrompt()" placeholder="Objetos, colores o motivos reconocibles">${esc(D().guinos)}</textarea></label>
     <label class="f" style="margin-top:10px">Tus ideas para el cartel<textarea style="min-height:70px" oninput="setP('ideas',this.value);actualizaPrompt()">${esc(D().ideas)}</textarea></label>
     <label class="f" style="margin-top:10px">Cartel definitivo de este año, en una frase<textarea style="min-height:70px" oninput="setP('concepto',this.value)" placeholder="Qué se ve y dónde va el guiño. Sirve para no repetirlo el año que viene.">${esc(D().concepto)}</textarea></label></section>
@@ -1798,7 +1815,7 @@ function apariciones(){ // todas las ediciones
   })}));return r;
 }
 const SING={voces:'voz',flautas:'flauta',guitarras:'guitarra',saxos:'saxofón',saxofones:'saxofón',saxo:'saxofón',trompetas:'trompeta',violines:'violín',pianos:'piano',teclados:'teclado'};
-function instrumentos(t){return String(t||'').split(/,|\/|&|\+|\by\b/i).map(x=>x.replace(/\(.*?\)/g,'').trim().toLowerCase()).filter(Boolean)
+function instrumentos(t){return canonIns(t).split(/,|\/|&|\+|\by\b/i).map(x=>x.replace(/\(.*?\)/g,'').trim().toLowerCase()).filter(Boolean)
   .map(x=>{const w=x.split(' ');w[0]=SING[w[0]]||w[0];return w.join(' ').replace(/^saxofón (alto|tenor|soprano|barítono)s?$/,'saxofón $1')}).map(may)}
 function cuenta(arr){const m=new Map();arr.forEach(([k,label])=>{const o=m.get(k)||{label,n:0};o.n++;m.set(k,o)});return[...m.values()].sort((a,b)=>b.n-a.n)}
 function barras(lista,max,cls){max=max||Math.max(1,...lista.map(x=>x.n));return lista.map(x=>`<div class="hb"><span>${x.label}</span><span class="b"><i class="${cls||''}" style="width:${x.n/max*100}%"></i></span><span class="n">${x.n}</span></div>`).join('')||'<p class="mu sm">Sin datos todavía.</p>'}
@@ -1817,7 +1834,9 @@ function vStats(){
   const cur=porCurso.find(p=>p.y==S.E.anio)||{c:{}};const maxC=Math.max(1,...NIVORD.map(k=>cur.c[k]||0));
   const tabla=`<div class="wrap"><table class="sem"><thead><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr></thead><tbody>
     ${porCurso.map(p=>`<tr><td><b>${p.y}</b></td>${NIVORD.map(k=>`<td>${p.c[k]||''}</td>`).join('')}<td>${p.c['?']||''}</td><td><b>${new Set(pr.filter(a=>a.anio==p.y).map(a=>idP(a.n))).size||''}</b></td></tr>`).join('')}</tbody></table></div>`;
-  const ins=cuenta(A.filter(a=>a.rol!='in').flatMap(a=>instrumentos(a.instr).map(i=>[clave(i),i]))).slice(0,10);
+  const vozDe=a=>{let f=a.b.t=='al'?a.b.formato:'';if(a.b.t=='gr'){const c={};(a.b.rep||[]).forEach(r=>r.formato&&(c[r.formato]=(c[r.formato]||0)+1));f=Object.keys(c).sort((x,y)=>c[y]-c[x])[0]||'live'}
+    return f=='karaoke'||f=='playalong'?'karaoke':f=='acappella'||f=='solo'?'<em>a cappella</em>':'live'};
+  const ins=cuenta(A.filter(a=>a.rol!='in').flatMap(a=>instrumentos(a.instr).map(i=>i=='Voz'?`Voz (${vozDe(a)})`:i).map(i=>[clave(i),i]))).slice(0,10);
   const top=x=>{const m=new Map();x.forEach(a=>{const k=idP(a.n);const o=m.get(k)||{label:a.n,n:0,y:new Set()};o.n++;o.y.add(a.anio);if(a.n.length>o.label.length)o.label=a.n;m.set(k,o)});
     return[...m.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size).slice(0,10).map(o=>({label:`${esc(o.label)} <span class="mu sm">(${[...o.y].sort().join(', ')})</span>`,n:o.n}))};
   const vets=[...new Map(alumnosDe(S.E).map(a=>[idP(a.n),a])).values()].map(a=>({n:a.n,v:vez(a.n)})).filter(x=>x.v>1).sort((a,b)=>b.v-a.v);
@@ -1859,7 +1878,7 @@ function vHistorial(){
    <button class="btn p" onclick="nuevaEd()">${ICO.plus}Nueva edición</button></div></div>
   <div class="hist">${S.eds.map(e=>`<article class="panel ${e===S.E?'cur':''}"><span class="yr">${e.anio}</span>
     <b>${esc(e.datos.musical?'Temática: '+e.datos.musical:'Sin temática anotada')}</b>
-    <span class="sm mu">${e.datos.dias.reduce((s,d)=>s+(d.no?0:d.bloques.length),0)} bloques · ${new Set(alumnosDe(e).map(a=>clave(a.n))).size} alumnos</span>
+    <span class="sm mu">${e.datos.dias.reduce((s,d)=>s+(d.no?0:d.bloques.length),0)} bloques · ${new Set(alumnosDe(e).map(a=>clave(a.n))).size} alumnos${e.datos.dias.map((d,i)=>d.no&&String(d.motivo||'').trim()?` · ${DIAS[i]}: ${esc(sinTxt(d).toLowerCase())}`:'').join('')}</span>
     ${e.datos.concepto?`<p class="sm" style="margin:0">${esc(e.datos.concepto)}</p>`:''}
     <div class="row" style="margin-top:auto">${e===S.E?'<span class="tag">Abierta</span>':`<button class="btn" onclick="cambiaEd(${e.anio});S.tab='programa';render()">Abrir</button>`}
      ${driveAnio(e)?`<a class="btn" href="${esc(driveAnio(e))}" target="_blank" rel="noopener">${ICO.drive}Carteles y programas</a>`:'<span class="sm mu">Sin carpeta de Drive</span>'}${e.datos.driveVales?`<a class="btn" href="${esc(e.datos.driveVales)}" target="_blank" rel="noopener">${ICO.drive}Vales</a>`:''}
