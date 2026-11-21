@@ -61,7 +61,7 @@ h3{font:700 18px/1.2 var(--disp);margin:0 0 8px}
 .mu{color:var(--mu)}
 .sm{font-size:14px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:18px}
 .panel{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:18px}
 .panel+.panel{margin-top:18px}
 .grid2>.panel{margin:0}
@@ -127,7 +127,7 @@ body.arrastrando .key{outline:2px dashed color-mix(in srgb,var(--mag) 40%,transp
 .cprev canvas{width:100%;height:auto;max-height:400px;object-fit:contain;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.15);display:block}
 .cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px 14px}
 .bh.tog{cursor:pointer}
-.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.grid4>.panel{margin:0}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:18px}.grid4>.panel{margin:0}
 .dudas{margin-bottom:18px;border-color:color-mix(in srgb,var(--oro) 60%,var(--ln));background:color-mix(in srgb,var(--oro) 8%,var(--sf))}
 .duda{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--ln)}
 .duda .btn.sm{font-size:13px;padding:5px 10px}
@@ -305,7 +305,7 @@ pre.enc{white-space:pre-wrap;font:12.5px/1.45 var(--txt);background:color-mix(in
 .vrow em{font-style:normal;font-size:12px;color:var(--mu);margin-left:6px}.vrow.off{opacity:.5}
 .vct{display:inline-flex;align-items:center;gap:8px}.vct .btn.sm{padding:3px 10px;font-size:15px}.vct b{min-width:16px;text-align:center}
 .leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin:-16px 0 18px}
-.leyenda span{display:inline-flex;align-items:center;gap:6px}
+.leyenda span{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;max-width:100%}
 @media (prefers-reduced-motion:reduce){.key{transition:none}}
 
 .dia{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:10px 12px 10px 16px;margin-bottom:16px}
@@ -419,6 +419,7 @@ table.sem th{font:700 14px var(--disp);color:var(--mu)}
 .wrap{overflow-x:auto}
 
 .ia textarea{min-height:240px;font-size:14px}
+.grid2.gia{grid-template-columns:minmax(260px,1fr) 2fr}@media (max-width:760px){.grid2.gia{grid-template-columns:minmax(0,1fr)}}
 .hist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
 .hist .panel{margin:0;display:flex;flex-direction:column;gap:8px}
 .hist .yr{font:800 40px/1 var(--disp);color:var(--acc)}
@@ -436,6 +437,44 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 .hb .b i{display:block;height:100%;background:var(--telon);border-radius:7px}
 .hb .b i.o{background:var(--oro)}
 .hb .n{text-align:right;font-weight:700}
+.sthead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}.sthead h2{margin:0 0 2px}
+.grid3s{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:18px}.grid3s>.panel,.grid2s>.panel{margin:0}
+.grid2s{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:18px;margin-top:18px}
+@media (max-width:820px){.grid2s{grid-template-columns:1fr}}
+.lnk{background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;text-decoration:underline dotted color-mix(in srgb,var(--mu) 60%,transparent);text-underline-offset:3px}
+.lnk:hover{color:var(--acc)}
+.podio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:end;margin:4px 0 14px}
+.pz{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit;text-align:center;min-width:0}
+.pz b{font:700 14px/1.2 var(--disp);overflow-wrap:anywhere}
+.pz i{display:block;width:100%;border-radius:10px 10px 0 0;background:color-mix(in srgb,var(--telon) 22%,var(--sf));border:1px solid color-mix(in srgb,var(--telon) 30%,var(--ln));border-bottom:0}
+.pz.p1 i{background:color-mix(in srgb,var(--oro) 55%,var(--sf))}.pz.p2 i{background:color-mix(in srgb,#B8BEC6 60%,var(--sf))}.pz.p3 i{background:color-mix(in srgb,#C98A55 50%,var(--sf))}
+.pz .md{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font:800 15px var(--disp);color:#fff;background:#B8962E}
+.pz.p2 .md{background:#8E959E}.pz.p3 .md{background:#A86A3A}
+.pz:hover b{color:var(--acc)}
+table.honor{border-collapse:collapse;width:100%;font-size:14px}
+table.honor th{font:700 13px var(--disp);color:var(--mu);padding:4px 6px;text-align:center}
+table.honor td{padding:5px 6px;border-top:1px solid var(--ln);text-align:center;white-space:nowrap}
+table.honor td:first-child{text-align:left;white-space:normal}
+table.honor .sel{background:color-mix(in srgb,var(--oro) 14%,transparent)}
+.pt{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid color-mix(in srgb,var(--mu) 45%,transparent)}
+.pt.on{background:var(--telon);border-color:var(--telon)}
+:root[data-theme="dark"] .pt.on{background:var(--oro);border-color:var(--oro)}
+.recs{display:grid;gap:10px}
+.rec{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:12px;background:color-mix(in srgb,var(--oro) 10%,var(--sf));border:1px solid color-mix(in srgb,var(--oro) 30%,var(--ln))}
+.rec .ri{flex:0 0 auto;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--telon);color:#fff}.rec .ri svg{width:17px;height:17px}
+.rec div div{font-size:15px}
+table.calor td{text-align:center;font-weight:700}
+table.calor .sel{box-shadow:inset 0 0 0 2px var(--oro)}
+ul.fl{margin:0;padding-left:18px;max-height:220px;overflow:auto}ul.fl li{margin:2px 0}
+.memo h4{font:800 11pt var(--disp);color:#8C2643;margin:4mm 0 1.5mm}
+.memo .mbig{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin:3mm 0}
+.memo .mbig div{border:1px solid #D9C6CE;border-radius:2mm;padding:2mm 3mm}.memo .mbig b{display:block;font:800 16pt var(--disp);color:#8C2643}.memo .mbig span{font-size:8.5pt;color:#555}
+.memo .mcol{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;font-size:9pt}
+.memo .mcol p{margin:0 0 1.5mm}.memo em{color:#777;font-style:normal}
+.memo ol.mm{margin:0;padding-left:5mm}.memo ol.mm li{margin:0 0 .8mm}
+.memo table.mt{border-collapse:collapse;font-size:8.5pt;width:100%}.memo table.mt td,.memo table.mt th{border-bottom:1px solid #E5DADF;padding:1mm 1.5mm;text-align:left}
+.memo table.mh td,.memo table.mh th{text-align:center}.memo table.mh td:first-child{text-align:left}
+.memo table.mt i{display:inline-block;width:2.6mm;height:2.6mm;border-radius:50%;margin-right:1.5mm;vertical-align:-.3mm}
 .cols{display:flex;align-items:flex-end;gap:10px;height:170px;padding-top:10px}
 .cols .c{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;font-size:12px}
 .cols .c i{display:block;width:100%;max-width:46px;background:var(--telon);border-radius:6px 6px 0 0;min-height:2px}
@@ -466,6 +505,48 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 }
 
 /* Impresión */
+/* Barra de cristal */
+.vidrio{position:fixed;top:0;left:0;right:0;z-index:30;padding:env(safe-area-inset-top) clamp(14px,4vw,32px) 0;
+  background:color-mix(in srgb,var(--telon) 84%,transparent);-webkit-backdrop-filter:saturate(1.6) blur(16px);backdrop-filter:saturate(1.6) blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.14);box-shadow:0 6px 20px rgba(0,0,0,.14);transform:translateY(-110%);opacity:0;visibility:hidden;transition:transform .28s ease,opacity .28s ease,visibility 0s .28s}
+.vidrio.ver{transform:none;opacity:1;visibility:visible;transition:transform .28s ease,opacity .28s ease}
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){.vidrio{background:var(--telon)}}
+.vidrio .bin{max-width:1480px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.vidrio .bano{font:700 13px var(--disp);color:var(--oro);white-space:nowrap}
+.vidrio nav.tabs{margin:0;flex:1;min-width:0}
+.vidrio nav.tabs button{padding:11px 12px;border-radius:9px;margin:5px 0;color:#fff}
+.vidrio nav.tabs button[aria-current="page"]{background:rgba(255,255,255,.16);color:#fff}
+@media (max-width:600px){.vidrio .bano{display:none}}
+@media (prefers-reduced-motion:no-preference){
+  /* Cambio de año: fundido de colores */
+  ::view-transition-old(root),::view-transition-new(root){animation-duration:.38s}
+  /* Detalles al tocar */
+  .btn{transition:transform .12s ease,border-color .15s,background-color .15s,box-shadow .15s}
+  .btn:active:not(:disabled){transform:scale(.97)}
+  .big>div,.imp>.panel,.rec{transition:transform .18s ease,box-shadow .18s ease}
+  .blq{transition:box-shadow .18s ease}
+  @media (hover:hover){
+    .big>div:hover,.imp>.panel:hover,.rec:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(60,10,30,.12)}
+    .blq:hover{box-shadow:0 6px 20px rgba(60,10,30,.10)}
+    :root[data-theme="dark"] .big>div:hover,:root[data-theme="dark"] .imp>.panel:hover,:root[data-theme="dark"] .rec:hover{box-shadow:0 8px 22px rgba(0,0,0,.45)}
+  }
+  /* Estadísticas que se animan al entrar */
+  .stv.anim .big>div,.stv.anim .panel{animation:stIn .5s cubic-bezier(.2,.8,.2,1) backwards}
+  .stv.anim .big>div:nth-child(2){animation-delay:.04s}.stv.anim .big>div:nth-child(3){animation-delay:.08s}.stv.anim .big>div:nth-child(4){animation-delay:.12s}
+  .stv.anim .big>div:nth-child(5){animation-delay:.16s}.stv.anim .big>div:nth-child(6){animation-delay:.2s}.stv.anim .big>div:nth-child(n+7){animation-delay:.24s}
+  .stv.anim .hb .b i{animation:stX .9s .2s cubic-bezier(.2,.8,.2,1) backwards;transform-origin:left center}
+  .stv.anim .pz i{animation:stY .7s .25s cubic-bezier(.3,1.3,.5,1) backwards;transform-origin:bottom}
+  .stv.anim .pz.p2 i{animation-delay:.4s}.stv.anim .pz.p3 i{animation-delay:.55s}
+  .stv.anim .pz .md{animation:stP .45s .6s cubic-bezier(.3,1.5,.5,1) backwards}
+  .stv.anim .gbars span{animation:stY .8s .25s cubic-bezier(.2,.8,.2,1) backwards;transform-origin:bottom}
+  .stv.anim .dn svg{animation:stR .9s .15s cubic-bezier(.2,.8,.2,1) backwards}
+  .stv.anim .pt.on{animation:stP .4s .3s backwards}
+  @keyframes stIn{from{opacity:0;transform:translateY(12px)}}
+  @keyframes stX{from{transform:scaleX(0)}}
+  @keyframes stY{from{transform:scaleY(0)}}
+  @keyframes stR{from{opacity:0;transform:rotate(-90deg) scale(.85)}}
+  @keyframes stP{from{transform:scale(0)}}
+}
 #print{display:none}
 @media print{
   body{background:#fff}
@@ -865,7 +946,9 @@ async function init(){
 /* ---------- Pintado general ---------- */
 const TABS=[['programa','Programa'],['semana','Semana'],['imprimir','Imprimir'],['stats','Estadísticas'],['historial','Historial'],['ajustes','Ajustes']];
 function render(){
-  const y=window.scrollY,dark=temaActual()=='dark';
+  aplicaTema();const y=window.scrollY,dark=temaActual()=='dark';
+  S._entra=S.tab=='stats'&&(S._tabAnt!=='stats'||S._yAnt!==S.statY); // las estadísticas se animan al entrar o al cambiar de año, no en cada repintado
+  const pestanas=TABS.map(([k,t])=>`<button ${S.tab==k?'aria-current="page"':''} onclick="limpiaVacios();S.edit.clear();S.tab='${k}';render();window.scrollTo(0,0)">${t}</button>`).join('');
   $('#app').innerHTML=`<header class="top">
    <div class="brand">${logo(0,1)}<div><h1>${NOMBRE}</h1><p>Departamento de Música · Santa Cecilia ${S.E.anio}</p><span class="by">by Manuel Esteve</span></div>
     <span class="sp"></span>
@@ -874,9 +957,12 @@ function render(){
      <span class="est" id="est">${esc(S.estado)}</span>
      <button class="tema" onclick="cambiaTema()" aria-label="${dark?'Cambiar a modo claro':'Cambiar a modo oscuro'}">${dark?SOL+'<span>Claro</span>':LUNA+'<span>Oscuro</span>'}</button></div>
    </div>
-   <nav class="tabs">${TABS.map(([k,t])=>`<button ${S.tab==k?'aria-current="page"':''} onclick="limpiaVacios();S.edit.clear();S.tab='${k}';render();scrollTo(0,0)">${t}</button>`).join('')}</nav>
-  </header><main>${({programa:vPrograma,semana:vSemana,imprimir:vImprimir,ia:vIA,stats:vStats,historial:vHistorial,ajustes:vAjustes})[S.tab]()}</main>`;
+   <nav class="tabs">${pestanas}</nav>
+  </header>
+  <div class="vidrio" id="vidrio"><div class="bin"><span class="bano">${S.E.anio}${S.E.datos.musical?` · ${esc(S.E.datos.musical)}`:''}</span><nav class="tabs" aria-label="Pestañas">${pestanas}</nav></div></div><main>${({programa:vPrograma,semana:vSemana,imprimir:vImprimir,ia:vIA,stats:vStats,historial:vHistorial,ajustes:vAjustes})[S.tab]()}</main>`;
   if(S.tab=='programa')scrollTo(0,y);
+  if(S._entra&&mov())requestAnimationFrame(cuentaNumeros);
+  S._tabAnt=S.tab;S._yAnt=S.statY;miraBarra();
   if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir'){pintaCartel();if(S.vFull)pintaVale()}
 }
 function carpetaEd(a){const e=S.eds.find(x=>x.anio==a);
@@ -887,7 +973,15 @@ async function guardaCarpeta(a){const e=S.eds.find(x=>x.anio==a),v=$('#cdrv').va
   if(v&&!/^https?:\/\//.test(v))return toast('Pega el enlace completo, empezando por https://',1);
   e.datos.drive=v;cerrar();S.ver++;await guardar(e);toast(v?`Carpeta de ${a} guardada`:`Carpeta de ${a} quitada`);render()}
 function abreEd(a){cambiaEd(a);toast(`Ahora trabajas en ${a}${S.E.datos.musical?' · '+S.E.datos.musical:''}`)}
-function cambiaEd(a){limpiaVacios();S.edit.clear();S.E=S.eds.find(e=>e.anio==a);S.dia=0;render()}
+function cambiaEd(a,tab){const e=S.eds.find(x=>x.anio==a);if(!e)return;limpiaVacios();S.edit.clear();S.E=e;S.dia=0;if(tab)S.tab=tab;conFundido(render);if(tab)scrollTo(0,0)}
+const mov=()=>{try{return !matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return true}};
+function conFundido(f){if(document.startViewTransition&&mov()){try{const t=document.startViewTransition(f);[t.ready,t.finished,t.updateCallbackDone].forEach(p=>p&&p.catch(()=>{}));return}catch(e){}}f()}
+/* Barra de cristal: aparece al bajar, cuando la cabecera ya no se ve */
+function miraBarra(){const b=$('#vidrio'),h=document.querySelector('header.top');if(!b||!h)return;b.classList.toggle('ver',h.getBoundingClientRect().bottom<0)}
+window.addEventListener('scroll',miraBarra,{passive:true});
+/* Los números grandes de las estadísticas cuentan hacia arriba */
+function cuentaNumeros(){document.querySelectorAll('.stv.anim .big b').forEach(el=>{const v=Number(el.textContent);if(!Number.isFinite(v)||v<2)return;
+  const t0=performance.now();el.textContent='0';const paso=t=>{const k=Math.min(1,(t-t0)/750);el.textContent=String(k>=1?v:Math.round(v*(1-Math.pow(1-k,3))));if(k<1)requestAnimationFrame(paso)};requestAnimationFrame(paso)})}
 
 /* ---------- Veteranos e identidad: el mismo alumno escrito de varias formas ---------- */
 const clave=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
@@ -1241,10 +1335,10 @@ function imprimir(html,orient){
   const imgs=[...$('#print').querySelectorAll('img')];
   Promise.all(imgs.map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r}))).then(()=>setTimeout(()=>window.print(),150));
 }
-function cabeceraPr(dIdx,derecha){ // como el cartel de pendientes: logo del instituto a la izquierda y el departamento a la derecha
+function cabeceraPr(dIdx,derecha,cursoTxt){ // como el cartel de pendientes: logo del instituto a la izquierda y el departamento a la derecha
   const E=S.E,lugar=`Recreo ${esc(D().hora)} · ${esc(D().lugar)}`;
   const d=derecha!=null?derecha:dIdx==null?`<b>${esc(rango(E).replace(/ de \d{4}$/,''))}</b><br>${lugar}`:`<b>${esc(may(fLarga(fechaDia(E,dIdx))))}</b><br>${lugar}`;
-  return `<div class="pr-h"><img src="${LOGO_IES}" alt="IES Infanta Elena"><span class="sp"></span><div class="r"><b>Departamento de Música</b><span>Curso ${esc(D().curso)}</span></div></div>
+  return `<div class="pr-h"><img src="${LOGO_IES}" alt="IES Infanta Elena"><span class="sp"></span><div class="r"><b>Departamento de Música</b><span>${esc(cursoTxt||'Curso '+D().curso)}</span></div></div>
    <div class="pr-t">${logo()}<div class="t"><b>${NOMBRE}</b><span>Semana de Santa Cecilia</span></div><div class="d">${d}</div></div>`;
 }
 function hojaApuntes(){
@@ -1406,6 +1500,7 @@ function coloresDe(inp){const f=inp.files[0];if(!f)return;const r=new FileReader
   D().estetica={...est(),nombre:'propia',c1:osc.c,c2:acc.c,c3:hex(...cl)};marcar();toast('Colores sacados de la imagen: retócalos si quieres');render()};im.src=r.result};r.readAsDataURL(f)}
 function vEstetica(){const e=est();
   return `<section class="panel estp" style="${estVars()}"><h3>La estética del año</h3>
+   <label class="opc" style="margin:0 0 10px"><input type="checkbox" ${temaOn()?'checked':''} onchange="fijaTemaAnio(this.checked)"><span>Vestir la app con los colores de cada año<br><small>Al cambiar de año, la cabecera y los botones toman su color. Si dos años se parecen, la app elige otro de sus colores.</small></span></label>
    <p class="sm mu" style="margin-top:0">Colores y letra de este año. Los usan los vales y diplomas de la app y, como punto de partida, el texto del cartel. Parte de un estilo genérico o saca los colores del cartel del musical: lo que retoques queda como «la de este año» y no se ofrece a otros años.</p>
    <div class="estl">${ESTILOS.some(x=>x.nombre==e.nombre)?'':`<button class="estb on" style="font-family:'${e.font}'"><i style="background:${e.c1}"></i><i style="background:${e.c2}"></i><i style="background:${e.c3};border:1px solid #ccc"></i>La de ${S.E.anio}${D().musical?` · ${esc(D().musical)}`:''}</button>`}${ESTILOS.map((x,i)=>`<button class="estb ${x.nombre==e.nombre?'on':''}" onclick="ponEstilo(${i})" style="font-family:'${x.font}'"><i style="background:${x.c1}"></i><i style="background:${x.c2}"></i><i style="background:${x.c3};border:1px solid #ccc"></i>${x.nombre}</button>`).join('')}</div>
    <div class="row" style="margin-top:12px;align-items:end">
@@ -1790,7 +1885,7 @@ function vIA(){
   const T=[['guion','Guion de presentadores'],['programa','Texto del programa'],['cartel','Cartel'],['hueco','Modelo con hueco'],['vales','Vales a juego'],['diploma','Diploma']];
   const imagen=['cartel','hueco','vales','diploma'].includes(S.iaTipo);
   return `<h2 style="margin-top:34px">Musical, cartel y encargos para la IA</h2><p class="mu" style="margin:0 0 18px">La app prepara el encargo con los datos de la semana. Lo copias, lo pegas en la IA y guardas el resultado en tu carpeta de Drive.</p>
-  <div class="grid2" style="grid-template-columns:minmax(260px,1fr) 2fr">
+  <div class="grid2 gia">
    <section class="panel"><h3>La temática de este curso</h3>
     <label class="f">Temática<input type="text" value="${esc(D().musical)}" placeholder="Ej.: el musical de este año, centenario de Mozart" oninput="setP('musical',this.value);actualizaPrompt()"></label>
     <label class="f" style="margin-top:10px">Símbolos para el guiño<textarea style="min-height:70px" oninput="setP('guinos',this.value);actualizaPrompt()" placeholder="Objetos, colores o motivos reconocibles">${esc(D().guinos)}</textarea></label>
@@ -1814,9 +1909,9 @@ function vIA(){
 }
 
 /* ---------- Estadísticas ---------- */
-function apariciones(){ // todas las ediciones
-  const r=[];S.eds.forEach(e=>(e.datos.dias||[]).forEach((d,i)=>{if(d.no)return;d.bloques.forEach(b=>{
-    const base={anio:e.anio,b};
+function apariciones(eds){ // todas las ediciones, o las que se pidan
+  const r=[];(eds||S.eds).forEach(e=>(e.datos.dias||[]).forEach((d,i)=>{if(d.no)return;d.bloques.forEach(b=>{
+    const base={anio:e.anio,dia:i,b};
     if(b.t=='al')b.alumnos.forEach(u=>u.n.trim()&&r.push({...base,rol:esProf(u)?'pr':'al',n:u.n.trim(),g:u.g,instr:u.i||b.instr}));
     if(b.t=='gr'){if(b.coro){if(b.director)r.push({...base,rol:'pr',n:b.director,instr:'Dirección de coro'})}
       else b.comp.forEach(c=>c.n.trim()&&r.push({...base,rol:c.rol,n:c.n.trim(),g:c.g,instr:c.instr}))}
@@ -1824,61 +1919,193 @@ function apariciones(){ // todas las ediciones
   })}));return r;
 }
 const SING={voces:'voz',flautas:'flauta',guitarras:'guitarra',saxos:'saxofón',saxofones:'saxofón',saxo:'saxofón',trompetas:'trompeta',violines:'violín',pianos:'piano',teclados:'teclado'};
-function instrumentos(t){return canonIns(t).split(/,|\/|&|\+|\by\b/i).map(x=>x.replace(/\(.*?\)/g,'').trim().toLowerCase()).filter(Boolean)
+function instrumentos(t){t=canonIns(t).replace(/saxof[oó]n(?:es)?\s+((?:(?:soprano|alto|tenor|bar[ií]tono)\s*(?:,|\by\b)?\s*)+)/gi,(m,l)=>l.split(/,|\by\b/).map(x=>x.trim()).filter(Boolean).map(x=>'saxofón '+x).join(', ')).replace(/\b(el[eé]ctric|ac[uú]stic)[oa]s\b/gi,'$1o');
+  return t.split(/,|\/|&|\+|\by\b/i).map(x=>x.replace(/\(.*?\)/g,'').trim().toLowerCase()).filter(Boolean)
   .map(x=>{const w=x.split(' ');w[0]=SING[w[0]]||w[0];return w.join(' ').replace(/^saxofón (alto|tenor|soprano|barítono)s?$/,'saxofón $1')}).map(may)}
 function cuenta(arr){const m=new Map();arr.forEach(([k,label])=>{const o=m.get(k)||{label,n:0};o.n++;m.set(k,o)});return[...m.values()].sort((a,b)=>b.n-a.n)}
 function barras(lista,max,cls){max=max||Math.max(1,...lista.map(x=>x.n));return lista.map(x=>`<div class="hb"><span>${x.label}</span><span class="b"><i class="${cls||''}" style="width:${x.n/max*100}%"></i></span><span class="n">${x.n}</span></div>`).join('')||'<p class="mu sm">Sin datos todavía.</p>'}
 function vStats(){
-  const A=apariciones(),años=[...new Set(S.eds.map(e=>e.anio))].sort(),P=personas();
-  const al=A.filter(a=>a.rol=='al'),pr=A.filter(a=>a.rol=='pr'),inv=A.filter(a=>a.rol=='in');
-  const distintos=x=>new Set(x.map(a=>idP(a.n))).size;
-  const blqAl=S.eds.flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques.filter(b=>b.t=='al')));
-  const COLF={karaoke:'#E8006A',playalong:'#3B6E99',live:'#13806E',acappella:'#8C2643',solo:'#D9A441',producer:'#8A7F86'};
-  const repF=S.eds.flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques.filter(b=>b.t!='al').flatMap(b=>b.rep||[])));
-  const fmts=Object.keys(FMT).map(f=>({label:f=='acappella'?'<em>a cappella</em>':FMT[f],n:blqAl.filter(b=>b.formato==f).length+repF.filter(r=>r.formato==f).length,c:COLF[f]}));
-  const blqT=S.eds.flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques));
-  const cats=[['al','Alumnos','#E8006A'],['pr','Profesores','#13806E'],['gr','Grupos y coros','#3B6E99'],['in','Artistas invitados','#D9A441']].map(([k,l,c])=>({label:l,c,n:blqT.filter(b=>catB(b)==k).length}));
-  const porAnio=años.map(y=>({al:new Set(al.filter(a=>a.anio==y).map(a=>idP(a.n))).size,pr:new Set(pr.filter(a=>a.anio==y).map(a=>idP(a.n))).size,ac:S.eds.filter(e=>e.anio==y).flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques)).length}));
-  const porCurso=años.map(y=>{const c={};al.filter(a=>a.anio==y).forEach(a=>{const p=curso(a.g);const k=p?p.niv:'?';c[k]=(c[k]||0)+1});return{y,c}});
-  const cur=porCurso.find(p=>p.y==S.E.anio)||{c:{}};const maxC=Math.max(1,...NIVORD.map(k=>cur.c[k]||0));
-  const tabla=`<div class="wrap"><table class="sem"><thead><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr></thead><tbody>
-    ${porCurso.map(p=>`<tr><td><b>${p.y}</b></td>${NIVORD.map(k=>`<td>${p.c[k]||''}</td>`).join('')}<td>${p.c['?']||''}</td><td><b>${new Set(pr.filter(a=>a.anio==p.y).map(a=>idP(a.n))).size||''}</b></td></tr>`).join('')}</tbody></table></div>`;
+  const todos=S.eds.map(e=>e.anio).sort((a,b)=>a-b);
+  if(S.statY!=='todos'&&!todos.includes(S.statY))S.statY='todos';
+  const Y=S.statY,uno=Y!=='todos',EDS=uno?S.eds.filter(e=>e.anio==Y):S.eds;
+  const A=apariciones(EDS),AT=apariciones(),P=personas();
+  const mus=A.filter(a=>a.rol!='in'),al=A.filter(a=>a.rol=='al'),pr=A.filter(a=>a.rol=='pr'),inv=A.filter(a=>a.rol=='in');
+  const ids=x=>new Set(x.map(a=>idP(a.n)));
+  const blq=EDS.flatMap(e=>e.datos.dias.flatMap((d,i)=>d.no?[]:d.bloques.map(b=>({b,anio:e.anio,dia:i}))));
+  const minutos=blq.reduce((s,x)=>s+minB(x.b),0);
+  const obras=obrasDe(EDS),obrK=new Map();obras.forEach(o=>{const v=obrK.get(o.k)||{label:o.o,n:0,y:new Set()};v.n++;v.y.add(o.anio);obrK.set(o.k,v)});
+  const nombreP=new Map();AT.forEach(a=>{const k=idP(a.n);if(!nombreP.has(k)||a.n.length>nombreP.get(k).length)nombreP.set(k,a.n)});
+  const nomP=k=>nombreP.get(k)||k;
+  // años en que ha tocado cada persona (siempre con todas las ediciones)
+  const vida=new Map();AT.filter(a=>a.rol!='in').forEach(a=>{const k=idP(a.n);const v=vida.get(k)||{k,y:new Set(),n:0,rol:a.rol};v.y.add(a.anio);v.n++;if(a.rol=='pr')v.rol='pr';vida.set(k,v)});
+  const antes=y=>new Set(AT.filter(a=>a.anio<y&&a.rol!='in').map(a=>idP(a.n)));
+  let nuevas=0,repiten=0;
+  if(uno){const prev=antes(Y);ids(mus).forEach(k=>prev.has(k)?repiten++:nuevas++)}else repiten=[...vida.values()].filter(v=>v.y.size>1).length;
+  // B. cabecera
+  const big=[...(uno?[]:[[todos.length,'ediciones']]),[ids(al).size,'alumnos'],[ids(pr).size,'profesores'],[blq.length,'actuaciones'],
+    [minutos,'minutos de música'],[obrK.size,'obras distintas'],...(uno?[[nuevas,'caras nuevas'],[repiten,'repiten de otros años']]:[[repiten,'músicos que repiten']])];
+  // D. podios
+  const ranking=x=>{const m=new Map();x.forEach(a=>{const k=idP(a.n);const o=m.get(k)||{k,n:0,y:new Set()};o.n++;o.y.add(a.anio);m.set(k,o)});
+    return[...m.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size||nomP(a.k).localeCompare(nomP(b.k)))};
+  const podio=(lista,cls)=>{if(!lista.length)return '<p class="mu sm">Sin datos todavía.</p>';const t=lista.slice(0,3),r=lista.slice(3,10),mx=lista[0].n;
+    const pz=(o,i)=>o?`<button class="pz p${i+1}" onclick="fichaMusico(${jsA(nomP(o.k))})"><span class="md">${i+1}</span><b>${esc(nomP(o.k))}</b><span class="mu sm">${o.n} ${o.n==1?'vez':'veces'}</span><i style="height:${[78,58,44][i]}px"></i></button>`:'<span></span>';
+    return `<div class="podio">${pz(t[1],1)}${pz(t[0],0)}${pz(t[2],2)}</div>${r.map(o=>`<div class="hb"><button class="lnk" onclick="fichaMusico(${jsA(nomP(o.k))})">${esc(nomP(o.k))}</button><span class="b"><i class="${cls||''}" style="width:${o.n/mx*100}%"></i></span><span class="n">${o.n}</span></div>`).join('')}`};
+  // C. cuadro de honor
+  const honor=[...vida.values()].filter(v=>v.y.size>1).sort((a,b)=>b.y.size-a.y.size||b.n-a.n||nomP(a.k).localeCompare(nomP(b.k)));
+  const honorV=S.honorTodo?honor:honor.slice(0,12);
+  const cuadro=honor.length?`<div class="wrap"><table class="honor"><thead><tr><th></th>${todos.map(y=>`<th class="${y==Y?'sel':''}">${y}</th>`).join('')}<th></th></tr></thead><tbody>
+    ${honorV.map(v=>`<tr><td><button class="lnk" onclick="fichaMusico(${jsA(nomP(v.k))})">${esc(nomP(v.k))}</button> <span class="nv ${v.rol=='pr'?'prof':''}">${v.rol=='pr'?'Profe':'Alumno/a'}</span></td>${todos.map(y=>`<td class="${y==Y?'sel':''}"><span class="pt ${v.y.has(y)?'on':''}" title="${y}"></span></td>`).join('')}<td><b>${v.y.size}</b> años</td></tr>`).join('')}</tbody></table></div>
+    ${honor.length>12?`<button class="btn g sm" style="margin-top:8px" onclick="S.honorTodo=!S.honorTodo;render()">${S.honorTodo?'Ver menos':`Ver los ${honor.length}`}</button>`:''}`
+    :'<p class="mu sm">Todavía nadie ha tocado en dos ediciones distintas.</p>';
+  // E. récords
+  const recs=[];
+  const larga=blq.slice().sort((a,b)=>minB(b.b)-minB(a.b))[0];if(larga&&minB(larga.b))recs.push(['clock','La actuación más larga',`${esc(tituloB(larga.b))}: <b>${minB(larga.b)} min</b>`,`${DIAS[larga.dia]} de ${larga.anio}`]);
+  const obMax=[...obrK.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size)[0];if(obMax&&obMax.n>1)recs.push(['music','La obra que más suena',`«${esc(obMax.label)}»: <b>${obMax.n} veces</b>`,[...obMax.y].sort().join(', ')]);
+  const insP=new Map();mus.forEach(a=>{const k=idP(a.n);const s=insP.get(k)||new Set();instrumentos(a.instr).forEach(i=>s.add(i));insP.set(k,s)});
+  insP.forEach(s=>{if(s.has('Saxofón')&&[...s].some(i=>/^Saxofón ./.test(i)))s.delete('Saxofón')});
+  const poli=[...insP.entries()].sort((a,b)=>b[1].size-a[1].size)[0];if(poli&&poli[1].size>1)recs.push(['music','El músico más polifacético',`${esc(nomP(poli[0]))}: <b>${poli[1].size} instrumentos</b>`,[...poli[1]].join(', ').toLowerCase()]);
+  const porDia=new Map();mus.forEach(a=>{const k=a.anio+'|'+a.dia;const s=porDia.get(k)||new Set();s.add(idP(a.n));porDia.set(k,s)});
+  const dMax=[...porDia.entries()].sort((a,b)=>b[1].size-a[1].size)[0];if(dMax){const[y,d]=dMax[0].split('|');recs.push(['users','El día con más gente en el escenario',`<b>${dMax[1].size} músicos</b>`,`${DIAS[d]} de ${y}`])}
+  const juntos=blq.filter(x=>{const r=new Set(apariciones([{anio:x.anio,datos:{dias:[{bloques:[x.b]}]}}]).map(a=>a.rol));return r.has('al')&&r.has('pr')}).length;
+  if(juntos)recs.push(['users','Profes y alumnos juntos',`<b>${juntos} ${juntos==1?'actuación':'actuaciones'}</b>`,'en las que comparten escenario']);
+  const fiel=honor[0];if(fiel)recs.push(['check','Récord de constancia',`${esc(nomP(fiel.k))}: <b>${fiel.y.size} años</b>`,[...fiel.y].sort().join(', ')]);
+  const records=recs.length?`<div class="recs">${recs.map(([ic,t,v,s])=>`<div class="rec"><span class="ri">${ICO[ic]}</span><div><span class="mu sm">${t}</span><div>${v}</div><span class="mu sm">${s}</span></div></div>`).join('')}</div>`:'<p class="mu sm">Sin datos todavía.</p>';
+  // F. familias de instrumentos
+  const fam=FAMS.map(([l,c])=>({label:l,c,n:0}));mus.forEach(a=>instrumentos(a.instr).forEach(i=>{fam[famDe(i)].n++}));
+  // instrumentos, autores, obras repetidas
   const vozDe=a=>{let f=a.b.t=='al'?a.b.formato:'';if(a.b.t=='gr'){const c={};(a.b.rep||[]).forEach(r=>r.formato&&(c[r.formato]=(c[r.formato]||0)+1));f=Object.keys(c).sort((x,y)=>c[y]-c[x])[0]||'live'}
     return f=='karaoke'||f=='playalong'?'karaoke':f=='acappella'||f=='solo'?'<em>a cappella</em>':'live'};
-  const ins=cuenta(A.filter(a=>a.rol!='in').flatMap(a=>instrumentos(a.instr).map(i=>i=='Voz'?`Voz (${vozDe(a)})`:i).map(i=>[clave(i),i]))).slice(0,10);
-  const top=x=>{const m=new Map();x.forEach(a=>{const k=idP(a.n);const o=m.get(k)||{label:a.n,n:0,y:new Set()};o.n++;o.y.add(a.anio);if(a.n.length>o.label.length)o.label=a.n;m.set(k,o)});
-    return[...m.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size).slice(0,10).map(o=>({label:`${esc(o.label)} <span class="mu sm">(${[...o.y].sort().join(', ')})</span>`,n:o.n}))};
-  const vets=[...new Map(alumnosDe(S.E).map(a=>[idP(a.n),a])).values()].map(a=>({n:a.n,v:vez(a.n)})).filter(x=>x.v>1).sort((a,b)=>b.v-a.v);
-  const obras=S.eds.flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques.flatMap(b=>b.t=='al'?[{o:b.obra,a:b.autor}]:b.rep.map(r=>({o:limpiaTit(r.obra),a:r.autor})))));
-  const aut=cuenta(obras.filter(x=>x.a&&!/original/i.test(x.a)).map(x=>[clave(x.a),esc(x.a)])).slice(0,10);
-  const obr=cuenta(obras.filter(x=>x.o).map(x=>[clave(x.o),esc(x.o)])).filter(x=>x.n>1).slice(0,10);
+  const ins=cuenta(mus.flatMap(a=>instrumentos(a.instr).map(i=>i=='Voz'?`Voz (${vozDe(a)})`:i).map(i=>[clave(i),i]))).slice(0,10);
+  const aut=cuenta(obras.flatMap(o=>autores(o.a)).map(x=>[x.k,esc(x.l)])).slice(0,10);
+  const autV=aut.length&&aut[0].n>1?aut.filter(x=>x.n>1):aut;
+  const obr=[...obrK.values()].filter(x=>x.n>1).sort((a,b)=>b.n-a.n).slice(0,10).map(x=>({label:`${esc(x.label)} <span class="mu sm">(${[...x.y].sort().join(', ')})</span>`,n:x.n}));
+  // formatos y tamaño de las actuaciones
+  const COLF={karaoke:'#E8006A',playalong:'#3B6E99',live:'#13806E',acappella:'#8C2643',solo:'#D9A441',producer:'#8A7F86'};
+  const fmtN={};blq.forEach(({b})=>{if(b.t=='al'){if(b.formato)fmtN[b.formato]=(fmtN[b.formato]||0)+1}else(b.rep||[]).forEach(r=>{if(r.formato)fmtN[r.formato]=(fmtN[r.formato]||0)+1})});
+  const fmts=Object.keys(FMT).map(f=>({label:f=='acappella'?'<em>a cappella</em>':FMT[f],n:fmtN[f]||0,c:COLF[f]})).filter(x=>x.n);
+  const TAM=[['Solistas','#E8006A'],['Dúos','#3B6E99'],['Tríos y cuartetos','#13806E'],['Grupos de 5 o más','#D9A441'],['Coros','#8C2643'],['Artistas invitados','#8A7F86']];
+  const tam=TAM.map(([l,c])=>({label:l,c,n:0}));blq.forEach(({b})=>{if(b.t=='in')return tam[5].n++;if(b.t=='gr'&&b.coro)return tam[4].n++;
+    const n=(b.t=='al'?b.alumnos.filter(u=>u.n.trim()):b.comp.filter(c=>c.n.trim())).length;tam[n<=1?0:n==2?1:n<=4?2:3].n++});
+  // año a año y mapa de calor (siempre con todos los años)
+  const ATal=AT.filter(a=>a.rol=='al'),ATpr=AT.filter(a=>a.rol=='pr');
+  const porAnio=todos.map(y=>({al:ids(ATal.filter(a=>a.anio==y)).size,pr:ids(ATpr.filter(a=>a.anio==y)).size,ac:S.eds.filter(e=>e.anio==y).flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques)).length}));
+  const porCurso=todos.map(y=>{const c={},vis=new Set();ATal.filter(a=>a.anio==y).forEach(a=>{const id=idP(a.n);if(vis.has(id))return;vis.add(id);const p=curso(a.g);const k=p?p.niv:'?';c[k]=(c[k]||0)+1});return{y,c}});
+  const maxH=Math.max(1,...porCurso.flatMap(p=>NIVORD.map(k=>p.c[k]||0)));
+  const celda=(v,y)=>{const f=v?.18+.82*v/maxH:0;return `<td class="${y==Y?'sel':''}" style="${v?`background:color-mix(in srgb,var(--telon) ${Math.round(f*100)}%,var(--sf));${f>.55?'color:#fff;':''}`:''}">${v||''}</td>`};
+  const calor=`<div class="wrap"><table class="sem calor"><thead><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr></thead><tbody>
+    ${porCurso.map((p,i)=>`<tr><td class="${p.y==Y?'sel':''}"><b>${p.y}</b></td>${NIVORD.map(k=>celda(p.c[k]||0,p.y)).join('')}<td class="${p.y==Y?'sel':''}">${p.c['?']||''}</td><td class="${p.y==Y?'sel':''}"><b>${porAnio[i].pr||''}</b></td></tr>`).join('')}</tbody></table></div>
+    <p class="sm mu" style="margin:8px 0 0">Cada alumno cuenta una vez por año. Cuanto más oscuro, más alumnos de ese curso.</p>`;
   const dudas=P.dudas.slice(0,12).map(([a,b])=>{const na=P.nom.get(a),nb=P.nom.get(b),j=x=>JSON.stringify(x).replace(/"/g,'&quot;');
     return `<div class="duda"><span><b>${esc(na)}</b> <span class="mu">y</span> <b>${esc(nb)}</b></span><span class="row" style="gap:6px">
      <button class="btn sm" onclick="unificar(${j(na)},${j(nb)})">Misma persona: «${esc(nb)}»</button>
      <button class="btn sm" onclick="unificar(${j(nb)},${j(na)})">Misma persona: «${esc(na)}»</button>
      <button class="btn g sm" onclick="distintas(${j(a)},${j(b)})">Son distintas</button></span></div>`}).join('');
-  return `<h2>Estadísticas</h2><p class="mu" style="margin:0 0 18px">Con todas las ediciones guardadas (${años.join(', ')}). Cuenta cada vez que alguien sube al escenario.</p>
-  <div class="big"><div><b>${años.length}</b><span>ediciones</span></div><div><b>${distintos(al)}</b><span>alumnos</span></div><div><b>${distintos(pr)}</b><span>profesores</span></div>
-   <div><b>${distintos(inv)}</b><span>artistas invitados</span></div><div><b>${blqAl.length}</b><span>actuaciones de alumnos y profesores</span></div></div>
+  S._memoria={Y,todos,big,ranking:{al:ranking(al),pr:ranking(pr)},nomP,honor,recs,fam,ins,aut:autV,obr,fmts,tam,porCurso,porAnio};
+  return `<div class="stv${S._entra&&mov()?' anim':''}"><div class="sthead"><div><h2>Estadísticas</h2><p class="mu" style="margin:0">${uno?`Solo la edición de ${Y}${D0(Y).musical?` · ${esc(D0(Y).musical)}`:''}.`:`Todas las ediciones (${todos.join(', ')}).`} Toca un nombre para ver su ficha.</p></div>
+   <div class="row"><div class="seg" role="group" aria-label="Años">${['todos',...todos].map(y=>`<button aria-pressed="${Y===y}" onclick="S.statY=${y==='todos'?"'todos'":y};render()">${y==='todos'?'Todos los años':y}</button>`).join('')}</div>
+   <button class="btn" onclick="imprimeMemoria()">${ICO.print}Memoria en PDF</button></div></div>
+  <div class="big">${big.map(([v,t])=>`<div><b>${v}</b><span>${t}</span></div>`).join('')}</div>
   ${dudas?`<section class="panel dudas"><h3>¿Es la misma persona?</h3><p class="sm mu" style="margin-top:0">Nombres parecidos que la app no se atreve a juntar sola. Elige cómo quieres que se llame: se corrige en todos los años y cuenta para los veteranos.</p>${dudas}</section>`:''}
-  <div class="grid4">
-   <section class="panel"><h3>Los alumnos que más tocan</h3>${barras(top(al))}</section>
-   <section class="panel"><h3>Los profesores que más tocan</h3>${barras(top(pr),0,'o')}</section>
-   <section class="panel"><h3>Autores más interpretados</h3>${barras(aut)}</section>
-   <section class="panel"><h3>Instrumentos que más suenan</h3>${barras(ins)}</section>
+  <div class="grid3s">
+   <section class="panel"><h3>Los alumnos que más tocan</h3>${podio(ranking(al))}</section>
+   <section class="panel"><h3>Los profesores que más tocan</h3>${podio(ranking(pr),'o')}</section>
+   <section class="panel"><h3>Récords y curiosidades</h3>${records}</section>
+  </div>
+  <div class="grid2s">
+   <section class="panel"><h3>Cuadro de honor</h3><p class="sm mu" style="margin-top:0">Alumnos y profesores que han tocado en más de una Santa Cecilia. Un punto por cada año.</p>${cuadro}</section>
+   <section class="panel"><h3>Familias de instrumentos</h3>${donut(fam.filter(x=>x.n),'veces')}</section>
   </div>
   <div class="grid4" style="margin-top:18px">
-   <section class="panel"><h3>Alumnos por curso en ${S.E.anio}</h3><div class="cols">${NIVORD.map(k=>`<div class="c"><b>${cur.c[k]||0}</b><i style="height:${(cur.c[k]||0)/maxC*120}px"></i><span>${NIV[k]}</span></div>`).join('')}</div></section>
-   <section class="panel"><h3>Veteranos de este año</h3>${vets.length?vets.map(v=>`<div class="hb"><span>${esc(v.n)}</span><span class="b"><i class="o" style="width:${Math.min(100,v.v/Math.max(...vets.map(x=>x.v))*100)}%"></i></span><span class="n">${v.v}.ª</span></div>`).join(''):'<p class="mu sm">Nadie repite todavía de años anteriores.</p>'}</section>
+   <section class="panel"><h3>Instrumentos que más suenan</h3>${barras(ins)}</section>
+   <section class="panel"><h3>Autores más interpretados</h3>${aut.length?barras(autV):'<p class="mu sm">Sin datos todavía.</p>'}</section>
    <section class="panel"><h3>Obras que se repiten</h3>${obr.length?barras(obr,0,'o'):'<p class="mu sm">Ninguna obra se ha repetido todavía.</p>'}</section>
   </div>
   <div class="grid4" style="margin-top:18px">
-   <section class="panel"><h3>Cómo suenan</h3>${donut(fmts,'actuaciones')}</section>
-   <section class="panel"><h3>Quién sube al escenario</h3>${donut(cats,'bloques')}</section>
-   <section class="panel"><h3>Año a año</h3>${columnas([{label:'Alumnos',c:'#E8006A',v:porAnio.map(x=>x.al)},{label:'Profesores',c:'#13806E',v:porAnio.map(x=>x.pr)},{label:'Actuaciones',c:'#D9A441',v:porAnio.map(x=>x.ac)}],años)}</section>
+   <section class="panel"><h3>Cómo suenan</h3>${donut(fmts,'obras')}</section>
+   <section class="panel"><h3>Cómo salen al escenario</h3>${donut(tam.filter(x=>x.n),'actuaciones')}</section>
+   <section class="panel"><h3>Año a año</h3>${columnas([{label:'Alumnos',c:'#E8006A',v:porAnio.map(x=>x.al)},{label:'Profesores',c:'#13806E',v:porAnio.map(x=>x.pr)},{label:'Actuaciones',c:'#D9A441',v:porAnio.map(x=>x.ac)}],todos)}</section>
   </div>
-  <section class="panel" style="margin-top:18px"><h3>Por curso, año a año</h3>${tabla}</section>`;
+  <section class="panel" style="margin-top:18px"><h3>Alumnos por curso, año a año</h3>${calor}</section></div>`;
 }
+const D0=y=>(S.eds.find(e=>e.anio==y)||S.E).datos;
+const jsA=x=>JSON.stringify(String(x)).replace(/"/g,'&quot;');
+/* Familias de instrumentos */
+const FAMS=[['Voz','#E8006A',/^(voz|coro|canto|cantante)/],['Viento madera','#13806E',/^(flauta|clarinete|saxof|oboe|fagot|requinto|dulzaina|gaita|corno ingl)/],
+  ['Viento metal','#D9A441',/^(trompeta|tromb|trompa|tuba|bombardino|fliscorno|corneta)/],['Cuerda','#3B6E99',/^(guitarra|bajo|viol|chelo|contrabajo|ukelele|bandurria|la[uú]d|arpa)/],
+  ['Teclado','#8C2643',/^(piano|teclado|[oó]rgano|sintetizador|acorde[oó]n)/],['Percusión','#7A5BA6',/^(bater|percus|caj[oó]n|xil|marimba|timbal|bombo|pandero|vibr)/],['Otros','#8A7F86',/./]];
+const famDe=i=>FAMS.findIndex(f=>f[2].test(String(i).toLowerCase()));
+/* Obras de unas ediciones: los popurrís «A / B» cuentan como dos obras */
+const claveObra=t=>clave(String(t||'').replace(/\(.*?\)|«|»|"|“|”/g,' ')).replace(/[^\p{L}\p{N} ]/gu,'').replace(/\s+/g,' ').trim();
+function obrasDe(eds){const r=[];eds.forEach(e=>e.datos.dias.forEach((d,i)=>{if(d.no)return;d.bloques.forEach(b=>{
+  const pon=(o,a)=>String(o||'').split(/\s+\/\s+/).forEach(x=>{x=limpiaTit(x).trim();if(x&&claveObra(x))r.push({o:x,a,k:claveObra(x),anio:e.anio,dia:i,b})});
+  if(b.t=='al')pon(b.obra,b.autor);else(b.rep||[]).forEach(x=>pon(x.obra,x.autor))})}));return r}
+/* Autores: «Keane / Sia» o «Milo J y Trueno» son dos; «versión de», paréntesis y obras originales o tradicionales no cuentan */
+const AUT_JUNTOS=/^(fito y (los )?fitipaldis|simon (y|&) garfunkel|hombres g|estopa|los del r[ií]o|ella baila sola|celtas cortos|amaral)$/i;
+const AUT_NO=/^(obra )?original$|tradicional|popular|an[oó]nimo|est[aá]ndar|desconocid|propia|improvisa/i;
+function autores(a){a=String(a||'').replace(/\(.*?\)|«.*?»|".*?"/g,' ').replace(/\b(versi[oó]n|arreglo|arr\.|adaptaci[oó]n)\s*(de\s+)?/gi,'|');
+  return a.split(/\s*(?:\/|,|&|\||;|\bfeat\.?|\bft\.?|\s+x\s+|\s+con\s+)\s*/i).flatMap(p=>{p=p.trim();return AUT_JUNTOS.test(p)?[p]:p.split(/\s+y\s+/i)})
+    .map(p=>p.replace(/\s+/g,' ').trim()).filter(p=>p&&!AUT_NO.test(p)).map(l=>({l:l.replace(/\.$/,''),k:clave(l).replace(/\./g,'').replace(/\s+/g,' ').trim()}))}
+/* H. Ficha de un músico */
+function fichaMusico(n){const k=idP(n),A=apariciones().filter(a=>idP(a.n)==k);if(!A.length)return;
+  const nom=A.reduce((m,a)=>a.n.length>m.length?a.n:m,''),años=[...new Set(A.map(a=>a.anio))].sort();
+  const ins=[...new Set(A.flatMap(a=>instrumentos(a.instr)))];
+  const obras=A.flatMap(a=>(a.b.t=='al'?[a.b.obra]:(a.b.rep||[]).map(r=>r.obra)).filter(Boolean).map(o=>({o:limpiaTit(o),anio:a.anio,dia:a.dia})));
+  const comp=new Map();A.forEach(a=>apariciones([{anio:a.anio,datos:{dias:[{bloques:[a.b]}]}}]).forEach(x=>{const kx=idP(x.n);if(kx!=k){const v=comp.get(kx)||{n:x.n,c:0};v.c++;if(x.n.length>v.n.length)v.n=x.n;comp.set(kx,v)}}));
+  const cps=[...comp.values()].sort((a,b)=>b.c-a.c).slice(0,8);
+  const rol=A.some(a=>a.rol=='pr')?'Profesor/a':A.some(a=>a.rol=='in')?'Artista invitado':'Alumno/a';
+  const cursos=años.map(y=>{const a=A.find(x=>x.anio==y&&x.g);return a?`${y}: ${fmtCurso(a.g)}`:''}).filter(Boolean);
+  modal(`<h3 style="margin-bottom:2px">${esc(nom)}</h3><p class="sm mu" style="margin-top:0">${rol} · ${años.length} ${años.length==1?'edición':'ediciones'} (${años.join(', ')})${cursos.length?` · ${esc(cursos.join(' · '))}`:''}</p>
+   ${ins.length?`<p style="margin:6px 0"><b>Instrumentos:</b> ${esc(ins.join(', '))}</p>`:''}
+   <p style="margin:10px 0 4px"><b>Lo que ha tocado</b></p><ul class="fl">${obras.map(o=>`<li>«${esc(o.o)}» <span class="mu sm">${DIAS[o.dia]} de ${o.anio}</span></li>`).join('')||'<li class="mu">Sin obras anotadas</li>'}</ul>
+   ${cps.length?`<p style="margin:10px 0 4px"><b>Ha tocado con</b></p><p style="margin:0">${cps.map(c=>`<button class="lnk" onclick="fichaMusico(${jsA(c.n)})">${esc(c.n)}</button>${c.c>1?` <span class="mu sm">×${c.c}</span>`:''}`).join(' · ')}</p>`:''}
+   <div class="row" style="margin-top:14px"><button class="btn p" onclick="cerrar()">Cerrar</button></div>`)}
+/* I. Memoria del departamento en PDF */
+function imprimeMemoria(){const m=S._memoria;if(!m)return;
+  const lista=(x,f)=>x.length?`<ol class="mm">${x.slice(0,10).map(o=>`<li>${f(o)}</li>`).join('')}</ol>`:'<p>—</p>';
+  const dn=x=>x.length?`<table class="mt">${x.map(o=>`<tr><td><i style="background:${o.c}"></i>${o.label}</td><td>${o.n}</td></tr>`).join('')}</table>`:'<p>—</p>';
+  const tit=m.Y==='todos'?`Estadísticas de ${m.todos[0]} a ${m.todos.at(-1)}`:`Estadísticas de ${m.Y}${D0(m.Y).musical?` · ${esc(D0(m.Y).musical)}`:''}`;
+  const cur=m.Y==='todos'?`Cursos ${D0(m.todos[0]).curso} a ${D0(m.todos.at(-1)).curso}`:`Curso ${D0(m.Y).curso}`;
+  imprimir(`<div class="pg memo">${cabeceraPr(null,`<b>${tit}</b><br>Memoria del departamento`,cur)}
+   <div class="mbig">${m.big.map(([v,t])=>`<div><b>${v}</b><span>${t}</span></div>`).join('')}</div>
+   <div class="mcol"><div><h4>Alumnos que más tocan</h4>${lista(m.ranking.al,o=>`${esc(m.nomP(o.k))} <em>${o.n}</em>`)}</div>
+    <div><h4>Profesores que más tocan</h4>${lista(m.ranking.pr,o=>`${esc(m.nomP(o.k))} <em>${o.n}</em>`)}</div>
+    <div><h4>Récords y curiosidades</h4>${m.recs.map(([,t,v,s])=>`<p><b>${t}:</b> ${v.replace(/<\/?b>/g,'')} <em>(${s})</em></p>`).join('')}</div></div>
+   <h4>Cuadro de honor</h4>${m.honor.length?`<table class="mt mh"><tr><th></th>${m.todos.map(y=>`<th>${y}</th>`).join('')}</tr>${m.honor.slice(0,16).map(v=>`<tr><td>${esc(m.nomP(v.k))}${v.rol=='pr'?' (profesor/a)':''}</td>${m.todos.map(y=>`<td>${v.y.has(y)?'●':''}</td>`).join('')}</tr>`).join('')}</table>`:'<p>Todavía nadie repite.</p>'}
+   <div class="mcol"><div><h4>Familias de instrumentos</h4>${dn(m.fam.filter(x=>x.n))}</div><div><h4>Cómo suenan</h4>${dn(m.fmts)}</div><div><h4>Cómo salen al escenario</h4>${dn(m.tam.filter(x=>x.n))}</div></div>
+   <div class="mcol"><div><h4>Instrumentos</h4>${lista(m.ins,o=>`${o.label} <em>${o.n}</em>`)}</div><div><h4>Autores</h4>${lista(m.aut,o=>`${o.label} <em>${o.n}</em>`)}</div><div><h4>Obras que se repiten</h4>${lista(m.obr,o=>`${o.label} <em>${o.n}</em>`)}</div></div>
+   <h4>Alumnos por curso y profesores, año a año</h4><table class="mt mh"><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr>${m.porCurso.map((p,i)=>`<tr><td><b>${p.y}</b></td>${NIVORD.map(k=>`<td>${p.c[k]||''}</td>`).join('')}<td>${p.c['?']||''}</td><td>${m.porAnio[i].pr||''}</td></tr>`).join('')}</table>
+  </div>`)}
+
+/* ---------- Colores del año: la app se viste un poco con la estética de cada edición ---------- */
+const hx=h=>{h=String(h||'').replace('#','');if(h.length==3)h=[...h].map(c=>c+c).join('');const n=parseInt(h,16);return isNaN(n)||h.length!=6?null:[n>>16&255,n>>8&255,n&255]};
+const aHex=c=>'#'+c.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
+const mezcla=(a,b,f)=>a.map((v,i)=>v+(b[i]-v)*f);
+const lum=c=>{const l=c.map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*l[0]+.7152*l[1]+.0722*l[2]};
+const contraste=(a,b)=>{const x=lum(a),y=lum(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+const hsl=c=>{const[r,g,b]=c.map(v=>v/255),mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn;if(!d)return[0,0,l];
+  const s=d/(1-Math.abs(2*l-1));let h=mx==r?((g-b)/d)%6:mx==g?(b-r)/d+2:(r-g)/d+4;return[(h*60+360)%360,s,l]};
+const difTono=(a,b)=>{const d=Math.abs(hsl(a)[0]-hsl(b)[0]);return Math.min(d,360-d)};
+const oscurece=(c,lmax)=>{let x=c;for(let i=0;i<20&&lum(x)>lmax;i++)x=mezcla(x,[0,0,0],.12);return x};
+const aclara=(c,fondo,min)=>{let x=c;for(let i=0;i<20&&contraste(x,fondo)<min;i++)x=mezcla(x,[255,255,255],.14);return x};
+const temaOn=()=>{try{return localStorage.getItem('rmi_tema')!=='0'}catch(e){return true}};
+function coloresAnios(){ // un color propio para cada año, distinto de los de los otros años
+  if(S._ca&&S._caV===S.ver&&S._caN===S.eds.length)return S._ca;
+  const base=hx(ESTILOS[0].c1),r={},usados=[];
+  S.eds.slice().sort((a,b)=>b.anio-a.anio).forEach(e=>{const t=e.datos.estetica;if(!t)return;
+    const cs=[t.c1,t.c2].map(hx).filter(c=>c&&hsl(c)[1]>.22&&lum(c)<.6);if(!cs.length)return;
+    const dist=c=>usados.length?Math.min(...usados.map(u=>difTono(c,u))):99;
+    const m=cs.length>1&&dist(cs[0])<35&&dist(cs[1])>dist(cs[0])?cs[1]:cs[0]; // si su color principal se parece al de otro año, usa el segundo
+    const otro=[t.c1,t.c2,t.c3].map(hx).find(c=>c&&c!==m&&difTono(c,m)>15&&hsl(c)[1]>.25)||hx(ESTILOS[0].c2);
+    usados.push(m);r[e.anio]={m,a:otro}});
+  S._ca=r;S._caV=S.ver;S._caN=S.eds.length;return r}
+function aplicaTema(){let st=$('#temaAnio');if(!st){st=document.createElement('style');st.id='temaAnio';document.head.appendChild(st)}
+  const c=S.E&&temaOn()?coloresAnios()[S.E.anio]:null;if(!c){st.textContent='';return}
+  const t=oscurece(c.m,.075),t2=mezcla(t,[0,0,0],.28),o=aclara(c.a,t,4.5),tD=mezcla(t,[0,0,0],.3),t2D=mezcla(tD,[0,0,0],.3);
+  const acD=aclara(c.a,[21,13,17],6),pap=mezcla([246,243,245],c.m,.1),papD=mezcla([18,13,16],c.m,.12),sfD=mezcla([30,25,28],c.m,.08),lnD=mezcla([60,50,56],c.m,.15);
+  const claro=`--telon:${aHex(t)};--telon2:${aHex(t2)};--oro:${aHex(o)};--oroc:${aHex(mezcla(o,[255,255,255],.72))};--acc:${aHex(t)};--papel:${aHex(pap)}`;
+  const osc=`--telon:${aHex(tD)};--telon2:${aHex(t2D)};--oro:${aHex(o)};--oroc:${aHex(mezcla(o,[20,16,18],.7))};--acc:${aHex(acD)};--papel:${aHex(papD)};--sf:${aHex(sfD)};--ln:${aHex(lnD)}`;
+  st.textContent=`:root{${claro}}:root[data-theme="dark"]{${osc}}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){${osc}}}`}
+function fijaTemaAnio(on){try{localStorage.setItem('rmi_tema',on?'1':'0')}catch(e){}render()}
 
 /* ---------- Historial ---------- */
 function vHistorial(){
@@ -1889,7 +2116,7 @@ function vHistorial(){
     <b>${esc(e.datos.musical?'Temática: '+e.datos.musical:'Sin temática anotada')}</b>
     <span class="sm mu">${e.datos.dias.reduce((s,d)=>s+(d.no?0:d.bloques.length),0)} bloques · ${new Set(alumnosDe(e).map(a=>clave(a.n))).size} alumnos${e.datos.dias.map((d,i)=>d.no&&String(d.motivo||'').trim()?` · ${DIAS[i]}: ${esc(sinTxt(d).toLowerCase())}`:'').join('')}</span>
     ${e.datos.concepto?`<p class="sm" style="margin:0">${esc(e.datos.concepto)}</p>`:''}
-    <div class="row" style="margin-top:auto">${e===S.E?'<span class="tag">Abierta</span>':`<button class="btn p" onclick="cambiaEd(${e.anio});S.tab='programa';render()">Ir a su programa</button>`}
+    <div class="row" style="margin-top:auto">${e===S.E?'<span class="tag">Abierta</span>':`<button class="btn p" onclick="cambiaEd(${e.anio},'programa')">Ir a su programa</button>`}
      ${driveAnio(e)?`<a class="btn" href="${esc(driveAnio(e))}" target="_blank" rel="noopener">${ICO.drive}Carteles y programas</a><button class="btn g sm" title="Cambiar la carpeta de Drive de ${e.anio}" onclick="carpetaEd(${e.anio})">Cambiar</button>`:`<button class="btn" onclick="carpetaEd(${e.anio})">${ICO.drive}Añadir carpeta de Drive</button>`}${e.datos.driveVales?`<a class="btn" href="${esc(e.datos.driveVales)}" target="_blank" rel="noopener">${ICO.drive}Vales</a>`:''}
      <button class="btn g" onclick="exportar(${e.anio})">Exportar</button></div></article>`).join('')}</div>
   <section class="panel" style="margin-top:22px"><h3>Copias e importación</h3>
