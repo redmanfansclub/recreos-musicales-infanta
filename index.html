@@ -475,6 +475,18 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 :root[data-theme="dark"] .nv.nal{color:#FF7DB8}
 .dn li i{box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
 .stv .sp>.dn{flex:1}
+details.rec{display:block;padding:0}details.rec>summary{list-style:none;display:flex;gap:10px;align-items:flex-start;padding:8px 10px;cursor:pointer}
+details.rec>summary::-webkit-details-marker{display:none}details.rec>summary>div{flex:1;min-width:0}
+.rec .rver{flex:0 0 auto;color:var(--mu);transition:transform .2s}.rec .rver svg{width:18px;height:18px}details.rec[open] .rver{transform:rotate(180deg)}
+.rec .sig{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:5px;font-size:13px;color:var(--mu)}.rec .sig span{display:inline-flex;align-items:center;gap:5px}
+.rec i.ps,.rfila .ps{display:inline-block;font:700 10px/20px var(--disp);font-style:normal;width:20px;height:20px;border-radius:50%;text-align:center;color:var(--mu)}
+.rec .ps.oro{background:#B8962E;color:#fff}.rec .ps.plata{background:#8E959E;color:#fff}.rec .ps.bronce{background:#A86A3A;color:#fff}
+.rlst{--lmin:0px;flex:none;max-height:220px;margin:0 10px 10px;padding-top:6px;border-top:1px dashed color-mix(in srgb,var(--pc) 30%,transparent)}
+.rfila{display:grid;grid-template-columns:24px 1fr auto;gap:8px;align-items:center;padding:3px 0;font-size:13.5px}
+.rfila b{white-space:nowrap;font-size:13px}
+table.calor th.tt,table.calor td.tt{border-left:2px solid color-mix(in srgb,var(--mu) 25%,transparent)}
+table.calor td.tt{font-size:16px}table.calor td.tal{color:#B0005A}table.calor td.tpr{color:#0E6B5C}table.calor td.tin{color:#A0700A}
+:root[data-theme="dark"] table.calor td.tal{color:#FF7DB8}:root[data-theme="dark"] table.calor td.tpr{color:#5FD3BC}:root[data-theme="dark"] table.calor td.tin{color:#F2C35B}
 .stv .rec{background:color-mix(in srgb,var(--pc) 8%,transparent);border-color:color-mix(in srgb,var(--pc) 25%,transparent)}.stv .rec .ri{background:var(--pc)}
 .busca{display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--ln);border-radius:12px;background:color-mix(in srgb,var(--sf) 70%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .busca svg{width:16px;height:16px;color:var(--mu)}.busca input{border:0;background:none;padding:9px 0;width:170px;font:inherit;color:inherit;outline:none}
@@ -2006,19 +2018,31 @@ function vStats(){
   const cuadro=honor.length?`<div class="lst honorl" onscroll="finLista(this)"><table class="honor"><thead><tr><th></th>${todos.map(y=>`<th class="${y==Y?'sel':''}">${y}</th>`).join('')}<th></th></tr></thead><tbody>
     ${honor.map(v=>`<tr><td><button class="lnk" onclick="${ficha(v.k)}">${esc(nomP(v.k))}</button> ${CHIP[v.rol]}</td>${todos.map(y=>`<td class="${y==Y?'sel':''}"><span class="pt ${v.y.has(y)?'on':''}" title="${y}"></span></td>`).join('')}<td><b>${v.y.size}</b> años</td></tr>`).join('')}</tbody></table></div>`
     :'<p class="mu sm">Todavía nadie ha tocado en dos ediciones distintas.</p>';
-  // Récords
-  const recs=[];
-  const larga=blq.slice().sort((a,b)=>minB(b.b)-minB(a.b))[0];if(larga&&minB(larga.b))recs.push(['clock','La actuación más larga',`${esc(tituloB(larga.b))}: <b>${minB(larga.b)} min</b>`,`${DIAS[larga.dia]} de ${larga.anio}`]);
-  const obMax=[...obrK.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size)[0];if(obMax&&obMax.n>1)recs.push(['music','La obra que más suena',`«${esc(obMax.label)}»: <b>${obMax.n} veces</b>`,[...obMax.y].sort().join(', ')]);
+  // Récords: el primero a la vista y, al tocarlo, la clasificación completa (los empates comparten puesto)
+  const recs=[],clasif=(arr,val)=>{arr.sort((a,b)=>val(b)-val(a));return arr};
+  const lb=blq.filter(x=>minB(x.b)).map(x=>({l:`${esc(tituloB(x.b))} <span class="mu sm">${DIAS[x.dia]} de ${x.anio}</span>`,v:`${minB(x.b)} min`,n:minB(x.b)}));
+  clasif(lb,o=>o.n);if(lb.length){const t=blq.find(x=>minB(x.b)==lb[0].n);recs.push(['clock','La actuación más larga',`${esc(tituloB(t.b))}: <b>${lb[0].v}</b>`,`${DIAS[t.dia]} de ${t.anio}`,lb])}
+  const lo=[...obrK.values()].map(x=>({l:`«${esc(x.label)}» <span class="mu sm">${[...x.y].sort().join(', ')}</span>`,v:`${x.n} ${x.n==1?'vez':'veces'}`,n:x.n,x}));
+  clasif(lo,o=>o.n);if(lo.length&&lo[0].n>1)recs.push(['music','La obra que más suena',`«${esc(lo[0].x.label)}»: <b>${lo[0].v}</b>`,[...lo[0].x.y].sort().join(', '),lo.filter(o=>o.n>1)]);
   const insP=new Map();mus.forEach(a=>{const k=idP(a.n);const s=insP.get(k)||new Set();instrumentos(a.instr).forEach(i=>s.add(i));insP.set(k,s)});
   insP.forEach(s=>{if(s.has('Saxofón')&&[...s].some(i=>/^Saxofón ./.test(i)))s.delete('Saxofón')});
-  const poli=[...insP.entries()].sort((a,b)=>b[1].size-a[1].size)[0];if(poli&&poli[1].size>1)recs.push(['music','El músico más polifacético',`${esc(nomP(poli[0]))}: <b>${poli[1].size} instrumentos</b>`,[...poli[1]].join(', ').toLowerCase()]);
+  const lp=[...insP.entries()].filter(([,s])=>s.size>1).map(([k,s])=>({l:`<button class="lnk" onclick="${ficha(k)}">${esc(nomP(k))}</button> <span class="mu sm">${esc([...s].join(', ').toLowerCase())}</span>`,v:`${s.size} instrumentos`,n:s.size,k,s}));
+  clasif(lp,o=>o.n);if(lp.length)recs.push(['music','El músico más polifacético',`${esc(nomP(lp[0].k))}: <b>${lp[0].v}</b>`,[...lp[0].s].join(', ').toLowerCase(),lp]);
   const porDia=new Map();mus.forEach(a=>{const k=a.anio+'|'+a.dia;const s=porDia.get(k)||new Set();s.add(idP(a.n));porDia.set(k,s)});
-  const dMax=[...porDia.entries()].sort((a,b)=>b[1].size-a[1].size)[0];if(dMax){const[y,d]=dMax[0].split('|');recs.push(['users','El día con más gente en el escenario',`<b>${dMax[1].size} músicos</b>`,`${DIAS[d]} de ${y}`])}
-  const juntos=blq.filter(x=>{const r=new Set(apariciones([{anio:x.anio,datos:{dias:[{bloques:[x.b]}]}}]).map(a=>a.rol));return r.has('al')&&r.has('pr')}).length;
-  if(juntos)recs.push(['users','Profes y alumnos juntos',`<b>${juntos} ${juntos==1?'actuación':'actuaciones'}</b>`,'en las que comparten escenario']);
-  const fiel=honor.find(v=>v.rol!='in');if(fiel)recs.push(['check','Récord de constancia',`${esc(nomP(fiel.k))}: <b>${fiel.y.size} años</b>`,[...fiel.y].sort().join(', ')]);
-  const records=recs.length?`<div class="recs">${recs.map(([ic,t,v,s])=>`<div class="rec"><span class="ri">${ICO[ic]}</span><div><span class="mu sm">${t}</span><div>${v}</div><span class="mu sm">${s}</span></div></div>`).join('')}</div>`:'<p class="mu sm">Sin datos todavía.</p>';
+  const ld=[...porDia.entries()].map(([k,s])=>{const[y,d]=k.split('|');return{l:`${DIAS[d]} de ${y}`,v:`${s.size} músicos`,n:s.size}});
+  clasif(ld,o=>o.n);if(ld.length)recs.push(['users','El día con más gente en el escenario',`<b>${ld[0].v}</b>`,ld[0].l,ld]);
+  const lj=blq.filter(x=>{const r=new Set(apariciones([{anio:x.anio,datos:{dias:[{bloques:[x.b]}]}}]).map(a=>a.rol));return r.has('al')&&r.has('pr')})
+    .map(x=>({l:`${esc(tituloB(x.b))} <span class="mu sm">${DIAS[x.dia]} de ${x.anio}</span>`,v:'',n:0}));
+  if(lj.length)recs.push(['users','Profes y alumnos juntos',`<b>${lj.length} ${lj.length==1?'actuación':'actuaciones'}</b>`,'en las que comparten escenario',lj]);
+  const lc=honor.filter(v=>v.rol!='in').map(v=>({l:`<button class="lnk" onclick="${ficha(v.k)}">${esc(nomP(v.k))}</button> <span class="mu sm">${[...v.y].sort().join(', ')}</span>`,v:`${v.y.size} años`,n:v.y.size,k:v.k,y:v.y}));
+  if(lc.length)recs.push(['check','Récord de constancia',`${esc(nomP(lc[0].k))}: <b>${lc[0].v}</b>`,[...lc[0].y].sort().join(', '),lc]);
+  const puestos=l=>{const vals=[...new Set(l.map(o=>o.n))];return l.map(o=>({...o,med:o.n?vals.indexOf(o.n):-1,pos:o.n?l.findIndex(p=>p.n==o.n)+1:l.indexOf(o)+1}))};
+  const MEDR=['oro','plata','bronce'];
+  const records=recs.length?`<div class="recs">${recs.map(([ic,t,v,s,l])=>{const p=puestos(l||[]),sig=p.slice(1).filter(o=>o.med>=0&&o.med<3).slice(0,2);
+    return `<details class="rec"${S.recAb==t?' open':''} ontoggle="if(this.open)S.recAb=${jsA(t)};else if(S.recAb==${jsA(t)})S.recAb=null"><summary><span class="ri">${ICO[ic]}</span><div><span class="mu sm">${t}</span><div>${v}</div><span class="mu sm">${s}</span>
+      ${sig.length?`<div class="sig">${sig.map(o=>`<span><i class="ps ${MEDR[o.med]}">${o.pos}</i>${o.l.replace(/<span class="mu sm">.*$/,'').replace(/<\/?button[^>]*>/g,'')}${o.v?` · ${o.v}`:''}</span>`).join('')}</div>`:''}</div>
+      ${p.length>1?`<span class="rver">${ICO.down}</span>`:''}</summary>
+      ${p.length>1?`<div class="lst rlst" onscroll="finLista(this)">${p.map(o=>`<div class="rfila"><span class="ps ${o.med>=0&&o.med<3?MEDR[o.med]:''}">${o.pos}</span><span>${o.l}</span><b>${o.v}</b></div>`).join('')}</div>`:''}</details>`}).join('')}</div>`:'<p class="mu sm">Sin datos todavía.</p>';
   // Familias, instrumentos (con el color de su familia), autores y obras: todos
   const fam=FAMS.map(([l,c])=>({label:l,c,n:0}));mus.forEach(a=>instrumentos(a.instr).forEach(i=>{fam[famDe(i)].n++}));
   const vozDe=a=>{let f=a.b.t=='al'?a.b.formato:'';if(a.b.t=='gr'){const c={};(a.b.rep||[]).forEach(r=>r.formato&&(c[r.formato]=(c[r.formato]||0)+1));f=Object.keys(c).sort((x,y)=>c[y]-c[x])[0]||'live'}
@@ -2032,14 +2056,15 @@ function vStats(){
   const TAM=[['Solistas','#E8006A'],['Dúos','#3B6E99'],['Tríos y cuartetos','#13806E'],['Grupos de 5 o más','#D9A441'],['Coros','#8C2643'],['Artistas invitados','#C98A12']];
   const tam=TAM.map(([l,c])=>({label:l,c,n:0}));blq.forEach(({b})=>{if(b.t=='in')return tam[5].n++;if(b.t=='gr'&&b.coro)return tam[4].n++;
     const n=(b.t=='al'?b.alumnos.filter(u=>u.n.trim()):b.comp.filter(c=>c.n.trim())).length;tam[n<=1?0:n==2?1:n<=4?2:3].n++});
-  const ATal=AT.filter(a=>a.rol=='al'),ATpr=AT.filter(a=>a.rol=='pr');
-  const porAnio=todos.map(y=>({al:ids(ATal.filter(a=>a.anio==y)).size,pr:ids(ATpr.filter(a=>a.anio==y)).size,ac:S.eds.filter(e=>e.anio==y).flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques)).length}));
+  const ATal=AT.filter(a=>a.rol=='al'),ATpr=AT.filter(a=>a.rol=='pr'),ATin=AT.filter(a=>a.rol=='in');
+  const porAnio=todos.map(y=>({al:ids(ATal.filter(a=>a.anio==y)).size,pr:ids(ATpr.filter(a=>a.anio==y)).size,inv:ids(ATin.filter(a=>a.anio==y)).size,ac:S.eds.filter(e=>e.anio==y).flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques)).length}));
   const porCurso=todos.map(y=>{const c={},vis=new Set();ATal.filter(a=>a.anio==y).forEach(a=>{const id=idP(a.n);if(vis.has(id))return;vis.add(id);const p=curso(a.g);const k=p?p.niv:'?';c[k]=(c[k]||0)+1});return{y,c}});
   const maxH=Math.max(1,...porCurso.flatMap(p=>NIVORD.map(k=>p.c[k]||0)));
   const celda=(v,y)=>{const f=v?.18+.82*v/maxH:0;return `<td class="${y==Y?'sel':''}" style="${v?`background:color-mix(in srgb,var(--telon) ${Math.round(f*100)}%,transparent);${f>.55?'color:#fff;':''}`:''}">${v||''}</td>`};
-  const calor=`<div class="wrap"><table class="sem calor"><thead><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr></thead><tbody>
-    ${porCurso.map((p,i)=>`<tr><td class="${p.y==Y?'sel':''}"><b>${p.y}</b></td>${NIVORD.map(k=>celda(p.c[k]||0,p.y)).join('')}<td class="${p.y==Y?'sel':''}">${p.c['?']||''}</td><td class="${p.y==Y?'sel':''}"><b>${porAnio[i].pr||''}</b></td></tr>`).join('')}</tbody></table></div>
-    <p class="sm mu" style="margin:8px 0 0">Cada alumno cuenta una vez por año. Cuanto más oscuro, más alumnos de ese curso.</p>`;
+  const calor=`<div class="wrap"><table class="sem calor"><thead><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th class="tt">Alumnos</th><th class="tt">Profesores</th><th class="tt">Invitados</th></tr></thead><tbody>
+    ${porCurso.map((p,i)=>{const sl=p.y==Y?'sel':'';return `<tr><td class="${sl}"><b>${p.y}</b></td>${NIVORD.map(k=>celda(p.c[k]||0,p.y)).join('')}<td class="${sl}">${p.c['?']||''}</td>
+      <td class="tt tal ${sl}">${porAnio[i].al}</td><td class="tt tpr ${sl}">${porAnio[i].pr}</td><td class="tt tin ${sl}">${porAnio[i].inv}</td></tr>`}).join('')}</tbody></table></div>
+    <p class="sm mu" style="margin:8px 0 0">Cada persona cuenta una vez por año. En los cursos, cuanto más oscuro, más alumnos.</p>`;
   const dudas=P.dudas.slice(0,12).map(([a,b])=>{const na=P.nom.get(a),nb=P.nom.get(b),j=x=>JSON.stringify(x).replace(/"/g,'&quot;');
     return `<div class="duda"><span><b>${esc(na)}</b> <span class="mu">y</span> <b>${esc(nb)}</b></span><span class="row" style="gap:6px">
      <button class="btn sm" onclick="unificar(${j(na)},${j(nb)})">Misma persona: «${esc(nb)}»</button>
@@ -2073,7 +2098,7 @@ function vStats(){
    ${P_('c-tam','users','Cómo salen al escenario',null,donut(tam.filter(x=>x.n),'actuaciones'))}
    ${P_('c-ano','calendar','Año a año',null,columnas([{label:'Alumnos',c:'#E8006A',v:porAnio.map(x=>x.al)},{label:'Profesores',c:'#13806E',v:porAnio.map(x=>x.pr)},{label:'Actuaciones',c:'#D9A441',v:porAnio.map(x=>x.ac)}],todos))}
   </div>
-  ${P_('c-cal','calendar','Alumnos por curso, año a año',null,calor)}</div>`;
+  ${P_('c-cal','calendar','Por curso y en total, año a año',null,calor)}</div>`;
 }
 function finLista(el){el.classList.toggle('fin',el.scrollTop+el.clientHeight>=el.scrollHeight-4)}
 function buscaMusico(el){const v=el.value.trim();if(!v)return;const N=[...new Set(apariciones().map(a=>a.n))];
@@ -2097,7 +2122,7 @@ function obrasDe(eds){const r=[];eds.forEach(e=>e.datos.dias.forEach((d,i)=>{if(
 const AUT_JUNTOS=/^(fito y (los )?fitipaldis|simon (y|&) garfunkel|hombres g|estopa|los del r[ií]o|ella baila sola|celtas cortos|amaral)$/i;
 const AUT_NO=/^(obra )?original$|tradicional|popular|an[oó]nimo|est[aá]ndar|desconocid|propia|improvisa/i;
 function autores(a){a=String(a||'').replace(/\(.*?\)|«.*?»|".*?"/g,' ').replace(/\b(versi[oó]n|arreglo|arr\.|adaptaci[oó]n)\s*(de\s+)?/gi,'|');
-  return a.split(/\s*(?:\/|,|&|\||;|\bfeat\.?|\bft\.?|\s+x\s+|\s+con\s+)\s*/i).flatMap(p=>{p=p.trim();return AUT_JUNTOS.test(p)?[p]:p.split(/\s+y\s+/i)})
+  return a.split(/\s*(?:\s\/|\/\s|,|&|\||;|\bfeat\.?|\bft\.?|\s+x\s+|\s+con\s+)\s*/i).flatMap(p=>{p=p.trim();return AUT_JUNTOS.test(p)?[p]:p.split(/\s+y\s+/i)})
     .map(p=>p.replace(/\s+/g,' ').trim()).filter(p=>p&&!AUT_NO.test(p)).map(l=>({l:l.replace(/\.$/,''),k:clave(l).replace(/\./g,'').replace(/\s+/g,' ').trim()}))}
 /* H. Ficha de un músico */
 function fichaMusico(n){const k=idP(n),A=apariciones().filter(a=>idP(a.n)==k);if(!A.length)return;
@@ -2123,11 +2148,11 @@ function imprimeMemoria(){const m=S._memoria;if(!m)return;
    <div class="mbig">${m.big.map(([v,t])=>`<div><b>${v}</b><span>${t}</span></div>`).join('')}</div>
    <div class="mcol"><div><h4>Alumnos que más tocan</h4>${lista(m.ranking.al,o=>`${esc(m.nomP(o.k))} <em>${o.n}</em>`)}</div>
     <div><h4>Profesores que más tocan</h4>${lista(m.ranking.pr,o=>`${esc(m.nomP(o.k))} <em>${o.n}</em>`)}</div>
-    <div><h4>Récords y curiosidades</h4>${m.recs.map(([,t,v,s])=>`<p><b>${t}:</b> ${v.replace(/<\/?b>/g,'')} <em>(${s})</em></p>`).join('')}</div></div>
+    <div><h4>Récords y curiosidades</h4>${m.recs.map(([,t,v,s,l])=>{const o=(l||[]).filter(x=>x.n&&x.n<(l[0]||{}).n).slice(0,2);return `<p><b>${t}:</b> ${v.replace(/<\/?b>/g,'')} <em>(${s})</em>${o.length?`<br><em>Después: ${o.map(x=>x.l.replace(/<[^>]+>/g,'')+(x.v?' · '+x.v:'')).join('; ')}</em>`:''}</p>`}).join('')}</div></div>
    <h4>Cuadro de honor</h4>${m.honor.length?`<table class="mt mh"><tr><th></th>${m.todos.map(y=>`<th>${y}</th>`).join('')}</tr>${m.honor.map(v=>`<tr><td>${esc(m.nomP(v.k))}${v.rol=='pr'?' (profesor/a)':v.rol=='in'?' (invitado/a)':''}</td>${m.todos.map(y=>`<td>${v.y.has(y)?'●':''}</td>`).join('')}</tr>`).join('')}</table>`:'<p>Todavía nadie repite.</p>'}
    <div class="mcol"><div><h4>Familias de instrumentos</h4>${dn(m.fam.filter(x=>x.n))}</div><div><h4>Cómo suenan</h4>${dn(m.fmts)}</div><div><h4>Cómo salen al escenario</h4>${dn(m.tam.filter(x=>x.n))}</div></div>
    <div class="mcol"><div><h4>Instrumentos</h4>${lista(m.ins,o=>`${o.label} <em>${o.n}</em>`)}</div><div><h4>Autores</h4>${lista(m.aut,o=>`${o.label} <em>${o.n}</em>`)}</div><div><h4>Obras que se repiten</h4>${lista(m.obr,o=>`${o.label} <em>${o.n}</em>`)}</div></div>
-   <h4>Alumnos por curso y profesores, año a año</h4><table class="mt mh"><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr>${m.porCurso.map((p,i)=>`<tr><td><b>${p.y}</b></td>${NIVORD.map(k=>`<td>${p.c[k]||''}</td>`).join('')}<td>${p.c['?']||''}</td><td>${m.porAnio[i].pr||''}</td></tr>`).join('')}</table>
+   <h4>Por curso y en total, año a año</h4><table class="mt mh"><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Alumnos</th><th>Profesores</th><th>Invitados</th></tr>${m.porCurso.map((p,i)=>`<tr><td><b>${p.y}</b></td>${NIVORD.map(k=>`<td>${p.c[k]||''}</td>`).join('')}<td>${p.c['?']||''}</td><td><b>${m.porAnio[i].al}</b></td><td><b>${m.porAnio[i].pr}</b></td><td><b>${m.porAnio[i].inv}</b></td></tr>`).join('')}</table>
   </div>`)}
 
 /* ---------- Colores del año: la app se viste un poco con la estética de cada edición ---------- */
