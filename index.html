@@ -438,19 +438,57 @@ pre.sql{background:#1C1216;color:#F6E6BD;padding:14px;border-radius:12px;overflo
 .hb .b i.o{background:var(--oro)}
 .hb .n{text-align:right;font-weight:700}
 .sthead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}.sthead h2{margin:0 0 2px}
-.grid3s{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:18px}.grid3s>.panel,.grid2s>.panel{margin:0}
-.grid2s{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:18px;margin-top:18px}
-@media (max-width:820px){.grid2s{grid-template-columns:1fr}}
+/* Estadísticas: cristal sobre manchas de color, un color por recuadro y listas completas con su barra */
+.stv{position:relative;isolation:isolate}
+.stv::before{content:"";position:absolute;inset:-24px 0 0;z-index:-1;pointer-events:none;
+  background:radial-gradient(620px 420px at 8% 4%,color-mix(in srgb,var(--telon) 20%,transparent),transparent 70%),radial-gradient(520px 400px at 92% 14%,color-mix(in srgb,var(--oro) 26%,transparent),transparent 70%),
+  radial-gradient(560px 440px at 28% 48%,rgba(19,128,110,.13),transparent 70%),radial-gradient(560px 440px at 86% 66%,rgba(76,95,213,.14),transparent 70%),radial-gradient(520px 400px at 12% 92%,rgba(232,0,106,.10),transparent 70%)}
+.stv .big>div{background:color-mix(in srgb,var(--sf) 60%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-color:color-mix(in srgb,#fff 60%,transparent)}
+.stv .sp{--pc:var(--telon);display:flex;flex-direction:column;margin:0;border-color:color-mix(in srgb,#fff 60%,transparent);box-shadow:0 10px 30px rgba(40,10,25,.07);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--pc) 13%,transparent),transparent 150px),color-mix(in srgb,var(--sf) 62%,transparent);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5)}
+:root[data-theme="dark"] .stv .sp,:root[data-theme="dark"] .stv .big>div{border-color:rgba(255,255,255,.08);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stv .sp,:root:not([data-theme="light"]) .stv .big>div{border-color:rgba(255,255,255,.08);box-shadow:0 10px 30px rgba(0,0,0,.3)}}
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){.stv .sp,.stv .big>div{background-color:var(--sf)}}
+.stv .sp.c-al{--pc:#E8006A}.stv .sp.c-pr{--pc:#13806E}.stv .sp.c-rec{--pc:#7A5BA6}.stv .sp.c-ins,.stv .sp.c-fam{--pc:#5B6270}.stv .sp.c-aut{--pc:#4C5FD5}.stv .sp.c-obr{--pc:#E8590C}.stv .sp.c-fmt{--pc:#B7791F}.stv .sp.c-tam{--pc:#0E7490}
+.sp h3{display:flex;align-items:center;gap:9px}
+.sp .hi{flex:0 0 auto;display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--pc);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--pc) 35%,transparent)}.sp .hi svg{width:16px;height:16px}
+.sp .tot{margin-left:auto;font:700 12px var(--disp);padding:3px 10px;border-radius:20px;background:color-mix(in srgb,var(--pc) 15%,transparent);color:var(--pc)}
+:root[data-theme="dark"] .sp .tot{color:color-mix(in srgb,var(--pc) 55%,#fff)}
+.gst{display:grid;gap:18px;margin-top:18px}.gst.g3{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.gst.g2{grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr))}.gst.g21{grid-template-columns:minmax(0,2fr) minmax(280px,1fr)}
+@media (max-width:860px){.gst.g21{grid-template-columns:minmax(0,1fr)}}
+.pila{display:flex;flex-direction:column;gap:18px}.pila>.sp{flex:1}
+.stv>.sp{margin-top:18px}
+.lst{--lmin:300px;flex:1 1 0;min-height:var(--lmin);overflow:auto;overscroll-behavior:contain;margin-right:-8px;padding-right:8px;scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--pc) 45%,transparent) transparent;
+  -webkit-mask-image:linear-gradient(#000 calc(100% - 40px),transparent);mask-image:linear-gradient(#000 calc(100% - 40px),transparent)}
+.lst.fin{-webkit-mask-image:none;mask-image:none}
+.lst::-webkit-scrollbar{width:8px}.lst::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--pc) 40%,transparent);border-radius:8px}
+.c-al .lst,.c-pr .lst{--lmin:200px}.c-hon .lst{--lmin:340px}
+.fila{display:grid;grid-template-columns:26px minmax(90px,1.15fr) 1fr 32px;gap:8px;align-items:center;font-size:14px;padding:4px 0}
+.fila .ps{font:700 11px/24px var(--disp);color:var(--mu);text-align:center;width:24px;height:24px;border-radius:50%}
+.fila .ps.oro{background:#B8962E;color:#fff}.fila .ps.plata{background:#8E959E;color:#fff}.fila .ps.bronce{background:#A86A3A;color:#fff}
+.fila .b{height:12px;background:color-mix(in srgb,var(--mu) 14%,transparent);border-radius:6px;overflow:hidden}
+.fila .b i{display:block;height:100%;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.fila .n{text-align:right;font-weight:700}
+.honor th{position:sticky;top:0;z-index:1;background:color-mix(in srgb,var(--sf) 88%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.nv.nal{background:color-mix(in srgb,#E8006A 14%,transparent);color:#B0005A}
+:root[data-theme="dark"] .nv.nal{color:#FF7DB8}
+.dn li i{box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.stv .sp>.dn{flex:1}
+.stv .rec{background:color-mix(in srgb,var(--pc) 8%,transparent);border-color:color-mix(in srgb,var(--pc) 25%,transparent)}.stv .rec .ri{background:var(--pc)}
+.busca{display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--ln);border-radius:12px;background:color-mix(in srgb,var(--sf) 70%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.busca svg{width:16px;height:16px;color:var(--mu)}.busca input{border:0;background:none;padding:9px 0;width:170px;font:inherit;color:inherit;outline:none}
+.busca:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 18%,transparent)}
 .lnk{background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;text-decoration:underline dotted color-mix(in srgb,var(--mu) 60%,transparent);text-underline-offset:3px}
 .lnk:hover{color:var(--acc)}
 .podio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:end;margin:4px 0 14px}
-.pz{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit;text-align:center;min-width:0}
-.pz b{font:700 14px/1.2 var(--disp);overflow-wrap:anywhere}
+.pz{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;min-width:0}
+.pzn{display:flex;flex-direction:column;align-items:center;gap:1px}.pzn .lnk{font:700 14px/1.25 var(--disp);text-align:center;overflow-wrap:anywhere}
+.pz .emp{color:var(--pc)}
 .pz i{display:block;width:100%;border-radius:10px 10px 0 0;background:color-mix(in srgb,var(--telon) 22%,var(--sf));border:1px solid color-mix(in srgb,var(--telon) 30%,var(--ln));border-bottom:0}
 .pz.p1 i{background:color-mix(in srgb,var(--oro) 55%,var(--sf))}.pz.p2 i{background:color-mix(in srgb,#B8BEC6 60%,var(--sf))}.pz.p3 i{background:color-mix(in srgb,#C98A55 50%,var(--sf))}
 .pz .md{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font:800 15px var(--disp);color:#fff;background:#B8962E}
 .pz.p2 .md{background:#8E959E}.pz.p3 .md{background:#A86A3A}
-.pz:hover b{color:var(--acc)}
 table.honor{border-collapse:collapse;width:100%;font-size:14px}
 table.honor th{font:700 13px var(--disp);color:var(--mu);padding:4px 6px;text-align:center}
 table.honor td{padding:5px 6px;border-top:1px solid var(--ln);text-align:center;white-space:nowrap}
@@ -534,7 +572,7 @@ ul.fl{margin:0;padding-left:18px;max-height:220px;overflow:auto}ul.fl li{margin:
   .stv.anim .big>div,.stv.anim .panel{animation:stIn .5s cubic-bezier(.2,.8,.2,1) backwards}
   .stv.anim .big>div:nth-child(2){animation-delay:.04s}.stv.anim .big>div:nth-child(3){animation-delay:.08s}.stv.anim .big>div:nth-child(4){animation-delay:.12s}
   .stv.anim .big>div:nth-child(5){animation-delay:.16s}.stv.anim .big>div:nth-child(6){animation-delay:.2s}.stv.anim .big>div:nth-child(n+7){animation-delay:.24s}
-  .stv.anim .hb .b i{animation:stX .9s .2s cubic-bezier(.2,.8,.2,1) backwards;transform-origin:left center}
+  .stv.anim .fila .b i{animation:stX .9s .2s cubic-bezier(.2,.8,.2,1) backwards;transform-origin:left center}
   .stv.anim .pz i{animation:stY .7s .25s cubic-bezier(.3,1.3,.5,1) backwards;transform-origin:bottom}
   .stv.anim .pz.p2 i{animation-delay:.4s}.stv.anim .pz.p3 i{animation-delay:.55s}
   .stv.anim .pz .md{animation:stP .45s .6s cubic-bezier(.3,1.5,.5,1) backwards}
@@ -763,6 +801,9 @@ const ICO={
   list:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h11M4 12h11M4 18h7"/><circle cx="18" cy="17" r="2.5"/><path d="M20.5 17V6l-3 1"/></svg>',
   plug:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0zM12 17v5"/></svg>',
   music:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M10 18V5l11-2v13"/></svg>',
+  search:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  star:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
+  calendar:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
   clock:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   mic:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
   copy:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>'
@@ -962,6 +1003,7 @@ function render(){
   <div class="vidrio" id="vidrio"><div class="bin"><span class="bano">${S.E.anio}${S.E.datos.musical?` · ${esc(S.E.datos.musical)}`:''}</span><nav class="tabs" aria-label="Pestañas">${pestanas}</nav></div></div><main>${({programa:vPrograma,semana:vSemana,imprimir:vImprimir,ia:vIA,stats:vStats,historial:vHistorial,ajustes:vAjustes})[S.tab]()}</main>`;
   if(S.tab=='programa')scrollTo(0,y);
   if(S._entra&&mov())requestAnimationFrame(cuentaNumeros);
+  document.querySelectorAll('.lst').forEach(finLista);
   S._tabAnt=S.tab;S._yAnt=S.statY;miraBarra();
   if(S.tab=='ajustes')actualizaPrompt();if(S.tab=='imprimir'){pintaCartel();if(S.vFull)pintaVale()}
 }
@@ -1746,7 +1788,7 @@ function donut(datos,centro){
   let a=-Math.PI/2,arcs='';const R=42,r=26,cx=50,cy=50;
   datos.filter(x=>x.n).forEach(x=>{const f=x.n/tot,b=a+f*Math.PI*2,lg=f>.5?1:0,p=(t,rr)=>`${(cx+rr*Math.cos(t)).toFixed(2)} ${(cy+rr*Math.sin(t)).toFixed(2)}`;
     arcs+=f>=.999?`<circle cx="${cx}" cy="${cy}" r="${(R+r)/2}" fill="none" stroke="${x.c}" stroke-width="${R-r}"/>`
-      :`<path d="M${p(a,R)} A${R} ${R} 0 ${lg} 1 ${p(b,R)} L${p(b,r)} A${r} ${r} 0 ${lg} 0 ${p(a,r)} Z" fill="${x.c}"/>`;a=b});
+      :`<path d="M${p(a,R)} A${R} ${R} 0 ${lg} 1 ${p(b,R)} L${p(b,r)} A${r} ${r} 0 ${lg} 0 ${p(a,r)} Z" fill="${x.c}" stroke="var(--sf)" stroke-width=".8"/>`;a=b});
   return `<div class="dn"><svg viewBox="0 0 100 100" role="img" aria-label="${esc(centro||'')}">${arcs}<text x="50" y="49" text-anchor="middle" class="dnn">${tot}</text><text x="50" y="61" text-anchor="middle" class="dnl">${esc(centro||'')}</text></svg>
    <ul>${datos.map(x=>`<li><i style="background:${x.c}"></i>${x.label}<b>${x.n}</b></li>`).join('')}</ul></div>`;
 }
@@ -1929,35 +1971,42 @@ function vStats(){
   if(S.statY!=='todos'&&!todos.includes(S.statY))S.statY='todos';
   const Y=S.statY,uno=Y!=='todos',EDS=uno?S.eds.filter(e=>e.anio==Y):S.eds;
   const A=apariciones(EDS),AT=apariciones(),P=personas();
-  const mus=A.filter(a=>a.rol!='in'),al=A.filter(a=>a.rol=='al'),pr=A.filter(a=>a.rol=='pr'),inv=A.filter(a=>a.rol=='in');
+  const mus=A.filter(a=>a.rol!='in'),al=A.filter(a=>a.rol=='al'),pr=A.filter(a=>a.rol=='pr');
   const ids=x=>new Set(x.map(a=>idP(a.n)));
   const blq=EDS.flatMap(e=>e.datos.dias.flatMap((d,i)=>d.no?[]:d.bloques.map(b=>({b,anio:e.anio,dia:i}))));
   const minutos=blq.reduce((s,x)=>s+minB(x.b),0);
   const obras=obrasDe(EDS),obrK=new Map();obras.forEach(o=>{const v=obrK.get(o.k)||{label:o.o,n:0,y:new Set()};v.n++;v.y.add(o.anio);obrK.set(o.k,v)});
   const nombreP=new Map();AT.forEach(a=>{const k=idP(a.n);if(!nombreP.has(k)||a.n.length>nombreP.get(k).length)nombreP.set(k,a.n)});
-  const nomP=k=>nombreP.get(k)||k;
-  // años en que ha tocado cada persona (siempre con todas las ediciones)
-  const vida=new Map();AT.filter(a=>a.rol!='in').forEach(a=>{const k=idP(a.n);const v=vida.get(k)||{k,y:new Set(),n:0,rol:a.rol};v.y.add(a.anio);v.n++;if(a.rol=='pr')v.rol='pr';vida.set(k,v)});
+  const nomP=k=>nombreP.get(k)||k,ficha=k=>`fichaMusico(${jsA(nomP(k))})`;
+  // años en que ha tocado cada persona, invitados incluidos (siempre con todas las ediciones)
+  const ROL={al:0,in:1,pr:2};
+  const vida=new Map();AT.forEach(a=>{const k=idP(a.n);const v=vida.get(k)||{k,y:new Set(),n:0,rol:a.rol};v.y.add(a.anio);v.n++;if(ROL[a.rol]>ROL[v.rol])v.rol=a.rol;vida.set(k,v)});
   const antes=y=>new Set(AT.filter(a=>a.anio<y&&a.rol!='in').map(a=>idP(a.n)));
   let nuevas=0,repiten=0;
-  if(uno){const prev=antes(Y);ids(mus).forEach(k=>prev.has(k)?repiten++:nuevas++)}else repiten=[...vida.values()].filter(v=>v.y.size>1).length;
-  // B. cabecera
+  if(uno){const prev=antes(Y);ids(mus).forEach(k=>prev.has(k)?repiten++:nuevas++)}else repiten=[...vida.values()].filter(v=>v.y.size>1&&v.rol!='in').length;
   const big=[...(uno?[]:[[todos.length,'ediciones']]),[ids(al).size,'alumnos'],[ids(pr).size,'profesores'],[blq.length,'actuaciones'],
     [minutos,'minutos de música'],[obrK.size,'obras distintas'],...(uno?[[nuevas,'caras nuevas'],[repiten,'repiten de otros años']]:[[repiten,'músicos que repiten']])];
-  // D. podios
+  // Ranking: a igualdad de veces hay empate (misma medalla); dentro del empate van antes quienes tocaron más recientemente
   const ranking=x=>{const m=new Map();x.forEach(a=>{const k=idP(a.n);const o=m.get(k)||{k,n:0,y:new Set()};o.n++;o.y.add(a.anio);m.set(k,o)});
-    return[...m.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size||nomP(a.k).localeCompare(nomP(b.k)))};
-  const podio=(lista,cls)=>{if(!lista.length)return '<p class="mu sm">Sin datos todavía.</p>';const t=lista.slice(0,3),r=lista.slice(3,10),mx=lista[0].n;
-    const pz=(o,i)=>o?`<button class="pz p${i+1}" onclick="fichaMusico(${jsA(nomP(o.k))})"><span class="md">${i+1}</span><b>${esc(nomP(o.k))}</b><span class="mu sm">${o.n} ${o.n==1?'vez':'veces'}</span><i style="height:${[78,58,44][i]}px"></i></button>`:'<span></span>';
-    return `<div class="podio">${pz(t[1],1)}${pz(t[0],0)}${pz(t[2],2)}</div>${r.map(o=>`<div class="hb"><button class="lnk" onclick="fichaMusico(${jsA(nomP(o.k))})">${esc(nomP(o.k))}</button><span class="b"><i class="${cls||''}" style="width:${o.n/mx*100}%"></i></span><span class="n">${o.n}</span></div>`).join('')}`};
-  // C. cuadro de honor
+    const r=[...m.values()].sort((a,b)=>b.n-a.n||Math.max(...b.y)-Math.max(...a.y)||b.y.size-a.y.size||nomP(a.k).localeCompare(nomP(b.k)));
+    const vals=[...new Set(r.map(o=>o.n))];r.forEach((o,i)=>{o.med=vals.indexOf(o.n);o.pos=r.findIndex(p=>p.n==o.n)+1});return r};
+  const MED=['oro','plata','bronce'];
+  const podio=(r,color)=>{if(!r.length)return '<p class="mu sm">Sin datos todavía.</p>';
+    const esc3=(g,i)=>{if(!g.length)return '<span></span>';const emp=g.length>1;
+      return `<div class="pz p${i+1}"><span class="md">${i+1}</span><div class="pzn">${g.slice(0,3).map(o=>`<button class="lnk" onclick="${ficha(o.k)}">${esc(nomP(o.k))}</button>`).join('')}${g.length>3?`<span class="mu sm">y ${g.length-3} más</span>`:''}</div>
+       <span class="mu sm">${g[0].n} ${g[0].n==1?'vez':'veces'}${emp?` · <b class="emp">${g.length} empatados</b>`:''}</span><i style="height:${[78,58,44][i]}px"></i></div>`};
+    const g=[0,1,2].map(m=>r.filter(o=>o.med==m)),mx=r[0].n;
+    return `<div class="podio">${esc3(g[1],1)}${esc3(g[0],0)}${esc3(g[2],2)}</div>
+     <div class="lst" onscroll="finLista(this)">${r.map(o=>`<div class="fila"><span class="ps ${o.med<3?MED[o.med]:''}">${o.pos}</span><button class="lnk" onclick="${ficha(o.k)}">${esc(nomP(o.k))}</button><span class="b"><i style="width:${o.n/mx*100}%;background:${color}"></i></span><span class="n">${o.n}</span></div>`).join('')}</div>`};
+  const lista=(items,color,vacio)=>{if(!items.length)return `<p class="mu sm">${vacio||'Sin datos todavía.'}</p>`;const mx=Math.max(...items.map(x=>x.n));
+    return `<div class="lst" onscroll="finLista(this)">${items.map((x,i)=>`<div class="fila"><span class="ps">${i+1}</span><span class="nm">${x.label}</span><span class="b"><i style="width:${x.n/mx*100}%;background:${x.c||color}"></i></span><span class="n">${x.n}</span></div>`).join('')}</div>`};
+  // Cuadro de honor: alumnos, profesores e invitados con más de una edición
   const honor=[...vida.values()].filter(v=>v.y.size>1).sort((a,b)=>b.y.size-a.y.size||b.n-a.n||nomP(a.k).localeCompare(nomP(b.k)));
-  const honorV=S.honorTodo?honor:honor.slice(0,12);
-  const cuadro=honor.length?`<div class="wrap"><table class="honor"><thead><tr><th></th>${todos.map(y=>`<th class="${y==Y?'sel':''}">${y}</th>`).join('')}<th></th></tr></thead><tbody>
-    ${honorV.map(v=>`<tr><td><button class="lnk" onclick="fichaMusico(${jsA(nomP(v.k))})">${esc(nomP(v.k))}</button> <span class="nv ${v.rol=='pr'?'prof':''}">${v.rol=='pr'?'Profe':'Alumno/a'}</span></td>${todos.map(y=>`<td class="${y==Y?'sel':''}"><span class="pt ${v.y.has(y)?'on':''}" title="${y}"></span></td>`).join('')}<td><b>${v.y.size}</b> años</td></tr>`).join('')}</tbody></table></div>
-    ${honor.length>12?`<button class="btn g sm" style="margin-top:8px" onclick="S.honorTodo=!S.honorTodo;render()">${S.honorTodo?'Ver menos':`Ver los ${honor.length}`}</button>`:''}`
+  const CHIP={al:'<span class="nv nal">Alumno/a</span>',pr:'<span class="nv prof">Profe</span>',in:'<span class="nv inv">Invitado/a</span>'};
+  const cuadro=honor.length?`<div class="lst honorl" onscroll="finLista(this)"><table class="honor"><thead><tr><th></th>${todos.map(y=>`<th class="${y==Y?'sel':''}">${y}</th>`).join('')}<th></th></tr></thead><tbody>
+    ${honor.map(v=>`<tr><td><button class="lnk" onclick="${ficha(v.k)}">${esc(nomP(v.k))}</button> ${CHIP[v.rol]}</td>${todos.map(y=>`<td class="${y==Y?'sel':''}"><span class="pt ${v.y.has(y)?'on':''}" title="${y}"></span></td>`).join('')}<td><b>${v.y.size}</b> años</td></tr>`).join('')}</tbody></table></div>`
     :'<p class="mu sm">Todavía nadie ha tocado en dos ediciones distintas.</p>';
-  // E. récords
+  // Récords
   const recs=[];
   const larga=blq.slice().sort((a,b)=>minB(b.b)-minB(a.b))[0];if(larga&&minB(larga.b))recs.push(['clock','La actuación más larga',`${esc(tituloB(larga.b))}: <b>${minB(larga.b)} min</b>`,`${DIAS[larga.dia]} de ${larga.anio}`]);
   const obMax=[...obrK.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size)[0];if(obMax&&obMax.n>1)recs.push(['music','La obra que más suena',`«${esc(obMax.label)}»: <b>${obMax.n} veces</b>`,[...obMax.y].sort().join(', ')]);
@@ -1968,30 +2017,26 @@ function vStats(){
   const dMax=[...porDia.entries()].sort((a,b)=>b[1].size-a[1].size)[0];if(dMax){const[y,d]=dMax[0].split('|');recs.push(['users','El día con más gente en el escenario',`<b>${dMax[1].size} músicos</b>`,`${DIAS[d]} de ${y}`])}
   const juntos=blq.filter(x=>{const r=new Set(apariciones([{anio:x.anio,datos:{dias:[{bloques:[x.b]}]}}]).map(a=>a.rol));return r.has('al')&&r.has('pr')}).length;
   if(juntos)recs.push(['users','Profes y alumnos juntos',`<b>${juntos} ${juntos==1?'actuación':'actuaciones'}</b>`,'en las que comparten escenario']);
-  const fiel=honor[0];if(fiel)recs.push(['check','Récord de constancia',`${esc(nomP(fiel.k))}: <b>${fiel.y.size} años</b>`,[...fiel.y].sort().join(', ')]);
+  const fiel=honor.find(v=>v.rol!='in');if(fiel)recs.push(['check','Récord de constancia',`${esc(nomP(fiel.k))}: <b>${fiel.y.size} años</b>`,[...fiel.y].sort().join(', ')]);
   const records=recs.length?`<div class="recs">${recs.map(([ic,t,v,s])=>`<div class="rec"><span class="ri">${ICO[ic]}</span><div><span class="mu sm">${t}</span><div>${v}</div><span class="mu sm">${s}</span></div></div>`).join('')}</div>`:'<p class="mu sm">Sin datos todavía.</p>';
-  // F. familias de instrumentos
+  // Familias, instrumentos (con el color de su familia), autores y obras: todos
   const fam=FAMS.map(([l,c])=>({label:l,c,n:0}));mus.forEach(a=>instrumentos(a.instr).forEach(i=>{fam[famDe(i)].n++}));
-  // instrumentos, autores, obras repetidas
   const vozDe=a=>{let f=a.b.t=='al'?a.b.formato:'';if(a.b.t=='gr'){const c={};(a.b.rep||[]).forEach(r=>r.formato&&(c[r.formato]=(c[r.formato]||0)+1));f=Object.keys(c).sort((x,y)=>c[y]-c[x])[0]||'live'}
     return f=='karaoke'||f=='playalong'?'karaoke':f=='acappella'||f=='solo'?'<em>a cappella</em>':'live'};
-  const ins=cuenta(mus.flatMap(a=>instrumentos(a.instr).map(i=>i=='Voz'?`Voz (${vozDe(a)})`:i).map(i=>[clave(i),i]))).slice(0,10);
-  const aut=cuenta(obras.flatMap(o=>autores(o.a)).map(x=>[x.k,esc(x.l)])).slice(0,10);
-  const autV=aut.length&&aut[0].n>1?aut.filter(x=>x.n>1):aut;
-  const obr=[...obrK.values()].filter(x=>x.n>1).sort((a,b)=>b.n-a.n).slice(0,10).map(x=>({label:`${esc(x.label)} <span class="mu sm">(${[...x.y].sort().join(', ')})</span>`,n:x.n}));
-  // formatos y tamaño de las actuaciones
+  const ins=cuenta(mus.flatMap(a=>instrumentos(a.instr).map(i=>[clave(i),i=='Voz'?`Voz (${vozDe(a)})`:i,i]).map(([k,l,i])=>[clave(l),l,i]))).map(x=>({...x,c:FAM_BARRA[famDe(x.label.replace(/\s*\(.*$/,''))]}));
+  const aut=cuenta(obras.flatMap(o=>autores(o.a)).map(x=>[x.k,esc(x.l)]));
+  const obr=[...obrK.values()].sort((a,b)=>b.n-a.n||b.y.size-a.y.size||a.label.localeCompare(b.label)).map(x=>({label:`${esc(x.label)} <span class="mu sm">(${[...x.y].sort().join(', ')})</span>`,n:x.n}));
   const COLF={karaoke:'#E8006A',playalong:'#3B6E99',live:'#13806E',acappella:'#8C2643',solo:'#D9A441',producer:'#8A7F86'};
   const fmtN={};blq.forEach(({b})=>{if(b.t=='al'){if(b.formato)fmtN[b.formato]=(fmtN[b.formato]||0)+1}else(b.rep||[]).forEach(r=>{if(r.formato)fmtN[r.formato]=(fmtN[r.formato]||0)+1})});
   const fmts=Object.keys(FMT).map(f=>({label:f=='acappella'?'<em>a cappella</em>':FMT[f],n:fmtN[f]||0,c:COLF[f]})).filter(x=>x.n);
-  const TAM=[['Solistas','#E8006A'],['Dúos','#3B6E99'],['Tríos y cuartetos','#13806E'],['Grupos de 5 o más','#D9A441'],['Coros','#8C2643'],['Artistas invitados','#8A7F86']];
+  const TAM=[['Solistas','#E8006A'],['Dúos','#3B6E99'],['Tríos y cuartetos','#13806E'],['Grupos de 5 o más','#D9A441'],['Coros','#8C2643'],['Artistas invitados','#C98A12']];
   const tam=TAM.map(([l,c])=>({label:l,c,n:0}));blq.forEach(({b})=>{if(b.t=='in')return tam[5].n++;if(b.t=='gr'&&b.coro)return tam[4].n++;
     const n=(b.t=='al'?b.alumnos.filter(u=>u.n.trim()):b.comp.filter(c=>c.n.trim())).length;tam[n<=1?0:n==2?1:n<=4?2:3].n++});
-  // año a año y mapa de calor (siempre con todos los años)
   const ATal=AT.filter(a=>a.rol=='al'),ATpr=AT.filter(a=>a.rol=='pr');
   const porAnio=todos.map(y=>({al:ids(ATal.filter(a=>a.anio==y)).size,pr:ids(ATpr.filter(a=>a.anio==y)).size,ac:S.eds.filter(e=>e.anio==y).flatMap(e=>e.datos.dias.filter(d=>!d.no).flatMap(d=>d.bloques)).length}));
   const porCurso=todos.map(y=>{const c={},vis=new Set();ATal.filter(a=>a.anio==y).forEach(a=>{const id=idP(a.n);if(vis.has(id))return;vis.add(id);const p=curso(a.g);const k=p?p.niv:'?';c[k]=(c[k]||0)+1});return{y,c}});
   const maxH=Math.max(1,...porCurso.flatMap(p=>NIVORD.map(k=>p.c[k]||0)));
-  const celda=(v,y)=>{const f=v?.18+.82*v/maxH:0;return `<td class="${y==Y?'sel':''}" style="${v?`background:color-mix(in srgb,var(--telon) ${Math.round(f*100)}%,var(--sf));${f>.55?'color:#fff;':''}`:''}">${v||''}</td>`};
+  const celda=(v,y)=>{const f=v?.18+.82*v/maxH:0;return `<td class="${y==Y?'sel':''}" style="${v?`background:color-mix(in srgb,var(--telon) ${Math.round(f*100)}%,transparent);${f>.55?'color:#fff;':''}`:''}">${v||''}</td>`};
   const calor=`<div class="wrap"><table class="sem calor"><thead><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr></thead><tbody>
     ${porCurso.map((p,i)=>`<tr><td class="${p.y==Y?'sel':''}"><b>${p.y}</b></td>${NIVORD.map(k=>celda(p.c[k]||0,p.y)).join('')}<td class="${p.y==Y?'sel':''}">${p.c['?']||''}</td><td class="${p.y==Y?'sel':''}"><b>${porAnio[i].pr||''}</b></td></tr>`).join('')}</tbody></table></div>
     <p class="sm mu" style="margin:8px 0 0">Cada alumno cuenta una vez por año. Cuanto más oscuro, más alumnos de ese curso.</p>`;
@@ -2000,39 +2045,48 @@ function vStats(){
      <button class="btn sm" onclick="unificar(${j(na)},${j(nb)})">Misma persona: «${esc(nb)}»</button>
      <button class="btn sm" onclick="unificar(${j(nb)},${j(na)})">Misma persona: «${esc(na)}»</button>
      <button class="btn g sm" onclick="distintas(${j(a)},${j(b)})">Son distintas</button></span></div>`}).join('');
-  S._memoria={Y,todos,big,ranking:{al:ranking(al),pr:ranking(pr)},nomP,honor,recs,fam,ins,aut:autV,obr,fmts,tam,porCurso,porAnio};
+  const rAl=ranking(al),rPr=ranking(pr);
+  S._memoria={Y,todos,big,ranking:{al:rAl,pr:rPr},nomP,honor,recs,fam,ins,aut,obr,fmts,tam,porCurso,porAnio};
+  const nombres=[...new Set([...nombreP.values()])].sort((a,b)=>a.localeCompare(b));
+  const P_=(cls,ic,tit,tot,cuerpo,extra)=>`<section class="panel sp ${cls}"><h3>${ICO[ic]?`<span class="hi">${ICO[ic]}</span>`:''}${tit}${tot!=null?` <span class="tot">${tot}</span>`:''}</h3>${extra||''}${cuerpo}</section>`;
   return `<div class="stv${S._entra&&mov()?' anim':''}"><div class="sthead"><div><h2>Estadísticas</h2><p class="mu" style="margin:0">${uno?`Solo la edición de ${Y}${D0(Y).musical?` · ${esc(D0(Y).musical)}`:''}.`:`Todas las ediciones (${todos.join(', ')}).`} Toca un nombre para ver su ficha.</p></div>
-   <div class="row"><div class="seg" role="group" aria-label="Años">${['todos',...todos].map(y=>`<button aria-pressed="${Y===y}" onclick="S.statY=${y==='todos'?"'todos'":y};render()">${y==='todos'?'Todos los años':y}</button>`).join('')}</div>
+   <div class="row"><label class="busca">${ICO.search||''}<input type="search" list="musicos" placeholder="Buscar un músico…" aria-label="Buscar un músico" onchange="buscaMusico(this)" onkeydown="if(event.key=='Enter')buscaMusico(this)"></label><datalist id="musicos">${nombres.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+   <div class="seg" role="group" aria-label="Años">${['todos',...todos].map(y=>`<button aria-pressed="${Y===y}" onclick="S.statY=${y==='todos'?"'todos'":y};render()">${y==='todos'?'Todos los años':y}</button>`).join('')}</div>
    <button class="btn" onclick="imprimeMemoria()">${ICO.print}Memoria en PDF</button></div></div>
   <div class="big">${big.map(([v,t])=>`<div><b>${v}</b><span>${t}</span></div>`).join('')}</div>
   ${dudas?`<section class="panel dudas"><h3>¿Es la misma persona?</h3><p class="sm mu" style="margin-top:0">Nombres parecidos que la app no se atreve a juntar sola. Elige cómo quieres que se llame: se corrige en todos los años y cuenta para los veteranos.</p>${dudas}</section>`:''}
-  <div class="grid3s">
-   <section class="panel"><h3>Los alumnos que más tocan</h3>${podio(ranking(al))}</section>
-   <section class="panel"><h3>Los profesores que más tocan</h3>${podio(ranking(pr),'o')}</section>
-   <section class="panel"><h3>Récords y curiosidades</h3>${records}</section>
+  <div class="gst g3">
+   ${P_('c-al','users','Los alumnos que más tocan',rAl.length,podio(rAl,'var(--pc)'))}
+   ${P_('c-pr','users','Los profesores que más tocan',rPr.length,podio(rPr,'var(--pc)'))}
+   ${P_('c-rec','star','Récords y curiosidades',null,records)}
   </div>
-  <div class="grid2s">
-   <section class="panel"><h3>Cuadro de honor</h3><p class="sm mu" style="margin-top:0">Alumnos y profesores que han tocado en más de una Santa Cecilia. Un punto por cada año.</p>${cuadro}</section>
-   <section class="panel"><h3>Familias de instrumentos</h3>${donut(fam.filter(x=>x.n),'veces')}</section>
+  <div class="gst g21">
+   ${P_('c-hon','check','Cuadro de honor',honor.length,cuadro,'<p class="sm mu" style="margin-top:0">Alumnos, profesores e invitados que han tocado en más de una Santa Cecilia. Un punto por cada año.</p>')}
+   <div class="pila">${P_('c-fam','music','Familias de instrumentos',null,donut(fam.filter(x=>x.n),'veces'))}${P_('c-fmt','music','Cómo suenan',null,donut(fmts,'obras'))}</div>
   </div>
-  <div class="grid4" style="margin-top:18px">
-   <section class="panel"><h3>Instrumentos que más suenan</h3>${barras(ins)}</section>
-   <section class="panel"><h3>Autores más interpretados</h3>${aut.length?barras(autV):'<p class="mu sm">Sin datos todavía.</p>'}</section>
-   <section class="panel"><h3>Obras que se repiten</h3>${obr.length?barras(obr,0,'o'):'<p class="mu sm">Ninguna obra se ha repetido todavía.</p>'}</section>
+  <div class="gst g3">
+   ${P_('c-ins','music','Instrumentos',ins.length,lista(ins,'var(--pc)'))}
+   ${P_('c-aut','users','Autores',aut.length,lista(aut,'var(--pc)'))}
+   ${P_('c-obr','music','Obras',obr.length,lista(obr,'var(--pc)'))}
   </div>
-  <div class="grid4" style="margin-top:18px">
-   <section class="panel"><h3>Cómo suenan</h3>${donut(fmts,'obras')}</section>
-   <section class="panel"><h3>Cómo salen al escenario</h3>${donut(tam.filter(x=>x.n),'actuaciones')}</section>
-   <section class="panel"><h3>Año a año</h3>${columnas([{label:'Alumnos',c:'#E8006A',v:porAnio.map(x=>x.al)},{label:'Profesores',c:'#13806E',v:porAnio.map(x=>x.pr)},{label:'Actuaciones',c:'#D9A441',v:porAnio.map(x=>x.ac)}],todos)}</section>
+  <div class="gst g2">
+   ${P_('c-tam','users','Cómo salen al escenario',null,donut(tam.filter(x=>x.n),'actuaciones'))}
+   ${P_('c-ano','calendar','Año a año',null,columnas([{label:'Alumnos',c:'#E8006A',v:porAnio.map(x=>x.al)},{label:'Profesores',c:'#13806E',v:porAnio.map(x=>x.pr)},{label:'Actuaciones',c:'#D9A441',v:porAnio.map(x=>x.ac)}],todos))}
   </div>
-  <section class="panel" style="margin-top:18px"><h3>Alumnos por curso, año a año</h3>${calor}</section></div>`;
+  ${P_('c-cal','calendar','Alumnos por curso, año a año',null,calor)}</div>`;
 }
+function finLista(el){el.classList.toggle('fin',el.scrollTop+el.clientHeight>=el.scrollHeight-4)}
+function buscaMusico(el){const v=el.value.trim();if(!v)return;const N=[...new Set(apariciones().map(a=>a.n))];
+  let n=N.find(x=>idP(x)==idP(v));if(!n){const c=clave(v),m=N.filter(x=>clave(x).includes(c));if(m.length==1)n=m[0];else return toast(m.length?'Hay varios: elige uno de la lista':`No encuentro a «${v}»`,1)}
+  el.value='';fichaMusico(n)}
 const D0=y=>(S.eds.find(e=>e.anio==y)||S.E).datos;
 const jsA=x=>JSON.stringify(String(x)).replace(/"/g,'&quot;');
 /* Familias de instrumentos */
-const FAMS=[['Voz','#E8006A',/^(voz|coro|canto|cantante)/],['Viento madera','#13806E',/^(flauta|clarinete|saxof|oboe|fagot|requinto|dulzaina|gaita|corno ingl)/],
-  ['Viento metal','#D9A441',/^(trompeta|tromb|trompa|tuba|bombardino|fliscorno|corneta)/],['Cuerda','#3B6E99',/^(guitarra|bajo|viol|chelo|contrabajo|ukelele|bandurria|la[uú]d|arpa)/],
-  ['Teclado','#8C2643',/^(piano|teclado|[oó]rgano|sintetizador|acorde[oó]n)/],['Percusión','#7A5BA6',/^(bater|percus|caj[oó]n|xil|marimba|timbal|bombo|pandero|vibr)/],['Otros','#8A7F86',/./]];
+const FAMS=[['Voz','#9C36B5',/^(voz|coro|canto|cantante)/],['Viento madera','#4B5563',/^(flauta|clarinete|saxof|oboe|fagot|requinto|dulzaina|gaita|corno ingl)/],
+  ['Viento metal','#D4A72C',/^(trompeta|tromb|trompa|tuba|bombardino|fliscorno|corneta)/],['Cuerda','#A0522D',/^(guitarra|bajo|viol|chelo|contrabajo|ukelele|bandurria|la[uú]d|arpa)/],
+  ['Teclado','#3B5BA9',/^(piano|teclado|[oó]rgano|sintetizador|acorde[oó]n)/],['Percusión','#E4DCC8',/^(bater|percus|caj[oó]n|xil|marimba|timbal|bombo|pandero|vibr)/],['Otros','#9CA3AF',/./]];
+/* En las barras: madera negro plateado, metal dorado, cuerda de madera, percusión color parche */
+const FAM_BARRA=['#9C36B5','linear-gradient(90deg,#1F2937,#9CA3AF)','linear-gradient(90deg,#B8860B,#F5D76E)','linear-gradient(90deg,#7B3F1D,#C68642)','#3B5BA9','linear-gradient(90deg,#D6CCB4,#F4EFE3)','#9CA3AF'];
 const famDe=i=>FAMS.findIndex(f=>f[2].test(String(i).toLowerCase()));
 /* Obras de unas ediciones: los popurrís «A / B» cuentan como dos obras */
 const claveObra=t=>clave(String(t||'').replace(/\(.*?\)|«|»|"|“|”/g,' ')).replace(/[^\p{L}\p{N} ]/gu,'').replace(/\s+/g,' ').trim();
@@ -2061,7 +2115,7 @@ function fichaMusico(n){const k=idP(n),A=apariciones().filter(a=>idP(a.n)==k);if
    <div class="row" style="margin-top:14px"><button class="btn p" onclick="cerrar()">Cerrar</button></div>`)}
 /* I. Memoria del departamento en PDF */
 function imprimeMemoria(){const m=S._memoria;if(!m)return;
-  const lista=(x,f)=>x.length?`<ol class="mm">${x.slice(0,10).map(o=>`<li>${f(o)}</li>`).join('')}</ol>`:'<p>—</p>';
+  const lista=(x,f)=>x.length?`<ol class="mm">${x.map(o=>`<li>${f(o)}</li>`).join('')}</ol>`:'<p>—</p>';
   const dn=x=>x.length?`<table class="mt">${x.map(o=>`<tr><td><i style="background:${o.c}"></i>${o.label}</td><td>${o.n}</td></tr>`).join('')}</table>`:'<p>—</p>';
   const tit=m.Y==='todos'?`Estadísticas de ${m.todos[0]} a ${m.todos.at(-1)}`:`Estadísticas de ${m.Y}${D0(m.Y).musical?` · ${esc(D0(m.Y).musical)}`:''}`;
   const cur=m.Y==='todos'?`Cursos ${D0(m.todos[0]).curso} a ${D0(m.todos.at(-1)).curso}`:`Curso ${D0(m.Y).curso}`;
@@ -2070,7 +2124,7 @@ function imprimeMemoria(){const m=S._memoria;if(!m)return;
    <div class="mcol"><div><h4>Alumnos que más tocan</h4>${lista(m.ranking.al,o=>`${esc(m.nomP(o.k))} <em>${o.n}</em>`)}</div>
     <div><h4>Profesores que más tocan</h4>${lista(m.ranking.pr,o=>`${esc(m.nomP(o.k))} <em>${o.n}</em>`)}</div>
     <div><h4>Récords y curiosidades</h4>${m.recs.map(([,t,v,s])=>`<p><b>${t}:</b> ${v.replace(/<\/?b>/g,'')} <em>(${s})</em></p>`).join('')}</div></div>
-   <h4>Cuadro de honor</h4>${m.honor.length?`<table class="mt mh"><tr><th></th>${m.todos.map(y=>`<th>${y}</th>`).join('')}</tr>${m.honor.slice(0,16).map(v=>`<tr><td>${esc(m.nomP(v.k))}${v.rol=='pr'?' (profesor/a)':''}</td>${m.todos.map(y=>`<td>${v.y.has(y)?'●':''}</td>`).join('')}</tr>`).join('')}</table>`:'<p>Todavía nadie repite.</p>'}
+   <h4>Cuadro de honor</h4>${m.honor.length?`<table class="mt mh"><tr><th></th>${m.todos.map(y=>`<th>${y}</th>`).join('')}</tr>${m.honor.map(v=>`<tr><td>${esc(m.nomP(v.k))}${v.rol=='pr'?' (profesor/a)':v.rol=='in'?' (invitado/a)':''}</td>${m.todos.map(y=>`<td>${v.y.has(y)?'●':''}</td>`).join('')}</tr>`).join('')}</table>`:'<p>Todavía nadie repite.</p>'}
    <div class="mcol"><div><h4>Familias de instrumentos</h4>${dn(m.fam.filter(x=>x.n))}</div><div><h4>Cómo suenan</h4>${dn(m.fmts)}</div><div><h4>Cómo salen al escenario</h4>${dn(m.tam.filter(x=>x.n))}</div></div>
    <div class="mcol"><div><h4>Instrumentos</h4>${lista(m.ins,o=>`${o.label} <em>${o.n}</em>`)}</div><div><h4>Autores</h4>${lista(m.aut,o=>`${o.label} <em>${o.n}</em>`)}</div><div><h4>Obras que se repiten</h4>${lista(m.obr,o=>`${o.label} <em>${o.n}</em>`)}</div></div>
    <h4>Alumnos por curso y profesores, año a año</h4><table class="mt mh"><tr><th>Año</th>${NIVORD.map(k=>`<th>${NIV[k]}</th>`).join('')}<th>Sin curso</th><th>Profesores</th></tr>${m.porCurso.map((p,i)=>`<tr><td><b>${p.y}</b></td>${NIVORD.map(k=>`<td>${p.c[k]||''}</td>`).join('')}<td>${p.c['?']||''}</td><td>${m.porAnio[i].pr||''}</td></tr>`).join('')}</table>
